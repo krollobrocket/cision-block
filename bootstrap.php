@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Cision Block
  * Description: Imports a news feed from cision.
- * Version: 1.5.1
+ * Version: 1.5.2
  * Author: Cyclonecode
  * Author URI: https://stackoverflow.com/users/1047662/cyclonecode?tab=profile
  * Copyright: Cyclonecode

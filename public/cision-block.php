@@ -8,7 +8,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('CISION_BLOCK_PLUGIN_VERSION', '1.5.1');
+define('CISION_BLOCK_PLUGIN_VERSION', '1.5.2');
 define('CISION_BLOCK_FEED_URL', 'https://publish.ne.cision.com/papi/NewsFeed/');
 define('CISION_BLOCK_FEED_RELEASE_URL', 'http://publish.ne.cision.com/papi/Release/');
 define('CISION_BLOCK_DOMAIN_FILTER_REGEXP', '/^(http|https):\/\/publish\.ne\.cision\.com/');
