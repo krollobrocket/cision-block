@@ -1,8 +1,8 @@
 <?php
 /**
  * Plugin Name: Cision Block
- * Description: Imports a news feed from cision.
- * Version: 1.5.1
+ * Description: Imports a news feed from Cision.
+ * Version: 2.2.0
  * Author: Cyclonecode
  * Author URI: https://stackoverflow.com/users/1047662/cyclonecode?tab=profile
  * Copyright: Cyclonecode
@@ -30,11 +30,10 @@ define('CISION_BLOCK_PLUGIN_FILE', __FILE__);
 
 require_once CISION_BLOCK_PLUGIN_DIR . '/public/cision-block.php';
 
-add_action('plugins_loaded', function() {
+add_action('plugins_loaded', function () {
     if (is_admin()) {
         CisionBlockAdmin::getInstance()->initialize();
-    }
-    else {
+    } else {
         CisionBlock::getInstance()->initialize();
     }
 });

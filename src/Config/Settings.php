@@ -42,7 +42,7 @@ class Settings
      */
     public function toJSON()
     {
-        return json_encode($this->toOptionsArray(), JSON_PRETTY_PRINT);
+        return function_exists('json_encode') ? json_encode($this->toOptionsArray(), JSON_PRETTY_PRINT) : '';
     }
 
     /**
@@ -50,7 +50,7 @@ class Settings
      */
     public function toYaml()
     {
-        return yaml_emit($this->settings);
+        return function_exists('yaml_emit') ? yaml_emit($this->settings) : '';
     }
 
     /**
@@ -184,6 +184,24 @@ class Settings
     */
     public function save()
     {
+        ksort($this->settings);
         return update_option($this->optionName, $this->settings);
+    }
+
+    /**
+     * Removes any settings that is not defined in $options.
+     *
+     * @param array $options
+     *   An array which keys will be used to validate the current settings keys.
+     */
+    public function clean($options) {
+        if (is_array($options)) {
+            $keys = array_keys($options);
+            foreach ($this->settings as $key => $value) {
+                if (!in_array($key, $keys)) {
+                    unset($this->settings[$key]);
+                }
+            }
+        }
     }
 }

@@ -1,5 +1,5 @@
 <?php
-namespace CisionBlock\widget;
+namespace CisionBlock\Widget;
 
 require_once 'Base/Widget.php';
 
@@ -32,7 +32,7 @@ class CisionBlockWidget extends Widget
             'count' => $instance['count'],
             'items_per_page' => $instance['items_per_page'],
             'flush' => ($instance['cache_expire'] == 0 ? 'true' : 'false'),
-            'regulatory' => ($instance['is_regulatory'] ? 'true' : 'false'),
+            'view' => $instance['view_mode'],
             'types' => implode($instance['types'], ', '),
             'tags' => $instance['tags'],
             'start' => $instance['start_date'],
@@ -70,7 +70,7 @@ class CisionBlockWidget extends Widget
                 'types' => array(CISION_BLOCK_DEFAULT_FEED_TYPE),
                 'tags' => '',
                 'items_per_page' => CISION_BLOCK_DEFAULT_ITEMS_PER_PAGE,
-                'is_regulatory' => 0,
+                'view_mode' => 1,
                 'cache_expire' => CISION_BLOCK_DEFAULT_CACHE_LIFETIME,
                 'start_date' => '',
                 'end_date' => '',
@@ -85,7 +85,7 @@ class CisionBlockWidget extends Widget
         $type_options = '';
         foreach ($feed_types as $key => $value) {
             $type_options .= '<option value="' . $key . '"' .
-                (in_array($key, $instance['types']) ? ' selected="selected"' : '') . '>' .
+                selected(in_array($key, $instance['types'])) . '>' .
                 $value . '</option>';
         }
 
@@ -93,7 +93,7 @@ class CisionBlockWidget extends Widget
         $image_style_options = '';
         foreach ($image_styles as $key => $image_style) {
             $image_style_options .= '<option value="' . $key . '"' .
-                ($key == $instance['image_style'] ? ' selected="selected"' : '') .
+                selected($key == $instance['image_style']) .
                 '>' . $image_style['label'] . '</option>';
         }
 
@@ -137,8 +137,12 @@ class CisionBlockWidget extends Widget
         $output .= '<input type="text" name="' . $this->get_field_name('language') . '" value="' . $instance['language'] . '" />';
         $output .= '</p>';
         $output .= '<p>';
-        $output .= '<input class="checkbox" type="checkbox" name="' . $this->get_field_name('is_regulatory') . '"' . ($instance['is_regulatory'] ? ' checked="checked"' : '') . '" />';
-        $output .= '<label for="' . $this->get_field_id('is_regulatory') . '">' . __('Regulatory', CISION_BLOCK_TEXTDOMAIN) . '</label>';
+        $output .= '<label for="' . $this->get_field_id('view_mode') . '">' . __('View mode', CISION_BLOCK_TEXTDOMAIN) . ': </label>';
+        $output .= '<select class="widefat" name=' . $this->get_field_name('view_mode') . '">';
+        $output .= '<option value="1"' . selected($instance['view_mode'] == 1) . '>' . __('All', CISION_BLOCK_TEXTDOMAIN) . '</option>';
+        $output .= '<option value="2"' . selected($instance['view_mode'] == 2) . '>' . __('Regulatory', CISION_BLOCK_TEXTDOMAIN) . '</option>';
+        $output .= '<option value="3"' . selected($instance['view_mode'] == 3) . '>' . __('Non-regulatory', CISION_BLOCK_TEXTDOMAIN) . '</option>';
+        $output .= '</select>';
         $output .= '</p>';
         $output .= '<p>';
         $output .= '<label for="' . $this->get_field_id('date_format') . '">' . __('Date format', CISION_BLOCK_TEXTDOMAIN) . ': </label>';
@@ -198,7 +202,7 @@ class CisionBlockWidget extends Widget
         if ($instance['items_per_page'] < 0 || $instance['items_per_page'] > CISION_BLOCK_MAX_ITEMS_PER_PAGE) {
             $instance['items_per_page'] = CISION_BLOCK_DEFAULT_ITEMS_PER_PAGE;
         }
-        $instance['is_regulatory'] = isset($new_instance['is_regulatory']) ? 1 : 0;
+        $instance['view_mode'] = isset($new_instance['view_mode']) ? (int)$new_instance['view_mode'] : 1;
         $instance['cache_expire'] = isset($new_instance['cache_expire']) ? (int)$new_instance['cache_expire'] : CISION_BLOCK_DEFAULT_CACHE_LIFETIME;
         $instance['start_date'] = isset($new_instance['start_date']) ? $new_instance['start_date'] : '';
         $instance['end_date'] = isset($new_instance['end_date']) ? $new_instance['end_date'] : '';

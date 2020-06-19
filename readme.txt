@@ -1,11 +1,11 @@
 === Cision Block ===
 Contributors: cyclonecode
-Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=VUK8LYLAN2DA6
+Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=VUK8LYLAN2DA6&source=url&lc=US&item_name=Cision+Block
 Tags: cision, feed, cision feed, shortcode, widget, content
 Requires at least: 3.1.0
-Tested up to: 5.0
+Tested up to: 5.4
 Requires PHP: 5.3
-Stable tag: 1.5.1
+Stable tag: 2.2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -18,8 +18,7 @@ This plugin is developed by [Cyclonecode](https://profiles.wordpress.org/cyclone
 To start pulling feed items from cision you first need to add the unique identifier for you json feed at the configuration page for the plugin.
 You can also change how many feed items to pull, type of feed items, enable pagination, configure caching and much more.
 
-If you have questions you can also try [slack](https://join.slack.com/t/cyclonecode/shared_invite/enQtNDk0OTY0ODg5ODU5LTc5YzEyOWUyNjE1ODZjYTM1MDY0NDExOTc3ZDgzYmExNzMyZmJkNmYyYzI2Y2ZiMTFhYTRlOWI3OTA5MTg3NWM).
-
+If you have questions or perhaps some idea on things that should be added you can also try [slack](https://join.slack.com/t/cyclonecode/shared_invite/zt-6bdtbdab-n9QaMLM~exHP19zFDPN~AQ).
 
 = Widget =
 
@@ -49,8 +48,11 @@ The readmore button text.
 - count
 The maximum number of items to include in the feed.
 
-- regulatory
-When this is set to true then only regulatory press releases will be included in the feed.
+- view
+This states what kind of items to include:
+1 - include both regulatory and non-regulatory items.
+2 - include only regulatory items.
+3 - include only non-regulatory items.
 
 - start
 Sets the start date for the feed items. The format to use is 2016-12-31.
@@ -86,25 +88,9 @@ Clears the cache for the block.
 
 Here is an example using all of the above attributes:
 
-`[cision-block
-  id=example_block
-  source_uid=A275C0BF733048FFAE9126ACA64DD08F
-  language=sv
-  date_format=m-d-Y
-  readmore="Read more"
-  regulatory=true
-  count=6
-  items_per_page=2
-  tags="cision,company"
-  categories="New Year,Summer camp"
-  types="PRM, RDV"
-  start=2016-01-12
-  end=2017-01-12
-  image_style=UrlTo400x400ArResized
-  flush=true
-]`
+`[cision-block id=example_block source_uid=A275C0BF733048FFAE9126ACA64DD08F language=sv date_format=m-d-Y readmore="Read more" view=1 count=6 items_per_page=2 tags="cision,company" categories="New Year,Summer camp" types="PRM, RDV" start=2016-01-12 end=2019-06-12 image_style=UrlTo400x400ArResized flush=true]`
 
-**Notice** that all shortcode attributes are optional.
+**Notice** that all shortcode attributes are optional and that they **must** be on a single line.
 Default values is taken from the plugins settings page.
 
 Here is a complete list of the different kind of pressreleases:
@@ -116,10 +102,25 @@ Here is a complete list of the different kind of pressreleases:
 * INB - Invitation
 * NBR - Newsletter
 
+= More than one block in a page =
+
+To use more than one block in a single page you will need to set a unique id for each block or else they will both share the same cache entry.
+
 = Template =
 
-The template used to render the feed is located under the **cision-block/templates/**, you can override
+The template used to render the feed is **cision-block/templates/cision-block.php**, you can override
 this template by copying it to either the root or under a **templates** folder in your theme.
+
+= Experimental: Display single press releases in Wordpress =
+
+Since version 2.0.0 it is possible to fetch and display press releases directly from within Wordpress.
+The template used in this case is **cision-block/templates/cision-block-post.php**, you can override
+this template by copying it to either the root or under a **templates** folder in your theme.
+
+The `$CisionItem` feed object that is available in the template contains all raw data fetched from Cision.
+Under the **Resources** section there is a link that explains all the different fields that is available.
+For example if you use the `$CisionItem->HtmlBody` to display content from the feed item you might have to add custom
+css since this contains pre formated html which may include inline css and so on.
 
 = Fields =
 
@@ -139,27 +140,27 @@ By default only the following fields are collected for each feed item:
 
 Add more fields to each feed item:
 
-    add_filter('cision_map_source_item', function($item, $data) {
+    add_filter('cision_map_source_item', function($item, $data, $block_id) {
       $item['Header'] = sanitize_text_field($data->Header);
       $item['LogoUrl'] = esc_url_raw($data->LogoUrl);
       $item['SocialMediaPitch'] = sanitize_text_field($data->SocialMediaPitch);
 
       return $item;
-    }, 10, 2);
+    }, 10, 3);
 
 Customize the sorting of the feed items:
 
-    add_filter('cision_block_sort', function($items) {
+    add_filter('cision_block_sort', function($items, $block_id) {
       usort($items, function($a, $b) {
         return $a->PublishDate > $b->PublishDate;
       });
 
       return $items;
-    });
+    }, 10, 2);
 
 Add custom attributes to the pager:
 
-    add_filter('cision_block_pager_attributes', function(array $attributes) {
+    add_filter('cision_block_pager_attributes', function(array $attributes, $block_id) {
       return array_merge(
         $attributes,
         array(
@@ -167,45 +168,45 @@ Add custom attributes to the pager:
           'id' => 'custom-id',
         )
       );
-    });
+    }, 10, 2);
 
 Set a custom class for active pager item:
 
-    add_filter('cision_block_pager_active_class', function($class) {
+    add_filter('cision_block_pager_active_class', function($class, $block_id) {
       return 'custom-class';
-    });
+    }, 10, 2);
 
 To add attributes to the section wrapper in the template:
 
-    add_filter('cision_block_wrapper_attributes', function(array $attributes) {
+    add_filter('cision_block_wrapper_attributes', function(array $attributes, $block_id) {
       return array(
         'class' => array(
           'custom-class',
         ),
       );
-    });
+    }, 10, 2);
 
 To add attributes to the article wrapper in the template:
 
-    add_filter('cision_block_media_attributes', function(array $attributes) {
+    add_filter('cision_block_media_attributes', function(array $attributes, $block_id) {
       return array(
         'class' => array(
           'custom-class',
         ),
       );
-    });
+    }, 10, 2);
 
 Add a prefix that will be displayed at the start of the wrapper:
 
-    add_filter('cision_block_prefix', function($prefix) {
+    add_filter('cision_block_prefix', function($prefix, $block_id) {
       return '<h1>Prefix</h1>';
-    });
+    }, 10, 2);
 
 Add a suffix that will be displayed at the end of the wrapper:
 
-    add_filter('cision_block_suffix', function($suffix) {
+    add_filter('cision_block_suffix', function($suffix, $block_id) {
       return '<h1>Suffix</h1>';
-    });
+    }, 10, 2);
 
 
 = Resources =
@@ -214,14 +215,28 @@ A complete list of fields can be found at: [https://websolutions.ne.cision.com/d
 
 The following Feed identifier can be used for testing: **A275C0BF733048FFAE9126ACA64DD08F**
 
-== Frequently Asked Questions ==
+== Ideas and upcoming features ==
+
+- Add plugin specific css classes to single article page.
+- Integrate support for Cision PUSH events.
+- Support to fetch feeds in XML format.
+- Add "test" button to configuration page. This would check so the feed can be retrieved successfully.
+- Support to hide feed items which does not have any picture.
+- Add new settings page where the user can select which field to include. This fields will then be available in the themes template file.
+- Support to grab the entire feeds, not just the 100 last entries.
+- Add checkbox to settings page which can be used to enabled/disable the rendering of shortcode and widget.
+- Extended error handling for debug purposes.
+- Autoloader.
+- Register and use custom posts for each fetched release.
+
+If you have any ideas for improvements, don't hesitate to email me at cyclonecode@gmail.com or send me a message on [slack](https://join.slack.com/t/cyclonecode/shared_invite/zt-6bdtbdab-n9QaMLM~exHP19zFDPN~AQ).
 
 == Support ==
 
 If you run into any trouble, don’t hesitate to add a new topic under the support section:
 [https://wordpress.org/support/plugin/cision-block](https://wordpress.org/support/plugin/cision-block)
 
-You can also try contacting me on [slack](https://join.slack.com/t/cyclonecode/shared_invite/enQtNDk0OTY0ODg5ODU5LTc5YzEyOWUyNjE1ODZjYTM1MDY0NDExOTc3ZDgzYmExNzMyZmJkNmYyYzI2Y2ZiMTFhYTRlOWI3OTA5MTg3NWM).
+You can also try contacting me on [slack](https://join.slack.com/t/cyclonecode/shared_invite/zt-6bdtbdab-n9QaMLM~exHP19zFDPN~AQ).
 
 
 == Installation ==
@@ -253,20 +268,54 @@ Fixed a bug where preview mode was not working correctly.
 = 1.4.9.1 =
 Fixed a bug where source id from widget was never used.
 
+= 2.1.0 =
+- Fixes a bug where the plugin could not be deleted.
+
 == Screenshots ==
 
 1. A feed from cision with a pager at the bottom.
 2. Settings form.
+3. A single press release displayed in Wordpress.
 
 == Changelog ==
 
-= dev
-- Fix deprecation warnings.
-- Fix php5.3 error message.
-- Add composer integration.
+= 2.2.0 =
+- Use Regulatory argument when fetching feeds.
+- Add SearchTerm setting and argument.
+- Use select correctly in any controls.
+- Move defines to class constants.
+- Clean and sort invalid settings before saving.
+- Make sure the json extension is installed and enabled.
+
+= 2.1.0 =
+- Fixes a bug where the plugin could not be deleted.
+
+= 2.0.0 =
+- Add support to fetch and display press releases in Wordpress.
+- Add block_id to all filters.
+- Add tabs.
+- Remove unused methods.
+- Use shorter names in form inputs.
+- Fixed name of cache key in shortcode.
+
+= 1.5.4 =
+- Remove is_regulatory settings and instead add view_mode that supports three states.
+
+= 1.5.3 =
+- Clear cache when post is updated.
+- Use block_id in cache name.
+- Check for update when plugin is initialized.
+
+= 1.5.2 =
+- Check so yaml extension is enabled.
+- Add templates folder.
+- Check so items is set or not when mapping sources.
 
 = 1.5.1 =
 - Add support to filter feed based on categories.
+- Fix deprecation warnings.
+- Fix php5.3 error message.
+- Add composer integration.
 
 = 1.5.0 =
 - Major update of code base.
