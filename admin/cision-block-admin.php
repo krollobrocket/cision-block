@@ -381,7 +381,7 @@ class CisionBlockAdmin extends Singleton
     {
         return array(
             'settings' => __('General Settings', CISION_BLOCK_TEXTDOMAIN),
-            'experimental' => __('Single Press Releases', CISION_BLOCK_TEXTDOMAIN),
+            'permalinks' => __('Permalinks', CISION_BLOCK_TEXTDOMAIN),
         );
     }
 

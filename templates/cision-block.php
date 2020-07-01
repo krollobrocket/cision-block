@@ -24,14 +24,13 @@
  *
  * @package Cision Block
  * @since 1.0
- * @version 2.0.0
+ * @version 2.2.1
  */
 
 ?>
-
+<?php if (count($cision_feed)) : ?>
 <section<?php echo $wrapper_attributes; ?>>
 <?php echo $prefix; ?>
-<?php if (count($cision_feed)) : ?>
     <?php foreach ($cision_feed as $item) : ?>
     <article<?php echo $attributes; ?>>
         <h2><?php echo esc_html($item->Title); ?></h2>
@@ -42,10 +41,11 @@
         <img
                 src="<?php echo esc_url($item->Images[0]->DownloadUrl); ?>"
                 alt="<?php echo esc_html($item->Images[0]->Description); ?>"
+                title="<?php echo esc_html($item->Images[0]->Title); ?>"
         />
         </span>
         <?php endif; ?>
-        <?php print wp_trim_words(esc_html($item->Intro ? $item->Intro : $item->Body)); ?>
+        <?php echo wp_trim_words(esc_html($item->Intro ? $item->Intro : $item->Body)); ?>
         </p>
         <?php if (isset($item->CisionWireUrl, $readmore)) : ?>
         <a
@@ -55,7 +55,8 @@
         <?php endif; ?>
     </article>
     <?php endforeach; ?>
-<?php endif; ?>
 <?php echo $pager; ?>
 <?php echo $suffix; ?>
 </section>
+<?php endif; ?>
+

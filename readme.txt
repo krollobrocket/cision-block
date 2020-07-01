@@ -3,9 +3,9 @@ Contributors: cyclonecode
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=VUK8LYLAN2DA6&source=url&lc=US&item_name=Cision+Block
 Tags: cision, feed, cision feed, shortcode, widget, content
 Requires at least: 3.1.0
-Tested up to: 5.4
+Tested up to: 5.4.2
 Requires PHP: 5.3
-Stable tag: 2.2.0
+Stable tag: 2.2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -278,6 +278,11 @@ Fixed a bug where source id from widget was never used.
 3. A single press release displayed in Wordpress.
 
 == Changelog ==
+
+= 2.2.1 =
+- Do not render anything if the feed is empty.
+- Add title attribute to img tag.
+- Change name of experimental template.
 
 = 2.2.0 =
 - Use Regulatory argument when fetching feeds.
