@@ -194,7 +194,8 @@ class Settings
      * @param array $options
      *   An array which keys will be used to validate the current settings keys.
      */
-    public function clean($options) {
+    public function clean($options)
+    {
         if (is_array($options)) {
             $keys = array_keys($options);
             foreach ($this->settings as $key => $value) {

@@ -56,13 +56,6 @@ class CisionBlock extends Singleton
     private $current_block_id;
 
     /**
-     * Constructor.
-     */
-    protected function __construct()
-    {
-    }
-
-    /**
      * Uninstalls the plugin.
      */
     public static function delete()
@@ -101,7 +94,7 @@ class CisionBlock extends Singleton
     /**
      * Initialization.
      */
-    public function initialize()
+    public function init()
     {
         $this->settings = new Settings(self::SETTINGS_NAME);
 

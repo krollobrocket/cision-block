@@ -63,16 +63,9 @@ class CisionBlockAdmin extends Singleton
     private $currentTab = '';
 
     /**
-    * Constructor.
-    */
-    protected function __construct()
-    {
-    }
-
-    /**
      *
      */
-    public function initialize()
+    public function init()
     {
         // Allow people to change what capability is required to use this plugin.
         $this->capability = apply_filters('cision_block_cap', $this->capability);

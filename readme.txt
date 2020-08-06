@@ -279,6 +279,9 @@ Fixed a bug where source id from widget was never used.
 
 == Changelog ==
 
+= dev =
+- Improve singleton class.
+
 = 2.2.1 =
 - Do not render anything if the feed is empty.
 - Add title attribute to img tag.

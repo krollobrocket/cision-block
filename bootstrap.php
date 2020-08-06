@@ -32,9 +32,9 @@ require_once CISION_BLOCK_PLUGIN_DIR . '/public/cision-block.php';
 
 add_action('plugins_loaded', function () {
     if (is_admin()) {
-        CisionBlockAdmin::getInstance()->initialize();
+        CisionBlockAdmin::getInstance();
     } else {
-        CisionBlock::getInstance()->initialize();
+        CisionBlock::getInstance();
     }
 });
 
