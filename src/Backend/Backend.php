@@ -62,7 +62,7 @@ class Backend extends Singleton
     public function addActions()
     {
         add_action('admin_menu', array($this, 'addMenu'));
-        add_action('admin_init', array($this, 'handleFormSubmission'));
+        add_action('admin_post_cision_block_save_settings', array($this, 'saveSettings'));
         add_action('admin_enqueue_scripts', array($this, 'registerStyles'));
     }
 
@@ -165,12 +165,14 @@ class Backend extends Singleton
     }
 
     /**
-     * Handle form data for configuration page.
+     * Handle form data for configuration pages.
      *
      * @return bool
      */
-    public function handleFormSubmission()
+    public function saveSettings()
     {
+        $tab = '';
+
         // Check if settings form is submitted.
         if (filter_input(INPUT_POST, 'cision-block-settings', FILTER_SANITIZE_STRING)) {
             // Validate so user has correct privileges.
@@ -307,11 +309,12 @@ class Backend extends Singleton
 
                 Frontend::clearCache();
 
-                return $this->settings->save();
+                $this->settings->save();
+                $tab = 'settings';
             }
         }
         // Check if settings form is submitted.
-        if (filter_input(INPUT_POST, 'cision-block-permalink', FILTER_SANITIZE_STRING)) {
+        if (filter_input(INPUT_POST, 'cision-block-permalinks', FILTER_SANITIZE_STRING)) {
             // Validate so user has correct privileges.
             if (!current_user_can($this->capability)) {
                 die(__('You are not allowed to perform this action.', Settings::TEXTDOMAIN));
@@ -336,6 +339,7 @@ class Backend extends Singleton
 
                 // Make sure we flush the rewrite rules.
                 set_transient('cision_block_flush_rewrite_rules', 1);
+                $tab = 'permalinks';
             }
         }
         // Check if settings form is submitted.
@@ -385,8 +389,10 @@ class Backend extends Singleton
                 Frontend::clearCache();
 
                 $this->settings->save();
+                $tab = 'filters';
             }
         }
+        wp_redirect(admin_url(self::PARENT_MENU_SLUG . '?page=' . self::MENU_SLUG . '&tab=' . $tab));
     }
 
     /**

@@ -3,12 +3,12 @@
 /**
  * Template used to display a single feed item from Cision.
  *
- * @var \stdClass $CisionItem
+ * @var stdClass $CisionItem
  *   A feed item. A reference of all available fields can be found here: https://websolutions.ne.cision.com/documents/P2_Feed.pdf
  *
  * @package Cision Block
  * @since 2.0.0
- * @version 2.0.0
+ * @version 2.3
  */
 
 get_header();

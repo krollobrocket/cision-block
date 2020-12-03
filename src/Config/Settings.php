@@ -2,6 +2,8 @@
 
 namespace CisionBlock\Config;
 
+use CisionBlock\Frontend\Frontend;
+
 class Settings extends Base\Settings
 {
 
@@ -70,7 +72,7 @@ class Settings extends Base\Settings
         'types' => array(self::DEFAULT_FEED_TYPE),
         'internal_links' => false,
         'base_slug' => 'cision',
-        // 'version' => Frontend::VERSION,
+        'version' => Frontend::VERSION,
     );
 
     /**
