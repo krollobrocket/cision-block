@@ -67,19 +67,19 @@ class Widget extends Base\Widget
         // Make sure so keys are set.
         if (empty($instance)) {
             $instance = array(
-                'count' => CISION_BLOCK_DEFAULT_ITEM_COUNT,
+                'count' => Settings::DEFAULT_ITEM_COUNT,
                 'source' => '',
-                'types' => array(CISION_BLOCK_DEFAULT_FEED_TYPE),
+                'types' => array(Settings::DEFAULT_FEED_TYPE),
                 'tags' => '',
-                'items_per_page' => CISION_BLOCK_DEFAULT_ITEMS_PER_PAGE,
+                'items_per_page' => Settings::DEFAULT_ITEMS_PER_PAGE,
                 'view_mode' => 1,
-                'cache_expire' => CISION_BLOCK_DEFAULT_CACHE_LIFETIME,
+                'cache_expire' => Settings::DEFAULT_CACHE_LIFETIME,
                 'start_date' => '',
                 'end_date' => '',
-                'image_style' => CISION_BLOCK_DEFAULT_IMAGE_STYLE,
+                'image_style' => Settings::DEFAULT_IMAGE_STYLE,
                 'language' => '',
-                'readmore' => CISION_BLOCK_DEFAULT_READMORE_TEXT,
-                'date_format' => CISION_BLOCK_DEFAULT_DATE_FORMAT,
+                'readmore' => Settings::DEFAULT_READ_MORE_TEXT,
+                'date_format' => Settings::DEFAULT_DATE_FORMAT,
             );
         }
 
@@ -87,7 +87,7 @@ class Widget extends Base\Widget
         $type_options = '';
         foreach ($feed_types as $key => $value) {
             $type_options .= '<option value="' . $key . '"' .
-                selected(in_array($key, $instance['types'])) . '>' .
+                selected(in_array($key, $instance['types']), true, false) . '>' .
                 $value . '</option>';
         }
 
@@ -95,7 +95,7 @@ class Widget extends Base\Widget
         $image_style_options = '';
         foreach ($image_styles as $key => $image_style) {
             $image_style_options .= '<option value="' . $key . '"' .
-                selected($key == $instance['image_style']) .
+                selected($key == $instance['image_style'], true, false) .
                 '>' . $image_style['label'] . '</option>';
         }
 
@@ -106,11 +106,11 @@ class Widget extends Base\Widget
         $output .= '</p>';
         $output .= '<p>';
         $output .= '<label for="' . $this->get_field_id('count') . '">' . __('Number of feed items', Settings::TEXTDOMAIN) . ': </label>';
-        $output .= '<input class="tiny-text" type="number" min="1" max="' . CISION_BLOCK_MAX_ITEMS_PER_FEED . '" name="' . $this->get_field_name('count') . '" value="' . $instance['count'] . '" />';
+        $output .= '<input class="tiny-text" type="number" min="1" max="' . Settings::MAX_ITEMS_PER_FEED . '" name="' . $this->get_field_name('count') . '" value="' . $instance['count'] . '" />';
         $output .= '</p>';
         $output .= '<p>';
         $output .= '<label for="' . $this->get_field_id('items_per_page') . '">' . __('Items per page', Settings::TEXTDOMAIN) . ': </label>';
-        $output .= '<input class="tiny-text" type="number" min="0" max="' . CISION_BLOCK_MAX_ITEMS_PER_PAGE . '" name="' . $this->get_field_name('items_per_page') . '" value="' . $instance['items_per_page'] . '" />';
+        $output .= '<input class="tiny-text" type="number" min="0" max="' . Settings::MAX_ITEMS_PER_PAGE . '" name="' . $this->get_field_name('items_per_page') . '" value="' . $instance['items_per_page'] . '" />';
         $output .= '</p>';
         $output .= '<p>';
         $output .= '<label for="' . $this->get_field_id('types') . '">' . __('Type of feed items', Settings::TEXTDOMAIN) . '</label>';
@@ -141,9 +141,9 @@ class Widget extends Base\Widget
         $output .= '<p>';
         $output .= '<label for="' . $this->get_field_id('view_mode') . '">' . __('View mode', Settings::TEXTDOMAIN) . ': </label>';
         $output .= '<select class="widefat" name=' . $this->get_field_name('view_mode') . '">';
-        $output .= '<option value="1"' . selected($instance['view_mode'] == 1) . '>' . __('All', Settings::TEXTDOMAIN) . '</option>';
-        $output .= '<option value="2"' . selected($instance['view_mode'] == 2) . '>' . __('Regulatory', Settings::TEXTDOMAIN) . '</option>';
-        $output .= '<option value="3"' . selected($instance['view_mode'] == 3) . '>' . __('Non-regulatory', Settings::TEXTDOMAIN) . '</option>';
+        $output .= '<option value="1"' . selected($instance['view_mode'] == 1, true, false) . '>' . __('All', Settings::TEXTDOMAIN) . '</option>';
+        $output .= '<option value="2"' . selected($instance['view_mode'] == 2, true, false) . '>' . __('Regulatory', Settings::TEXTDOMAIN) . '</option>';
+        $output .= '<option value="3"' . selected($instance['view_mode'] == 3, true, false) . '>' . __('Non-regulatory', Settings::TEXTDOMAIN) . '</option>';
         $output .= '</select>';
         $output .= '</p>';
         $output .= '<p>';
@@ -180,14 +180,14 @@ class Widget extends Base\Widget
 
         // Filter and sanitize form values.
         $instance['count'] = isset($new_instance['count']) ? (int)$new_instance['count'] : 0;
-        if ($instance['count'] < 1 || $instance['count'] > CISION_BLOCK_MAX_ITEMS_PER_FEED) {
-            $instance['count'] = CISION_BLOCK_DEFAULT_ITEM_COUNT;
+        if ($instance['count'] < 1 || $instance['count'] > Settings::MAX_ITEMS_PER_FEED) {
+            $instance['count'] = Settings::DEFAULT_ITEM_COUNT;
         }
         $instance['source'] = isset($new_instance['source']) ? $new_instance['source'] : '';
         $instance['types'] = array();
         if (!isset($new_instance['types'])) {
             // Set default options.
-            $instance['types'] = array(CISION_BLOCK_DEFAULT_FEED_TYPE);
+            $instance['types'] = array(Settings::DEFAULT_FEED_TYPE);
         } else {
             $types = $new_instance['types'];
             $all_feed_types = array_keys(Frontend::getInstance()->getFeedTypes());
@@ -201,14 +201,14 @@ class Widget extends Base\Widget
         }
         $instance['tags'] = isset($new_instance['tags']) ? $new_instance['tags'] : '';
         $instance['items_per_page'] = isset($new_instance['items_per_page']) ? (int)$new_instance['items_per_page'] : 0;
-        if ($instance['items_per_page'] < 0 || $instance['items_per_page'] > CISION_BLOCK_MAX_ITEMS_PER_PAGE) {
-            $instance['items_per_page'] = CISION_BLOCK_DEFAULT_ITEMS_PER_PAGE;
+        if ($instance['items_per_page'] < 0 || $instance['items_per_page'] > Settings::MAX_ITEMS_PER_PAGE) {
+            $instance['items_per_page'] = Settings::DEFAULT_ITEMS_PER_PAGE;
         }
         $instance['view_mode'] = isset($new_instance['view_mode']) ? (int)$new_instance['view_mode'] : 1;
-        $instance['cache_expire'] = isset($new_instance['cache_expire']) ? (int)$new_instance['cache_expire'] : CISION_BLOCK_DEFAULT_CACHE_LIFETIME;
+        $instance['cache_expire'] = isset($new_instance['cache_expire']) ? (int)$new_instance['cache_expire'] : Settings::DEFAULT_CACHE_LIFETIME;
         $instance['start_date'] = isset($new_instance['start_date']) ? $new_instance['start_date'] : '';
         $instance['end_date'] = isset($new_instance['end_date']) ? $new_instance['end_date'] : '';
-        $instance['image_style'] = isset($new_instance['image_style']) ? $new_instance['image_style'] : CISION_BLOCK_DEFAULT_IMAGE_STYLE;
+        $instance['image_style'] = isset($new_instance['image_style']) ? $new_instance['image_style'] : Settings::DEFAULT_IMAGE_STYLE;
         $instance['language'] = isset($new_instance['language']) ? $new_instance['language'] : '';
         $instance['readmore'] = isset($new_instance['readmore']) ? $new_instance['readmore'] : null;
         $instance['date_format'] = isset($new_instance['date_format']) ? $new_instance['date_format'] : '';
