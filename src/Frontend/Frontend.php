@@ -241,7 +241,7 @@ class Frontend extends Singleton
      */
     protected function localize()
     {
-        load_plugin_textdomain(Settings::TEXTDOMAIN, false, dirname(plugin_basename(__FILE__)) . '/languages');
+        load_plugin_textdomain(Settings::TEXTDOMAIN);
     }
 
     /**
@@ -441,14 +441,14 @@ class Frontend extends Singleton
             'cision_feed' => $feed_items,
             'pager' => $pager,
             'id' => $this->current_block_id,
-            'readmore' => __($this->settings->get('readmore'), Settings::TEXTDOMAIN),
+            'readmore' => $this->settings->get('readmore'),
             'mark_regulatory' => $this->settings->get('mark_regulatory'),
-            'regulatory_text' => __($this->settings->get('regulatory_text'), Settings::TEXTDOMAIN),
-            'non_regulatory_text' => __($this->settings->get('non_regulatory_text'), Settings::TEXTDOMAIN),
+            'regulatory_text' => $this->settings->get('regulatory_text'),
+            'non_regulatory_text' => $this->settings->get('non_regulatory_text'),
             'show_filters' => $this->settings->get('show_filters'),
-            'filter_all_text' => __($this->settings->get('filter_all_text'), Settings::TEXTDOMAIN),
-            'filter_regulatory_text' => __($this->settings->get('filter_regulatory_text'), Settings::TEXTDOMAIN),
-            'filter_non_regulatory_text' => __($this->settings->get('filter_non_regulatory_text'), Settings::TEXTDOMAIN),
+            'filter_all_text' => $this->settings->get('filter_all_text'),
+            'filter_regulatory_text' => $this->settings->get('filter_regulatory_text'),
+            'filter_non_regulatory_text' => $this->settings->get('filter_non_regulatory_text'),
             'prefix' => apply_filters('cision_block_prefix', '', $this->current_block_id),
             'suffix' => apply_filters('cision_block_suffix', '', $this->current_block_id),
             'attributes' => $this->parseAttributes(apply_filters('cision_block_media_attributes', array(
