@@ -12,19 +12,19 @@ use CisionBlock\Config\Settings;
         <table class="form-table">
             <tr>
                 <th scope="row">
-                    <label for="internal-links"><?php _e('Internal links', Settings::TEXTDOMAIN); ?></label>
+                    <label for="internal_links"><?php _e('Internal links', Settings::TEXTDOMAIN); ?></label>
                 </th>
                 <td>
-                    <input type="checkbox" name="internal-links"<?php checked($this->settings->get('internal_links')); ?>/>
+                    <input type="checkbox" name="internal_links"<?php checked($this->settings->get('internal_links')); ?>/>
                     <p class="description"><?php _e('Display feed items directly in Wordpress.', Settings::TEXTDOMAIN); ?></p>
                 </td>
             </tr>
             <tr>
                 <th scope="row">
-                    <label for="base-slug"><?php _e('Slug', Settings::TEXTDOMAIN); ?></label>
+                    <label for="base_slug"><?php _e('Slug', Settings::TEXTDOMAIN); ?></label>
                 </th>
                 <td>
-                    <input type="text" name="base-slug" value="<?php echo $this->settings->get('base_slug'); ?>" />
+                    <input type="text" name="base_slug" value="<?php echo $this->settings->get('base_slug'); ?>" />
                     <p class="description"><?php _e('The base slug to use when displaying feed items in Wordpress.', Settings::TEXTDOMAIN); ?></p>
                     <p class="description"><?php _e(sprintf('Current format is: %s/%s/AAA093541230X/', get_bloginfo('url'), $this->settings->get('base_slug')), Settings::TEXTDOMAIN); ?></p>
                 </td>

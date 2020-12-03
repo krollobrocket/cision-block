@@ -82,4 +82,15 @@ class Settings extends Base\Settings
     {
         return $this->defaultSettings;
     }
+
+    /**
+     * @param array $options
+     */
+    public function setFromArray(array $options)
+    {
+        foreach ($options as $name => $value) {
+            $this->set($name, $value);
+        }
+        return $this;
+    }
 }

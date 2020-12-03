@@ -172,6 +172,7 @@ class Backend extends Singleton
     public function saveSettings()
     {
         $tab = '';
+        $settings = array();
 
         // Check if settings form is submitted.
         if (filter_input(INPUT_POST, 'cision-block-settings', FILTER_SANITIZE_STRING)) {
@@ -182,134 +183,8 @@ class Backend extends Singleton
 
             // Verify nonce and referer.
             if (check_admin_referer('cision-block-settings-action', 'cision-block-settings-nonce')) {
-                // Filter and sanitize form values.
-                $this->settings->count = filter_input(
-                    INPUT_POST,
-                    'count',
-                    FILTER_VALIDATE_INT,
-                    array(
-                        'options' => array(
-                            'default' => Settings::DEFAULT_ITEM_COUNT,
-                            'min_range' => 1,
-                            'max_range' => Settings::MAX_ITEMS_PER_FEED,
-                        ),
-                    )
-                );
-                $this->settings->cache_expire = filter_input(
-                    INPUT_POST,
-                    'cache-expire',
-                    FILTER_SANITIZE_NUMBER_INT
-                );
-                $this->settings->source_uid = filter_input(
-                    INPUT_POST,
-                    'source-uid',
-                    FILTER_SANITIZE_STRING
-                );
-                $this->settings->types = filter_input(
-                    INPUT_POST,
-                    'feed-types',
-                    FILTER_SANITIZE_STRING,
-                    FILTER_REQUIRE_ARRAY
-                );
-                $this->settings->language = filter_input(
-                    INPUT_POST,
-                    'language',
-                    FILTER_SANITIZE_STRING
-                );
-                $this->settings->readmore = filter_input(
-                    INPUT_POST,
-                    'readmore',
-                    FILTER_SANITIZE_STRING
-                );
-                // Force lowercase language code.
-                $this->settings->language = strtolower($this->settings->language);
-                $this->settings->start_date = filter_input(
-                    INPUT_POST,
-                    'start-date',
-                    FILTER_SANITIZE_STRING
-                );
-                $this->settings->end_date = filter_input(
-                    INPUT_POST,
-                    'end-date',
-                    FILTER_SANITIZE_STRING
-                );
-                $this->settings->mark_regulatory = filter_input(
-                    INPUT_POST,
-                    'mark-regulatory',
-                    FILTER_VALIDATE_BOOLEAN
-                );
-                $text = filter_input(
-                    INPUT_POST,
-                    'regulatory-text',
-                    FILTER_SANITIZE_STRING
-                );
-                if ($text === '') {
-                    $this->settings->regulatory_text = Settings::DEFAULT_MARK_REGULATORY_TEXT;
-                } elseif ($text !== null) {
-                    $this->settings->regulatory_text = $text;
-                }
-                $text = filter_input(
-                    INPUT_POST,
-                    'non-regulatory-text',
-                    FILTER_SANITIZE_STRING
-                );
-                if ($text === '') {
-                    $this->settings->non_regulatory_text = Settings::DEFAULT_MARK_NON_REGULATORY_TEXT;
-                } elseif ($text !== null) {
-                    $this->settings->non_regulatory_text = $text;
-                }
-                $this->settings->date_format = filter_input(
-                    INPUT_POST,
-                    'date-format',
-                    FILTER_SANITIZE_STRING
-                );
-                $this->settings->tags = filter_input(
-                    INPUT_POST,
-                    'tags',
-                    FILTER_SANITIZE_STRING
-                );
-                $this->settings->search_term = filter_input(
-                    INPUT_POST,
-                    'search-term',
-                    FILTER_SANITIZE_STRING
-                );
-                $this->settings->categories = filter_input(
-                    INPUT_POST,
-                    'categories',
-                    FILTER_SANITIZE_STRING
-                );
-                $this->settings->categories = trim(strtolower($this->settings->categories));
-                $this->settings->view_mode = filter_input(
-                    INPUT_POST,
-                    'display-mode',
-                    FILTER_VALIDATE_INT
-                );
-                $this->settings->use_https = filter_input(
-                    INPUT_POST,
-                    'use-https',
-                    FILTER_VALIDATE_BOOLEAN
-                );
-                $this->settings->image_style = filter_input(
-                    INPUT_POST,
-                    'image-style',
-                    FILTER_SANITIZE_STRING
-                );
-                $this->settings->items_per_page = filter_input(
-                    INPUT_POST,
-                    'items-per-page',
-                    FILTER_VALIDATE_INT,
-                    array(
-                        'options' => array(
-                            'default' => Settings::DEFAULT_ITEMS_PER_PAGE,
-                            'min_range' => 0,
-                            'max_range' => Settings::MAX_ITEMS_PER_PAGE,
-                        ),
-                    )
-                );
+                $settings = Frontend::getInstance()->verifySettings($_POST);
 
-                Frontend::clearCache();
-
-                $this->settings->save();
                 $tab = 'settings';
             }
         }
@@ -321,21 +196,7 @@ class Backend extends Singleton
             }
             // Verify nonce and referer.
             if (check_admin_referer('cision-block-settings-action', 'cision-block-settings-nonce')) {
-                // Filter and sanitize form values.
-                $this->settings->internal_links = filter_input(
-                    INPUT_POST,
-                    'internal-links',
-                    FILTER_VALIDATE_BOOLEAN
-                );
-                $this->settings->base_slug = filter_input(
-                    INPUT_POST,
-                    'base-slug',
-                    FILTER_SANITIZE_STRING
-                );
-
-                Frontend::clearCache();
-
-                $this->settings->save();
+                $settings = Frontend::getInstance()->verifySettings($_POST);
 
                 // Make sure we flush the rewrite rules.
                 set_transient('cision_block_flush_rewrite_rules', 1);
@@ -350,48 +211,13 @@ class Backend extends Singleton
             }
             // Verify nonce and referer.
             if (check_admin_referer('cision-block-settings-action', 'cision-block-settings-nonce')) {
-                $this->settings->show_filters = filter_input(
-                    INPUT_POST,
-                    'show-filters',
-                    FILTER_VALIDATE_BOOLEAN
-                );
-                $text = filter_input(
-                    INPUT_POST,
-                    'filter-all-text',
-                    FILTER_SANITIZE_STRING
-                );
-                if ($text === '') {
-                    $this->settings->filter_all_text = Settings::DEFAULT_FILTER_ALL_TEXT;
-                } elseif ($text !== null) {
-                    $this->settings->filter_all_text = $text;
-                }
-                $text = filter_input(
-                    INPUT_POST,
-                    'filter-regulatory-text',
-                    FILTER_SANITIZE_STRING
-                );
-                if ($text === '') {
-                    $this->settings->filter_regulatory_text = Settings::DEFAULT_FILTER_REGULATORY_TEXT;
-                } elseif ($text !== null) {
-                    $this->settings->filter_regulatory_text = $text;
-                }
-                $text = filter_input(
-                    INPUT_POST,
-                    'filter-non-regulatory-text',
-                    FILTER_SANITIZE_STRING
-                );
-                if ($text === '') {
-                    $this->settings->filter_non_regulatory_text = Settings::DEFAULT_FILTER_NON_REGULATORY_TEXT;
-                } elseif ($text !== null) {
-                    $this->settings->filter_non_regulatory_text = $text;
-                }
+                $settings = Frontend::getInstance()->verifySettings($_POST);
 
-                Frontend::clearCache();
-
-                $this->settings->save();
                 $tab = 'filters';
             }
         }
+        $this->settings->setFromArray($settings)->save();
+        Frontend::clearCache();
         wp_redirect(admin_url(self::PARENT_MENU_SLUG . '?page=' . self::MENU_SLUG . '&tab=' . $tab));
     }
 

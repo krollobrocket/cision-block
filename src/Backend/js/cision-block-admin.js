@@ -1,18 +1,18 @@
 ;
 (function ($) {
     $(document).on('ready', () => {
-        $(':checkbox[name=mark-regulatory]').on('change', function () {
+        $(':checkbox[name=mark_regulatory]').on('change', function () {
             if (this.checked) {
-                $('[name=regulatory-text],[name=non-regulatory-text]').prop('disabled', false)
+                $('[name=regulatory_text],[name=non_regulatory_text]').prop('disabled', false)
             } else {
-                $('[name=regulatory-text],[name=non-regulatory-text]').prop('disabled', true)
+                $('[name=regulatory_text],[name=non_regulatory_text]').prop('disabled', true)
             }
         });
-        $(':checkbox[name=show-filters]').on('change', function () {
+        $(':checkbox[name=show_filters]').on('change', function () {
             if (this.checked) {
-                $('[name=filter-all-text],[name=filter-regulatory-text],[name=filter-non-regulatory-text]').prop('disabled', false)
+                $('[name=filter_all_text],[name=filter_regulatory_text],[name=filter_non_regulatory_text]').prop('disabled', false)
             } else {
-                $('[name=filter-all-text],[name=filter-regulatory-text],[name=filter-non-regulatory-text]').prop('disabled', true)
+                $('[name=filter_all_text],[name=filter_regulatory_text],[name=filter_non_regulatory_text]').prop('disabled', true)
             }
         });
     });

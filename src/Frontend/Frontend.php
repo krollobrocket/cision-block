@@ -311,104 +311,232 @@ class Frontend extends Singleton
     }
 
     /**
-     * @param array $atts
-     *   An array of shortcode arguments.
+     * @param array $settings
+     * @return false[]
      */
-    protected function checkShortcodeAttributes(array $atts)
+    public function verifySettings(array $settings)
     {
         global $post;
         global $widget_id;
 
-        if (isset($atts['id'])) {
-            $this->current_block_id = $atts['id'];
+        $mapping = array(
+            // general
+            'count' => 'count',
+            'cache_expire' => 'cache_expire',
+            'source_uid' => 'source_uid',
+            'types' => 'types',
+            'language' => 'language',
+            'readmore' => 'readmore',
+            'start' => 'start_date',
+            'end' => 'end_date',
+            'mark_regulatory' => 'mark_regulatory',
+            'regulatory_text' => 'regulatory_text',
+            'non_regulatory_text' => 'non_regulatory_text',
+            'date_format' => 'date_format',
+            'tags' => 'tags',
+            'search_term' => 'search_term',
+            'categories' => 'categories',
+            'view' => 'view_mode',
+            'use_https' => 'use_https',
+            'image_style' => 'image_style',
+            'items_per_page' => 'items_per_page',
+
+            // permalinks
+            'internal_links' => 'internal_links',
+            'base_slug' => 'base_slug',
+
+            // filters
+            'show_filters' => 'show_filters',
+            'filter_all_text' => 'filter_all_text',
+            'filter_regulatory_text' => 'filter_regulatory_text',
+            'filter_non_regulatory_text' => 'filter_non_regulatory_text',
+
+            // special for shortcode attrib
+            'regulatory' => 'view_mode',
+            'flush' => 'flush',
+            'id' => 'id',
+
+            // special for widget
+            'widget' => 'widget',
+        );
+
+        $result = array(
+            'use_https' => false,
+            'mark_regulatory' => false,
+            'show_filters' => false,
+            'internal_links' => false,
+        );
+
+        foreach ($settings as $name => $value) {
+            switch ($name) {
+                case 'count':
+                    $result[$mapping[$name]] = filter_var(
+                        $value,
+                        FILTER_VALIDATE_INT,
+                        array(
+                            'options' => array(
+                                'default' => Settings::DEFAULT_ITEM_COUNT,
+                                'min_range' => 1,
+                                'max_range' => Settings::MAX_ITEMS_PER_FEED,
+                            ),
+                        )
+                    );
+                    break;
+                case 'cache_expire':
+                    $result[$mapping[$name]] = filter_var(
+                        $value,
+                        FILTER_SANITIZE_NUMBER_INT
+                    );
+                    break;
+                case 'types':
+                    if (is_string($value)) {
+                        $result[$mapping[$name]] = explode(',', str_replace(' ', '', $value));
+                    } else {
+                        $result[$mapping[$name]] = filter_var(
+                            $value,
+                            FILTER_SANITIZE_STRING,
+                            FILTER_REQUIRE_ARRAY
+                        );
+                    }
+                    break;
+                case 'source_uid':
+                case 'readmore':
+                case 'start':
+                case 'end':
+                case 'date_format':
+                case 'tags':
+                case 'search_term':
+                case 'image_style':
+                case 'base_slug':
+                    $result[$mapping[$name]] = filter_var(
+                        $value,
+                        FILTER_SANITIZE_STRING
+                    );
+                    break;
+                case 'language':
+                    $result[$mapping[$name]] = filter_var(
+                        $value,
+                        FILTER_SANITIZE_STRING
+                    );
+                    $result[$mapping[$name]] = strtolower($result[$mapping[$name]]);
+                    break;
+                case 'categories':
+                    $result[$mapping[$name]] = filter_var(
+                        $value,
+                        FILTER_SANITIZE_STRING
+                    );
+                    $result[$mapping[$name]] = trim(strtolower($result[$mapping[$name]]));
+                    break;
+                case 'mark_regulatory':
+                case 'use_https':
+                case 'internal_links':
+                case 'show_filters':
+                    $result[$mapping[$name]] = filter_var(
+                        $value,
+                        FILTER_VALIDATE_BOOLEAN
+                    );
+                    break;
+                case 'regulatory_text':
+                    $text = filter_var(
+                        $value,
+                        FILTER_SANITIZE_STRING
+                    );
+                    if ($text === '') {
+                        $result[$mapping[$name]] = Settings::DEFAULT_MARK_REGULATORY_TEXT;
+                    } else {
+                        $result[$mapping[$name]] = $text;
+                    }
+                    break;
+                case 'non_regulatory_text':
+                    $text = filter_var(
+                        $value,
+                        FILTER_SANITIZE_STRING
+                    );
+                    if ($text === '') {
+                        $result[$mapping[$name]] = Settings::DEFAULT_MARK_NON_REGULATORY_TEXT;
+                    } else {
+                        $result[$mapping[$name]] = $text;
+                    }
+                    break;
+                case 'filter_all_text':
+                    $text = filter_var(
+                        $value,
+                        FILTER_SANITIZE_STRING
+                    );
+                    if ($text === '') {
+                        $result[$mapping[$name]] = Settings::DEFAULT_FILTER_ALL_TEXT;
+                    } else {
+                        $result[$mapping[$name]] = $text;
+                    }
+                    break;
+                case 'filter_regulatory_text':
+                    $text = filter_var(
+                        $value,
+                        FILTER_SANITIZE_STRING
+                    );
+                    if ($text === '') {
+                        $result[$mapping[$name]] = Settings::DEFAULT_FILTER_REGULATORY_TEXT;
+                    } else {
+                        $result[$mapping[$name]] = $text;
+                    }
+                    break;
+                case 'filter_non_regulatory_text':
+                    $text = filter_var(
+                        $value,
+                        FILTER_SANITIZE_STRING
+                    );
+                    if ($text === '') {
+                        $result[$mapping[$name]] = Settings::DEFAULT_FILTER_NON_REGULATORY_TEXT;
+                    } else {
+                        $result[$mapping[$name]] = $text;
+                    }
+                    break;
+                case 'view':
+                    $result[$mapping[$name]] = filter_var(
+                        $value,
+                        FILTER_VALIDATE_INT,
+                        array(
+                            'default' => 1,
+                            'min_range' => 1,
+                            'max_range' => 3,
+                        )
+                    );
+                    break;
+                case 'items_per_page':
+                    $result[$mapping[$name]] = filter_var(
+                        $value,
+                        FILTER_VALIDATE_INT,
+                        array(
+                            'options' => array(
+                                'default' => Settings::DEFAULT_ITEMS_PER_PAGE,
+                                'min_range' => 0,
+                                'max_range' => Settings::MAX_ITEMS_PER_PAGE,
+                            ),
+                        )
+                    );
+                    break;
+                case 'regulatory':
+                    // This is a fallback for old argument
+                    $result[$mapping['name']] = 2;
+                    break;
+                case 'flush':
+                    if (filter_var(
+                        $value,
+                        FILTER_VALIDATE_BOOLEAN
+                    )) {
+                        delete_transient(self::TRANSIENT_KEY . '_' . $this->current_block_id . '_' . ($widget_id ? $widget_id : $post->ID));
+                    }
+                    break;
+                case 'id':
+                    $this->current_block_id = $value;
+                    break;
+                case 'widget':
+                    $widget_id = $value;
+                    break;
+
+            }
         }
-        if (isset($atts['widget'])) {
-            $widget_id = $atts['widget'];
-        }
-        if (isset($atts['language'])) {
-            $this->settings->language = $atts['language'];
-        }
-        if (isset($atts['readmore'])) {
-            $this->settings->readmore = $atts['readmore'];
-        }
-        if (isset($atts['date_format'])) {
-            $this->settings->date_format = $atts['date_format'];
-        }
-        if (isset($atts['items_per_page'])) {
-            $this->settings->items_per_page = filter_var(
-                $atts['items_per_page'],
-                FILTER_SANITIZE_NUMBER_INT,
-                array(
-                    'options' => array(
-                        'default' => Settings::DEFAULT_ITEMS_PER_PAGE,
-                        'min_range' => 0,
-                        'max_range' => Settings::MAX_ITEMS_PER_PAGE,
-                    ),
-                )
-            );
-        }
-        if (isset($atts['count'])) {
-            $this->settings->count = filter_var(
-                $atts['count'],
-                FILTER_VALIDATE_INT,
-                array(
-                    'options' => array(
-                        'default' => Settings::DEFAULT_ITEM_COUNT,
-                        'min_range' => 1,
-                        'max_range' => Settings::MAX_ITEMS_PER_FEED,
-                    ),
-                )
-            );
-        }
-        if (isset($atts['types'])) {
-            $this->settings->types = explode(',', str_replace(' ', '', $atts['types']));
-        }
-        if (isset($atts['view'])) {
-            $this->settings->view_mode = filter_var($atts['view'], FILTER_VALIDATE_INT);
-        }
-        if (isset($atts['regulatory']) && filter_var($atts['regulatory'], FILTER_VALIDATE_BOOLEAN)) {
-            // This is a fallback for old argument
-            $this->settings->view_mode = 2;
-        }
-        if (isset($atts['flush']) && filter_var($atts['flush'], FILTER_VALIDATE_BOOLEAN)) {
-            delete_transient(self::TRANSIENT_KEY . '_' . $this->current_block_id . '_' . ($widget_id ? $widget_id : $post->ID));
-        }
-        if (isset($atts['tags'])) {
-            $this->settings->tags = $atts['tags'];
-        }
-        if (isset($atts['search_term'])) {
-            $this->settings->search_term = $atts['search_term'];
-        }
-        if (isset($atts['categories'])) {
-            $this->settings->categories = strtolower($atts['categories']);
-        }
-        if (isset($atts['start'])) {
-            $this->settings->start_date = $atts['start'];
-        }
-        if (isset($atts['end'])) {
-            $this->settings->end_date = $atts['end'];
-        }
-        if (isset($atts['image_style'])) {
-            $this->settings->image_style = $atts['image_style'];
-        }
-        if (!empty($atts['source_uid'])) {
-            $this->settings->source_uid = filter_var(
-                $atts['source_uid'],
-                FILTER_SANITIZE_STRING
-            );
-        }
-        if (isset($atts['show_filters'])) {
-            $this->settings->show_filters = filter_var(
-                $atts['show_filters'],
-                FILTER_VALIDATE_BOOLEAN
-            );
-        }
-        if (isset($atts['mark_regulatory'])) {
-            $this->settings->mark_regulatory = filter_var(
-                $atts['mark_regulatory'],
-                FILTER_VALIDATE_BOOLEAN
-            );
-        }
+        return $result;
     }
 
     /**
@@ -431,7 +559,8 @@ class Frontend extends Singleton
 
         // There is no need to check these values if no arguments is supplied.
         if (is_array($atts)) {
-            $this->checkShortcodeAttributes($atts);
+            $verified = $this->verifySettings($atts);
+            $this->settings->setFromArray($verified);
         }
         $feed_items = $this->getFeed();
         $pager = $this->getPagination($feed_items);

@@ -291,6 +291,7 @@ Fixed a bug where source id from widget was never used.
 - Add filters.
 - Add support to mark releases as regulatory and non-regulatory in the feed.
 - Add autoloader
+- Update minimum supported PHP version to 5.6.
 
 = 2.2.2 =
 - Improve singleton class.
