@@ -38,7 +38,7 @@
  *
  * @package Cision Block
  * @since   1.0
- * @version 2.3
+ * @version 2.3.0
  */
 
 ?>

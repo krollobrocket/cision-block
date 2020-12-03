@@ -121,7 +121,7 @@ class Backend extends Singleton
             $this->settings->version = Frontend::VERSION;
 
             // Store updated settings.
-            $this->settings->cleanOptions($defaults);
+            // $this->settings->cleanOptions($defaults);
             $this->settings->save();
         }
     }

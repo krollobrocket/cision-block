@@ -1,7 +1,7 @@
 {
     "name": "cyclonecode/cision-block",
     "type": "wordpress-plugin",
-    "version": "2.3",
+    "version": "2.3.0",
     "keywords": ["wordpress", "plugin", "cision", "feed", "cision feed", "shortcode", "widget", "content"],
     "description": "This plugin adds a shortcode and a widget that can be used for pulling and displaying pressreleases from cision.",
     "require": {
