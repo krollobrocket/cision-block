@@ -1,4 +1,5 @@
 <?php
+
 namespace CisionBlock\Common;
 
 abstract class Singleton

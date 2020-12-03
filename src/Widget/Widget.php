@@ -1,13 +1,12 @@
 <?php
+
 namespace CisionBlock\Widget;
 
-require_once 'Base/Widget.php';
+use CisionBlock\Frontend\Frontend;
+use CisionBlock\Backend\Backend;
+use CisionBlock\Config\Settings;
 
-use CisionBlock\CisionBlock;
-use CisionBlock\CisionBlockAdmin;
-use CisionBlock\Widget\Base\Widget;
-
-class CisionBlockWidget extends Widget
+class Widget extends Base\Widget
 {
     /**
      * Constructor.
@@ -15,8 +14,8 @@ class CisionBlockWidget extends Widget
     public function __construct()
     {
         $this->name = 'cision_block_widget';
-        $this->description = __('Display pressreleases from cision.', CISION_BLOCK_TEXTDOMAIN);
-        $this->title = __('Cision Block', CISION_BLOCK_TEXTDOMAIN);
+        $this->description = __('Display pressreleases from cision.', Settings::TEXTDOMAIN);
+        $this->title = __('Cision Block', Settings::TEXTDOMAIN);
         parent::__construct();
     }
 
@@ -42,6 +41,9 @@ class CisionBlockWidget extends Widget
             'readmore' => isset($instance['readmore']) ? $instance['readmore'] : null,
             'date_format' => $instance['date_format'],
             'widget' => $this->id,
+            // Always disable filters and marked releases here.
+            'mark_regulatory' => false,
+            'show_filters' => false,
         );
 
         $shortcode_args = '';
@@ -81,7 +83,7 @@ class CisionBlockWidget extends Widget
             );
         }
 
-        $feed_types = CisionBlock::getInstance()->getFeedTypes();
+        $feed_types = Frontend::getInstance()->getFeedTypes();
         $type_options = '';
         foreach ($feed_types as $key => $value) {
             $type_options .= '<option value="' . $key . '"' .
@@ -89,7 +91,7 @@ class CisionBlockWidget extends Widget
                 $value . '</option>';
         }
 
-        $image_styles = CisionBlockAdmin::getInstance()->getImageStyles();
+        $image_styles = Backend::getInstance()->getImageStyles();
         $image_style_options = '';
         foreach ($image_styles as $key => $image_style) {
             $image_style_options .= '<option value="' . $key . '"' .
@@ -99,64 +101,64 @@ class CisionBlockWidget extends Widget
 
         $output = '';
         $output .= '<p>';
-        $output .= '<label for="' . $this->get_field_id('source') . '">' . __('Cision Feed source id', CISION_BLOCK_TEXTDOMAIN) . '</label>';
+        $output .= '<label for="' . $this->get_field_id('source') . '">' . __('Cision Feed source id', Settings::TEXTDOMAIN) . '</label>';
         $output .= '<input type="text" class="widefat" name="' . $this->get_field_name('source') . '" value="' . sanitize_text_field($instance['source']) . '"/>';
         $output .= '</p>';
         $output .= '<p>';
-        $output .= '<label for="' . $this->get_field_id('count') . '">' . __('Number of feed items', CISION_BLOCK_TEXTDOMAIN) . ': </label>';
+        $output .= '<label for="' . $this->get_field_id('count') . '">' . __('Number of feed items', Settings::TEXTDOMAIN) . ': </label>';
         $output .= '<input class="tiny-text" type="number" min="1" max="' . CISION_BLOCK_MAX_ITEMS_PER_FEED . '" name="' . $this->get_field_name('count') . '" value="' . $instance['count'] . '" />';
         $output .= '</p>';
         $output .= '<p>';
-        $output .= '<label for="' . $this->get_field_id('items_per_page') . '">' . __('Items per page', CISION_BLOCK_TEXTDOMAIN) . ': </label>';
+        $output .= '<label for="' . $this->get_field_id('items_per_page') . '">' . __('Items per page', Settings::TEXTDOMAIN) . ': </label>';
         $output .= '<input class="tiny-text" type="number" min="0" max="' . CISION_BLOCK_MAX_ITEMS_PER_PAGE . '" name="' . $this->get_field_name('items_per_page') . '" value="' . $instance['items_per_page'] . '" />';
         $output .= '</p>';
         $output .= '<p>';
-        $output .= '<label for="' . $this->get_field_id('types') . '">' . __('Type of feed items', CISION_BLOCK_TEXTDOMAIN) . '</label>';
+        $output .= '<label for="' . $this->get_field_id('types') . '">' . __('Type of feed items', Settings::TEXTDOMAIN) . '</label>';
         $output .= '<select class="widefat" name="' . $this->get_field_name('types') . '[]" multiple>';
         $output .= $type_options;
         $output .= '</select>';
         $output .= '</p>';
         $output .= '<p>';
-        $output .= '<label for="' . $this->get_field_id('start_date') . '">' . __('Start date', CISION_BLOCK_TEXTDOMAIN) . ': </label>';
+        $output .= '<label for="' . $this->get_field_id('start_date') . '">' . __('Start date', Settings::TEXTDOMAIN) . ': </label>';
         $output .= '<input type="date" name="' . $this->get_field_name('start_date') . '" value="' . $instance['start_date'] . '" />';
         $output .= '</p>';
         $output .= '<p>';
-        $output .= '<label for="' . $this->get_field_id('end_date') . '">' . __('End date', CISION_BLOCK_TEXTDOMAIN) . ': </label>';
+        $output .= '<label for="' . $this->get_field_id('end_date') . '">' . __('End date', Settings::TEXTDOMAIN) . ': </label>';
         $output .= '<input type="date" name="' . $this->get_field_name('end_date') . '" value="' . $instance['end_date'] . '" />';
         $output .= '</p>';
         $output .= '<p>';
-        $output .= '<label for="' . $this->get_field_id('tags') . '">' . __('Tags', CISION_BLOCK_TEXTDOMAIN) . '</label>';
+        $output .= '<label for="' . $this->get_field_id('tags') . '">' . __('Tags', Settings::TEXTDOMAIN) . '</label>';
         $output .= '<input type="text" class="widefat" name="' . $this->get_field_name('tags') . '" value="' . $instance['tags'] . '">';
         $output .= '</p>';
         $output .= '<p>';
-        $output .= '<label for="' . $this->get_field_id('readmore') . '">' . __('Read more text', CISION_BLOCK_TEXTDOMAIN) . ': </label>';
+        $output .= '<label for="' . $this->get_field_id('readmore') . '">' . __('Read more text', Settings::TEXTDOMAIN) . ': </label>';
         $output .= '<input type="text" name="' . $this->get_field_name('readmore') . '" value="' . $instance['readmore'] . '" />';
         $output .= '</p>';
         $output .= '<p>';
-        $output .= '<label for="' . $this->get_field_id('language') . '">' . __('Language', CISION_BLOCK_TEXTDOMAIN) . ': </label>';
+        $output .= '<label for="' . $this->get_field_id('language') . '">' . __('Language', Settings::TEXTDOMAIN) . ': </label>';
         $output .= '<input type="text" name="' . $this->get_field_name('language') . '" value="' . $instance['language'] . '" />';
         $output .= '</p>';
         $output .= '<p>';
-        $output .= '<label for="' . $this->get_field_id('view_mode') . '">' . __('View mode', CISION_BLOCK_TEXTDOMAIN) . ': </label>';
+        $output .= '<label for="' . $this->get_field_id('view_mode') . '">' . __('View mode', Settings::TEXTDOMAIN) . ': </label>';
         $output .= '<select class="widefat" name=' . $this->get_field_name('view_mode') . '">';
-        $output .= '<option value="1"' . selected($instance['view_mode'] == 1) . '>' . __('All', CISION_BLOCK_TEXTDOMAIN) . '</option>';
-        $output .= '<option value="2"' . selected($instance['view_mode'] == 2) . '>' . __('Regulatory', CISION_BLOCK_TEXTDOMAIN) . '</option>';
-        $output .= '<option value="3"' . selected($instance['view_mode'] == 3) . '>' . __('Non-regulatory', CISION_BLOCK_TEXTDOMAIN) . '</option>';
+        $output .= '<option value="1"' . selected($instance['view_mode'] == 1) . '>' . __('All', Settings::TEXTDOMAIN) . '</option>';
+        $output .= '<option value="2"' . selected($instance['view_mode'] == 2) . '>' . __('Regulatory', Settings::TEXTDOMAIN) . '</option>';
+        $output .= '<option value="3"' . selected($instance['view_mode'] == 3) . '>' . __('Non-regulatory', Settings::TEXTDOMAIN) . '</option>';
         $output .= '</select>';
         $output .= '</p>';
         $output .= '<p>';
-        $output .= '<label for="' . $this->get_field_id('date_format') . '">' . __('Date format', CISION_BLOCK_TEXTDOMAIN) . ': </label>';
+        $output .= '<label for="' . $this->get_field_id('date_format') . '">' . __('Date format', Settings::TEXTDOMAIN) . ': </label>';
         $output .= '<input type="text" name="' . $this->get_field_name('date_format') . '" value="' . $instance['date_format'] . '" />';
         $output .= '</p>';
         $output .= '<p>';
-        $output .= '<label for="' . $this->get_field_id('image_style') . '">' . __('Image style', CISION_BLOCK_TEXTDOMAIN) . ': </label>';
+        $output .= '<label for="' . $this->get_field_id('image_style') . '">' . __('Image style', Settings::TEXTDOMAIN) . ': </label>';
         $output .= '<select class="widefat" name=' . $this->get_field_name('image_style') . '">';
-        $output .= '<option value="">' . __('Select', CISION_BLOCK_TEXTDOMAIN) . '</option>';
+        $output .= '<option value="">' . __('Select', Settings::TEXTDOMAIN) . '</option>';
         $output .= $image_style_options;
         $output .= '</select>';
         $output .= '</p>';
         $output .= '<p>';
-        $output .= '<label for="' . $this->get_field_id('cache_expire') . '">' . __('Cache lifetime', CISION_BLOCK_TEXTDOMAIN) . ': </label>';
+        $output .= '<label for="' . $this->get_field_id('cache_expire') . '">' . __('Cache lifetime', Settings::TEXTDOMAIN) . ': </label>';
         $output .= '<input class="tiny-text" type="number" min="0" name="' . $this->get_field_name('cache_expire') . '" value="' . $instance['cache_expire'] . '" />';
         $output .= '</p>';
         echo $output;
@@ -188,7 +190,7 @@ class CisionBlockWidget extends Widget
             $instance['types'] = array(CISION_BLOCK_DEFAULT_FEED_TYPE);
         } else {
             $types = $new_instance['types'];
-            $all_feed_types = array_keys(CisionBlock::getInstance()->getFeedTypes());
+            $all_feed_types = array_keys(Frontend::getInstance()->getFeedTypes());
             $feed_types = array();
             foreach ($types as $type) {
                 if (in_array($type, $all_feed_types)) {

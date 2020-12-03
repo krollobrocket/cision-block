@@ -1,8 +1,9 @@
 <?php
+
 /**
  * Plugin Name: Cision Block
  * Description: Imports a news feed from Cision.
- * Version: 2.2.2
+ * Version: 2.3
  * Author: Cyclonecode
  * Author URI: https://stackoverflow.com/users/1047662/cyclonecode?tab=profile
  * Copyright: Cyclonecode
@@ -14,6 +15,7 @@
  * @package Cision Block
  * @author Cyclonecode
  */
+
 namespace CisionBlock;
 
 /**
@@ -23,20 +25,18 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('CISION_BLOCK_PLUGIN_DIR', plugin_dir_path(__FILE__));
-define('CISION_BLOCK_PLUGIN_ADMIN_DIR', CISION_BLOCK_PLUGIN_DIR . '/admin');
-define('CISION_BLOCK_PLUGIN_URL', plugin_dir_url(__FILE__));
-define('CISION_BLOCK_PLUGIN_FILE', __FILE__);
+require_once __DIR__ . '/vendor/autoload.php';
 
-require_once CISION_BLOCK_PLUGIN_DIR . '/public/cision-block.php';
+use CisionBlock\Backend\Backend;
+use CisionBlock\Frontend\Frontend;
 
 add_action('plugins_loaded', function () {
     if (is_admin()) {
-        CisionBlockAdmin::getInstance();
+        Backend::getInstance();
     } else {
-        CisionBlock::getInstance();
+        Frontend::getInstance();
     }
 });
 
-register_activation_hook(__FILE__, array('CisionBlock\CisionBlockAdmin', 'activate'));
-register_uninstall_hook(__FILE__, array('CisionBlock\CisionBlock', 'delete'));
+register_activation_hook(__FILE__, array('CisionBlock\Backend', 'activate'));
+register_uninstall_hook(__FILE__, array('CisionBlock\Frontend', 'delete'));

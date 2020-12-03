@@ -3,9 +3,9 @@ Contributors: cyclonecode
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=VUK8LYLAN2DA6&source=url&lc=US&item_name=Cision+Block
 Tags: cision, feed, cision feed, shortcode, widget, content
 Requires at least: 3.1.0
-Tested up to: 5.5
-Requires PHP: 5.3
-Stable tag: 2.2.2
+Tested up to: 5.5.3
+Requires PHP: 5.6
+Stable tag: 2.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -106,12 +106,20 @@ Here is a complete list of the different kind of pressreleases:
 
 To use more than one block in a single page you will need to set a unique id for each block or else they will both share the same cache entry.
 
+= Filter and marking feed items =
+
+On the 'Filters' tab you can enable filtering on you feed and add a text for the different kind of filters or use the default ones.
+If for some reason you would like to hide a specific filter button you can enter the special value `[none]` in the corresponding text field.
+
+You can add a text for each feed item stating if it is regulatory or not by checking the 'Mark regulatory' checkbox in the settings page.
+If you wish to hide the text for regulatory or non-regulatory releases you can use the special value `[none]` in the corresponding text field.
+
 = Template =
 
 The template used to render the feed is **cision-block/templates/cision-block.php**, you can override
 this template by copying it to either the root or under a **templates** folder in your theme.
 
-= Experimental: Display single press releases in Wordpress =
+= Display single press releases in Wordpress =
 
 Since version 2.0.0 it is possible to fetch and display press releases directly from within Wordpress.
 The template used in this case is **cision-block/templates/cision-block-post.php**, you can override
@@ -278,6 +286,11 @@ Fixed a bug where source id from widget was never used.
 3. A single press release displayed in Wordpress.
 
 == Changelog ==
+
+= 2.3
+- Add filters.
+- Add support to mark releases as regulatory and non-regulatory in the feed.
+- Add autoloader
 
 = 2.2.2 =
 - Improve singleton class.

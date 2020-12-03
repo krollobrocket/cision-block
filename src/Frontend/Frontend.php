@@ -1,33 +1,13 @@
 <?php
-namespace CisionBlock;
 
-define('CISION_BLOCK_DEFAULT_ITEMS_PER_PAGE', 0);
-define('CISION_BLOCK_DEFAULT_ITEM_COUNT', 50);
-define('CISION_BLOCK_DEFAULT_CACHE_LIFETIME', 60 * 5);
-define('CISION_BLOCK_DEFAULT_DATE_FORMAT', 'd-m-Y');
-define('CISION_BLOCK_DEFAULT_IMAGE_STYLE', 'DownloadUrl');
-define('CISION_BLOCK_MAX_ITEMS_PER_FEED', 100);
-define('CISION_BLOCK_MAX_ITEMS_PER_PAGE', 100);
-define('CISION_BLOCK_DEFAULT_FEED_TYPE', 'PRM');
-define('CISION_BLOCK_DEFAULT_PAGE_INDEX', 1);
-define('CISION_BLOCK_DEFAULT_LANGUAGE', '');
-define('CISION_BLOCK_DEFAULT_READMORE_TEXT', 'Read more');
-define('CISION_BLOCK_DISPLAY_MODE_ALL', 1);
-define('CISION_BLOCK_DISPLAY_MODE_REGULATORY', 2);
-define('CISION_BLOCK_DISPLAY_MODE_NON_REGULATORY', 3);
-define('CISION_BLOCK_DEFAULT_DISPLAY_MODE', CISION_BLOCK_DISPLAY_MODE_ALL);
-define('CISION_BLOCK_TEXTDOMAIN', 'cision-block');
-
-require_once CISION_BLOCK_PLUGIN_DIR . '/src/Common/Singleton.php';
-require_once CISION_BLOCK_PLUGIN_DIR . '/src/Config/Settings.php';
-require_once CISION_BLOCK_PLUGIN_DIR . '/src/Widget/CisionBlockWidget.php';
-require_once CISION_BLOCK_PLUGIN_DIR . '/admin/cision-block-admin.php';
+namespace CisionBlock\Frontend;
 
 use CisionBlock\Common\Singleton;
 use CisionBlock\Config\Settings;
-use CisionBlock\Widget\CisionBlockWidget;
+use CisionBlock\Widget\Widget;
+use stdClass;
 
-class CisionBlock extends Singleton
+class Frontend extends Singleton
 {
     const FEED_DETAIL_LEVEL = 'detail';
     const FEED_FORMAT = 'json';
@@ -36,17 +16,17 @@ class CisionBlock extends Singleton
     const SETTINGS_NAME = 'cision_block_settings';
     const TRANSIENT_KEY = 'cision_block_data';
     const USER_AGENT = 'cision-block/' . self::VERSION;
-    const VERSION = '2.2.2';
+    const VERSION = '2.3';
 
     /**
      *
-     * @var \CisionBlock\Config\Settings
+     * @var Settings
      */
     private $settings;
 
     /**
      *
-     * @var \CisionBlock\Widget\CisionBlockWidget
+     * @var Widget
      */
     private $widget;
 
@@ -99,7 +79,7 @@ class CisionBlock extends Singleton
         $this->settings = new Settings(self::SETTINGS_NAME);
 
         // Setup widget.
-        $this->widget = new CisionBlockWidget();
+        $this->widget = new Widget();
 
         add_shortcode('cision-block', array($this, 'displayFeed'));
 
@@ -120,8 +100,10 @@ class CisionBlock extends Singleton
             $regex = get_shortcode_regex();
             $matches = array();
             $block_id = 'cision_block';
-            if (preg_match_all('/' . $regex . '/', $content, $matches) &&
-                array_key_exists(2, $matches)) {
+            if (
+                preg_match_all('/' . $regex . '/', $content, $matches) &&
+                array_key_exists(2, $matches)
+            ) {
                 foreach ($matches[2] as $key => $match) {
                     if ($match == 'cision-block') {
                         if (array_key_exists(3, $matches)) {
@@ -141,7 +123,7 @@ class CisionBlock extends Singleton
      * Sets the page title when visiting a press release.
      *
      * @param string $title
-     * @global \stdClass $CisionItem
+     * @global stdClass $CisionItem
      *
      * @return string
      */
@@ -149,7 +131,7 @@ class CisionBlock extends Singleton
     {
         global $CisionItem;
         if (get_query_var('cision_release_id')) {
-            return get_bloginfo('name') . ' | ' . ($CisionItem ? $CisionItem->Title : __('Not found', CISION_BLOCK_TEXTDOMAIN));
+            return get_bloginfo('name') . ' | ' . ($CisionItem ? $CisionItem->Title : __('Not found', Settings::TEXTDOMAIN));
         }
 
         return $title;
@@ -158,7 +140,7 @@ class CisionBlock extends Singleton
     /**
      * Include custom template if needed.
      *
-     * @global \stdClass $CisionItem
+     * @global stdClass $CisionItem
      * @global WP_Query $wp_query
      */
     public function addTemplate()
@@ -195,7 +177,7 @@ class CisionBlock extends Singleton
                     return $template;
                 } else {
                     // Include the default plugin supplied template.
-                    return CISION_BLOCK_PLUGIN_DIR . 'templates/cision-block-post.php';
+                    return __DIR__ . '/templates/cision-block-post.php';
                 }
             });
         }
@@ -259,7 +241,7 @@ class CisionBlock extends Singleton
      */
     protected function localize()
     {
-        load_plugin_textdomain(CISION_BLOCK_TEXTDOMAIN, false, dirname(plugin_basename(__FILE__)) . '/languages');
+        load_plugin_textdomain(Settings::TEXTDOMAIN, false, dirname(plugin_basename(__FILE__)) . '/languages');
     }
 
     /**
@@ -271,12 +253,12 @@ class CisionBlock extends Singleton
     public function getFeedTypes()
     {
         return array(
-            'KMK' => __('Annual Financial statement', CISION_BLOCK_TEXTDOMAIN),
-            'RDV' => __('Annual Report', CISION_BLOCK_TEXTDOMAIN),
-            'PRM' => __('Company Announcement', CISION_BLOCK_TEXTDOMAIN),
-            'RPT' => __('Interim Report', CISION_BLOCK_TEXTDOMAIN),
-            'INB' => __('Invitation', CISION_BLOCK_TEXTDOMAIN),
-            'NBR' => __('Newsletter', CISION_BLOCK_TEXTDOMAIN),
+            'KMK' => __('Annual Financial statement', Settings::TEXTDOMAIN),
+            'RDV' => __('Annual Report', Settings::TEXTDOMAIN),
+            'PRM' => __('Company Announcement', Settings::TEXTDOMAIN),
+            'RPT' => __('Interim Report', Settings::TEXTDOMAIN),
+            'INB' => __('Invitation', Settings::TEXTDOMAIN),
+            'NBR' => __('Newsletter', Settings::TEXTDOMAIN),
         );
     }
 
@@ -301,7 +283,23 @@ class CisionBlock extends Singleton
      */
     public function addStyles()
     {
-        wp_register_style('cision-block', CISION_BLOCK_PLUGIN_URL . 'css/cision-block.css');
+        wp_register_style('cision-block', $this->getPluginUrl('css/cision-block.css'));
+        wp_enqueue_script(
+            'cision-block',
+            $this->getPluginUrl('js/cision-block.js'),
+            array('jquery'),
+            '',
+            true
+        );
+    }
+
+    /**
+     * @param string $path
+     * @return string
+     */
+    public function getPluginUrl($path)
+    {
+        return plugin_dir_url(__FILE__) . $path;
     }
 
     /**
@@ -342,9 +340,9 @@ class CisionBlock extends Singleton
                 FILTER_SANITIZE_NUMBER_INT,
                 array(
                     'options' => array(
-                        'default' => CISION_BLOCK_DEFAULT_ITEMS_PER_PAGE,
+                        'default' => Settings::DEFAULT_ITEMS_PER_PAGE,
                         'min_range' => 0,
-                        'max_range' => CISION_BLOCK_MAX_ITEMS_PER_PAGE,
+                        'max_range' => Settings::MAX_ITEMS_PER_PAGE,
                     ),
                 )
             );
@@ -355,9 +353,9 @@ class CisionBlock extends Singleton
                 FILTER_VALIDATE_INT,
                 array(
                     'options' => array(
-                        'default' => CISION_BLOCK_DEFAULT_ITEM_COUNT,
+                        'default' => Settings::DEFAULT_ITEM_COUNT,
                         'min_range' => 1,
-                        'max_range' => CISION_BLOCK_MAX_ITEMS_PER_FEED,
+                        'max_range' => Settings::MAX_ITEMS_PER_FEED,
                     ),
                 )
             );
@@ -399,6 +397,18 @@ class CisionBlock extends Singleton
                 FILTER_SANITIZE_STRING
             );
         }
+        if (isset($atts['show_filters'])) {
+            $this->settings->show_filters = filter_var(
+                $atts['show_filters'],
+                FILTER_VALIDATE_BOOLEAN
+            );
+        }
+        if (isset($atts['mark_regulatory'])) {
+            $this->settings->mark_regulatory = filter_var(
+                $atts['mark_regulatory'],
+                FILTER_VALIDATE_BOOLEAN
+            );
+        }
     }
 
     /**
@@ -431,7 +441,14 @@ class CisionBlock extends Singleton
             'cision_feed' => $feed_items,
             'pager' => $pager,
             'id' => $this->current_block_id,
-            'readmore' => $this->settings->get('readmore'),
+            'readmore' => __($this->settings->get('readmore'), Settings::TEXTDOMAIN),
+            'mark_regulatory' => $this->settings->get('mark_regulatory'),
+            'regulatory_text' => __($this->settings->get('regulatory_text'), Settings::TEXTDOMAIN),
+            'non_regulatory_text' => __($this->settings->get('non_regulatory_text'), Settings::TEXTDOMAIN),
+            'show_filters' => $this->settings->get('show_filters'),
+            'filter_all_text' => __($this->settings->get('filter_all_text'), Settings::TEXTDOMAIN),
+            'filter_regulatory_text' => __($this->settings->get('filter_regulatory_text'), Settings::TEXTDOMAIN),
+            'filter_non_regulatory_text' => __($this->settings->get('filter_non_regulatory_text'), Settings::TEXTDOMAIN),
             'prefix' => apply_filters('cision_block_prefix', '', $this->current_block_id),
             'suffix' => apply_filters('cision_block_suffix', '', $this->current_block_id),
             'attributes' => $this->parseAttributes(apply_filters('cision_block_media_attributes', array(
@@ -459,7 +476,7 @@ class CisionBlock extends Singleton
             include $template;
         } else {
             // Include the default plugin supplied template.
-            include CISION_BLOCK_PLUGIN_DIR . 'templates/cision-block.php';
+            include __DIR__ . '/templates/cision-block.php';
         }
         return ob_get_clean();
     }
@@ -507,7 +524,7 @@ class CisionBlock extends Singleton
             $page = (int) get_query_var('cb_page', -1);
             $active = ($id == 'cision_block' ? $page : 0);
             if ($max > 1) {
-                $output = '<ul' . $attributes. '>';
+                $output = '<ul' . $attributes . '>';
                 for ($i = 0; $i < $max; $i++) {
                     $output .= '<li><a href="' . add_query_arg(array('cb_id' => 'cision_block', 'cb_page' => $i)) . '"' .
                         ($active == $i ? ' class="' . $active_class . '"' : '') . '>' . ($i + 1) . '</a></li>';
@@ -563,7 +580,7 @@ class CisionBlock extends Singleton
         $data = get_transient(self::TRANSIENT_KEY . '_' . $this->current_block_id . '_' . ($widget_id ? $widget_id : $post->ID));
         if ($data === false) {
             $params = array(
-                'PageIndex' => CISION_BLOCK_DEFAULT_PAGE_INDEX,
+                'PageIndex' => Settings::DEFAULT_PAGE_INDEX,
                 'PageSize' => $this->settings->get('count'),
                 'DetailLevel' => self::FEED_DETAIL_LEVEL,
                 'Format' => self::FEED_FORMAT,
@@ -572,9 +589,9 @@ class CisionBlock extends Singleton
                 'EndDate' => $this->settings->get('end_date'),
                 'SearchTerm' => $this->settings->get('search_term'),
                 'Regulatory' =>
-                $this->settings->get('view_mode') === CISION_BLOCK_DISPLAY_MODE_REGULATORY ?
-                'true' :
-                ($this->settings->get('view_mode') === CISION_BLOCK_DISPLAY_MODE_NON_REGULATORY ? 'false' : null),
+                    $this->settings->get('view_mode') === Settings::DISPLAY_MODE_REGULATORY ?
+                        'true' :
+                        ($this->settings->get('view_mode') === Settings::DISPLAY_MODE_NON_REGULATORY ? 'false' : null),
             );
             $response = $this->remoteRequest(
                 self::FEED_URL . $this->settings->get('source_uid') . '?' . http_build_query($params)
@@ -594,13 +611,13 @@ class CisionBlock extends Singleton
     }
 
     /**
-     * @param \stdClass $release
+     * @param stdClass $release
      * @param $image_style
      * @param bool $use_https
      *
      * @return object
      */
-    protected function mapFeedItem(\stdClass $release, $image_style, $use_https = false)
+    protected function mapFeedItem(stdClass $release, $image_style, $use_https = false)
     {
         $item = array();
 
@@ -639,12 +656,12 @@ class CisionBlock extends Singleton
     /**
      * Check if an item is connected to any category.
      *
-     * @param \stdClass $item
+     * @param stdClass $item
      * @param array $categories
      *
      * @return bool
      */
-    protected function hasCategory(\stdClass $item, array $categories)
+    protected function hasCategory(stdClass $item, array $categories)
     {
         foreach ($item->Categories as $category) {
             if (in_array(strtolower($category->Name), $categories)) {
@@ -656,13 +673,13 @@ class CisionBlock extends Singleton
     /**
      * Creates an array of feed items.
      *
-     * @param \stdClass $feed
+     * @param stdClass $feed
      *   A cision feed object.
      *
      * @return array
      *   An array of mapped feed items.
      */
-    protected function mapSources(\stdClass $feed)
+    protected function mapSources(stdClass $feed)
     {
         $items = array();
         $image_style = $this->settings->get('image_style');

@@ -1,4 +1,5 @@
 <?php
+
 namespace CisionBlock\Widget\Base;
 
 abstract class Widget extends \WP_Widget

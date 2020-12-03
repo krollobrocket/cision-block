@@ -1,7 +1,8 @@
 <?php
+
 namespace CisionBlock\Config;
 
-class Settings
+class Settings extends Base\Settings
 {
 
     /**
@@ -18,191 +19,65 @@ class Settings
     */
     public $settings = array();
 
-    /**
-    * Settings constructor.
-    *
-    * @param string $optionName
-    */
-    public function __construct($optionName)
-    {
-        $this->optionName = $optionName;
-        $this->load();
-    }
+    const DEFAULT_ITEMS_PER_PAGE = 0;
+    const DEFAULT_ITEM_COUNT = 50;
+    const DEFAULT_CACHE_LIFETIME = 60 * 5;
+    const DEFAULT_DATE_FORMAT = 'd-m-Y';
+    const DEFAULT_IMAGE_STYLE = 'DownloadUrl';
+    const MAX_ITEMS_PER_FEED =  100;
+    const MAX_ITEMS_PER_PAGE = 100;
+    const DEFAULT_FEED_TYPE = 'PRM';
+    const DEFAULT_PAGE_INDEX = 1;
+    const DEFAULT_LANGUAGE = '';
+    const DEFAULT_READ_MORE_TEXT = 'Read more';
+    const DISPLAY_MODE_ALL = 1;
+    const DISPLAY_MODE_REGULATORY = 2;
+    const DISPLAY_MODE_NON_REGULATORY = 3;
+    const DEFAULT_DISPLAY_MODE = self::DISPLAY_MODE_ALL;
+    const DEFAULT_MARK_REGULATORY_TEXT = 'Regulatory pressrelease';
+    const DEFAULT_MARK_NON_REGULATORY_TEXT = 'Non-regulatory pressrelease';
+    const DEFAULT_FILTER_ALL_TEXT = 'Show all';
+    const DEFAULT_FILTER_REGULATORY_TEXT = 'Regulatory';
+    const DEFAULT_FILTER_NON_REGULATORY_TEXT = 'Non-regulatory';
+    const TEXTDOMAIN = 'cision-block';
 
     /**
-     * @return array
+     * @var array $default_settings
      */
-    public function toOptionsArray()
-    {
-        return $this->settings;
-    }
+    private $defaultSettings = array(
+        'count' => self::DEFAULT_ITEM_COUNT,
+        'source_uid' => '',
+        'tags' => '',
+        'categories' => '',
+        'start_date' => '',
+        'end_date' => '',
+        'mark_regulatory' => false,
+        'regulatory_text' => self::DEFAULT_MARK_REGULATORY_TEXT,
+        'non_regulatory_text' => self::DEFAULT_MARK_NON_REGULATORY_TEXT,
+        'show_filters' => false,
+        'filter_all_text' => self::DEFAULT_FILTER_ALL_TEXT,
+        'filter_regulatory_text' => self::DEFAULT_FILTER_REGULATORY_TEXT,
+        'filter_non_regulatory_text' => self::DEFAULT_FILTER_NON_REGULATORY_TEXT,
+        'search_term' => '',
+        'image_style' => self::DEFAULT_IMAGE_STYLE,
+        'use_https' => false,
+        'date_format' => self::DEFAULT_DATE_FORMAT,
+        'view_mode' => self::DEFAULT_DISPLAY_MODE,
+        'language' => '',
+        'readmore' => self::DEFAULT_READ_MORE_TEXT,
+        'items_per_page' => self::DEFAULT_ITEMS_PER_PAGE,
+        'cache_expire' => self::DEFAULT_CACHE_LIFETIME,
+        'types' => array(self::DEFAULT_FEED_TYPE),
+        'internal_links' => false,
+        'base_slug' => 'cision',
+        // 'version' => Frontend::VERSION,
+    );
 
     /**
-     * @return false|mixed|string|void
+     * @return mixed|null
      */
-    public function toJSON()
+    public function getDefaults()
     {
-        return function_exists('json_encode') ? json_encode($this->toOptionsArray(), JSON_PRETTY_PRINT) : '';
-    }
-
-    /**
-     *
-     */
-    public function toYaml()
-    {
-        return function_exists('yaml_emit') ? yaml_emit($this->settings) : '';
-    }
-
-    /**
-     * Returns the name of this option.
-     *
-     * @return string
-     */
-    public function getOptionName()
-    {
-        return $this->optionName;
-    }
-
-    /**
-    * Delete this setting from database.
-    */
-    public function delete()
-    {
-        delete_option($this->optionName);
-    }
-
-    /**
-    * Sets a configuration value.
-    *
-    * @param string $name
-    *   Name of option to set.
-    *
-    * @param mixed $value
-    *   The value to set.
-    */
-    public function __set($name, $value)
-    {
-        $this->set($name, $value);
-    }
-
-    /**
-    * Sets a configuration value.
-    *
-    * @param string $name
-    *   Name of option to set.
-    *
-    * @param mixed $value
-    *   The value to set.
-    */
-    public function set($name, $value)
-    {
-        $this->settings[$name] = $value;
-    }
-
-    /**
-    * Add a setting.
-    *
-    * @param string $name
-    *   Name of setting to add.
-    *
-    * @param mixed $value
-    *   Value to add.
-    */
-    public function add($name, $value)
-    {
-        if (!isset($this->settings[$name])) {
-            $this->set($name, $value);
-        }
-    }
-
-    /**
-    * Get a configuration value.
-    *
-    * @param string $name
-    *   Name of option to get.
-    *
-    * @return mixed
-    */
-    public function __get($name)
-    {
-        return $this->get($name);
-    }
-
-    /**
-    * Get a configuration value.
-    *
-    * @param string $name
-    *   Name of option to get.
-    *
-    * @return mixed
-    */
-    public function get($name)
-    {
-        return (isset($this->settings[$name]) ? $this->settings[$name] : null);
-    }
-
-    /**
-    * Remove setting.
-    *
-    * @param string $name
-    *   Name of setting to remove.
-    */
-    public function remove($name)
-    {
-        unset($this->settings[$name]);
-    }
-
-    /**
-    * Rename setting.
-    *
-    * @param string $from
-    *   Name of setting.
-    *
-    * @param string $to
-    *   New name for setting.
-    */
-    public function rename($from, $to)
-    {
-        if (isset($this->settings[$from])) {
-            $this->settings[$to] = $this->settings[$from];
-            $this->remove($from);
-        }
-    }
-
-    /**
-    * Load settings from database.
-    */
-    public function load()
-    {
-        $this->settings = get_option($this->optionName);
-    }
-
-    /**
-    * Save setting to database.
-    *
-    * @return bool
-    */
-    public function save()
-    {
-        ksort($this->settings);
-        return update_option($this->optionName, $this->settings);
-    }
-
-    /**
-     * Removes any settings that is not defined in $options.
-     *
-     * @param array $options
-     *   An array which keys will be used to validate the current settings keys.
-     */
-    public function clean($options)
-    {
-        if (is_array($options)) {
-            $keys = array_keys($options);
-            foreach ($this->settings as $key => $value) {
-                if (!in_array($key, $keys)) {
-                    unset($this->settings[$key]);
-                }
-            }
-        }
+        return $this->defaultSettings;
     }
 }

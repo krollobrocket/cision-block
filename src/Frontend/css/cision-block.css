@@ -21,11 +21,30 @@
 .cision-feed-wrapper ul.cision-feed-pager li a.active {
   text-decoration: underline;
 }
+.cision-feed-wrapper ul.cision-feed-filters {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+.cision-feed-wrapper ul.cision-feed-filters li button {
+  display: inline-block;
+  float: left;
+  background-color: transparent;
+  color: #000;
+}
+.cision-feed-wrapper ul.cision-feed-filters li button:focus {
+  outline: 0;
+}
 .cision-feed-item {
   overflow: hidden;
   border-bottom: 1px solid #c0c0c0;
   padding: 15px 0 30px 0;
   margin-bottom: 15px;
+}
+.cision-feed-item .cision-feed-regulatory {
+  display: block;
+  padding: 15px 0;
 }
 .cision-feed-item-media {
   width: 100%;
