@@ -15,6 +15,7 @@ use CisionBlock\Config\Settings;
                     <label for="show_filters"><?php _e('Show filters', Settings::TEXTDOMAIN); ?></label>
                 </th>
                 <td>
+                    <input type="hidden" id="hidden_show_filters" name="show_filters" value="0" />
                     <input type="checkbox" name="show_filters"<?php checked($this->settings->get('show_filters')); ?>" />
                     <p class="description"><?php _e('Enable filtering of feed items.', Settings::TEXTDOMAIN); ?></p>
                 </td>

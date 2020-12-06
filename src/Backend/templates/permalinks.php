@@ -15,6 +15,7 @@ use CisionBlock\Config\Settings;
                     <label for="internal_links"><?php _e('Internal links', Settings::TEXTDOMAIN); ?></label>
                 </th>
                 <td>
+                    <input type="hidden" id="hidden_internal_links" name="internal_links" value="0" />
                     <input type="checkbox" name="internal_links"<?php checked($this->settings->get('internal_links')); ?>/>
                     <p class="description"><?php _e('Display feed items directly in Wordpress.', Settings::TEXTDOMAIN); ?></p>
                 </td>

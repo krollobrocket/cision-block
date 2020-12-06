@@ -42,6 +42,8 @@ class Settings extends Base\Settings
     const DEFAULT_FILTER_REGULATORY_TEXT = 'Regulatory';
     const DEFAULT_FILTER_NON_REGULATORY_TEXT = 'Non-regulatory';
     const TEXTDOMAIN = 'cision-block';
+    const MIN_PHP_VERSION = '5.6';
+    const MIN_WP_VERSION = '3.1.0';
 
     /**
      * @var array $default_settings
@@ -85,6 +87,7 @@ class Settings extends Base\Settings
 
     /**
      * @param array $options
+     * @return $this
      */
     public function setFromArray(array $options)
     {

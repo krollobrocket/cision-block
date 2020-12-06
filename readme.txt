@@ -5,7 +5,7 @@ Tags: cision, feed, cision feed, shortcode, widget, content
 Requires at least: 3.1.0
 Tested up to: 5.5.3
 Requires PHP: 5.6
-Stable tag: 2.2
+Stable tag: 2.3.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -60,6 +60,27 @@ Sets the start date for the feed items. The format to use is 2016-12-31.
 - end
 Sets the end date for the feed items. The format to use is 2016-12-31.
 
+- mark_regulatory
+Emphasis if a release if regulatory or non-regulatory.
+
+- regulatory_text
+Text to display for regulatory items.
+
+- non_regulatory_text
+Text to display for non-regulatory items.
+
+- show_filters
+Enable filtering of feed items.
+
+- filter_all_text
+Button text for \'all\' filter.
+
+- filter_regulatory_text
+Button text for \'regulatory\' filter.
+
+- filter_non_regulatory_text
+Button text for \'non-regulatory\' filter.
+
 - items_per_page
 Sets the number of feed items to display on each page.
 
@@ -88,7 +109,7 @@ Clears the cache for the block.
 
 Here is an example using all of the above attributes:
 
-`[cision-block id=example_block source_uid=A275C0BF733048FFAE9126ACA64DD08F language=sv date_format=m-d-Y readmore="Read more" view=1 count=6 items_per_page=2 tags="cision,company" categories="New Year,Summer camp" types="PRM, RDV" start=2016-01-12 end=2019-06-12 image_style=UrlTo400x400ArResized flush=true]`
+`[cision-block id=example_block source_uid=A275C0BF733048FFAE9126ACA64DD08F language=sv date_format=m-d-Y readmore="Read more" view=1 count=6 items_per_page=2 tags="cision,company" categories="New Year,Summer camp" types="PRM, RDV" start=2016-01-12 end=2019-06-12 image_style=UrlTo400x400ArResized mark_regulatory=1 regulatory_text=Regulatory non_regulatory_text=[none] show_filters=1 filter_all_text=[none] filter_regulatory_text=Regulatory filter_non_regulatory_text=Non-regulatory flush=true]`
 
 **Notice** that all shortcode attributes are optional and that they **must** be on a single line.
 Default values is taken from the plugins settings page.
@@ -287,200 +308,6 @@ Fixed a bug where source id from widget was never used.
 
 == Changelog ==
 
-= 2.3
-- Add filters.
-- Add support to mark releases as regulatory and non-regulatory in the feed.
-- Add autoloader
-- Update minimum supported PHP version to 5.6.
-
-= 2.2.2 =
-- Improve singleton class.
-
-= 2.2.1 =
-- Do not render anything if the feed is empty.
-- Add title attribute to img tag.
-- Change name of experimental template.
-
-= 2.2.0 =
-- Use Regulatory argument when fetching feeds.
-- Add SearchTerm setting and argument.
-- Use select correctly in any controls.
-- Move defines to class constants.
-- Clean and sort invalid settings before saving.
-- Make sure the json extension is installed and enabled.
-
-= 2.1.0 =
-- Fixes a bug where the plugin could not be deleted.
-
-= 2.0.0 =
-- Add support to fetch and display press releases in Wordpress.
-- Add block_id to all filters.
-- Add tabs.
-- Remove unused methods.
-- Use shorter names in form inputs.
-- Fixed name of cache key in shortcode.
-
-= 1.5.4 =
-- Remove is_regulatory settings and instead add view_mode that supports three states.
-
-= 1.5.3 =
-- Clear cache when post is updated.
-- Use block_id in cache name.
-- Check for update when plugin is initialized.
-
-= 1.5.2 =
-- Check so yaml extension is enabled.
-- Add templates folder.
-- Check so items is set or not when mapping sources.
-
-= 1.5.1 =
-- Add support to filter feed based on categories.
-- Fix deprecation warnings.
-- Fix php5.3 error message.
-- Add composer integration.
-
-= 1.5.0 =
-- Major update of code base.
-- Use safe version of wp_remote_request().
-- Add correct filter when sanitizing settings.
-- Add link to settings page under plugin page.
-- Add textarea holding settings in json format.
-
-= 1.4.9.1 =
-- Fixed a bug where source id from widget was never used.
-
-= 1.4.9 =
-- Removed duplicate language field from widget.
-- Removed classes from select elements in widget form.
-- Add date_format to shortcode arguments.
-- Add date_format to widget settings.
-
-= 1.4.8 =
-- Fixed a bug where pagination was not working in preview.
-- Add User-Agent request header.
-
-= 1.4.7 =
-- Improve filtering of variables and post data.
-- Add separate cache key for widget.
-- Add support to change text or remove the 'Read more' button.
-- Corrected call to register_activation_hook().
-
-= 1.4.6 =
-- Add separate method for clearing transient cache.
-- Remove unused namespace.
-- Add source_uid to shortcode attributes.
-- Add language form field to widget.
-
-= 1.4.5 =
-- Fixed a bugg where settings gets overwritten by the use of a widget or another block.
-- Add code to remove any cision_block_widgets from the sidebars during removal.
-- Change member visibility.
-- Add constants for cision specific query arguments.
-- Change description for start and end date as suggested in https://wordpress.org/support/topic/suggestion-regarding-date-format/.
-- Major update of readme.
-- Added image style to widget settings.
-- Added image style to shortcode attributes.
-- Added filters to set attributes of wrappers in template.
-- Added id shortcode parameter used to name a specific block.
-- Added filters for suffix and prefix.
-- Added filters to set attributes and active class for pager.
-- Added support to filter items based on language.
-
-= 1.4.4 =
-- Fixed a bugg triggered when no shortcort argument was set.
-
-= 1.4.3 =
-- Allow people to change what capability is required to use this plugin.
-- Improve filter validation.
-- Refactor code to conform with PSR2 standard.
-- Add support to disable images.
-
-= 1.4.2 =
-- Add date format option.
-
-= 1.4.1 =
-- All images can now be handled over https.
-- Add support to select size of image.
-
-= 1.4.0 =
-- Add start and end date to widget.
-- Add separate class for backend specific code.
-
-= 1.3.2 =
-- Add support to choose start and end date for collected feed items.
-
-= 1.3.1 =
-- Add support to override settings from widget.
-
-= 1.3.0 =
-- Add settings field for cache lifetime.
-- Remove transient cache when settings are saved.
-
-= 1.2.9 =
-- Add support to filter feed based on IsRegulatory field.
-
-= 1.2.8 =
-- Add tags setting that can be used to filter a feed on keywords.
-- Improved error checking for remote request.
-
-= 1.2.7 =
-- Place settings page under general options.
-
-= 1.2.6 =
-- Add swedish translation.
-
-= 1.2.5 =
-- Add support to sort feed through the cision_block_sort filter.
-- Return template output in order to get correct placement of the shortcode in post content.
-
-= 1.2.4 =
-- Add separate cache key for each post containing a cision block shortcode.
-
-= 1.2.3 =
-- Add support to override which type of pressreleases to display in shortcode arguments.
-
-= 1.2.2 =
-- Add shortcode arguments that can be used to override block settings.
-- Switched to using wp_remote_request() instead of file_get_contents().
-
-= 1.2.1 =
-- Updated readme with widget tag.
-- Added new icons.
-
-= 1.2.0 =
-- Added a cision block widget.
-
-= 1.1.6 =
-- Rename template to match module name.
-- Add variable section in template.
-- Use version_compare() to check version.
-- Corrected call to load_plugin_textdomain().
-
-= 1.1.5 =
-- Fixed invalid pagination.
-- Added support to select which feed types to display.
-
-= 1.1.4 =
-- Added correct order for filter parameters.
-- Check so feed items are set before pagination.
-- Added types setting variable.
-
-= 1.1.3 =
-- Verify version in settings on load.
-- Added missing delete() function.
-
-= 1.1.2 =
-- Added active class for pager.
-- Store version string in settings.
-- Added separate Settings class.
-- Added activation hook.
-
-
-= 1.1.1 =
-- Added pager.
-
-= 1.1 =
-- Added a filter, cision_map_source_item, that can be used to extract more data for each feed item.
-
-= 1.0 =
-- Initial commit.
+= 2.3.2
+- Add mark release and filter settings to widget.
+- Check PHP and Wordpress version on activation.

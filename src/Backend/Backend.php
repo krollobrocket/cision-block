@@ -121,7 +121,6 @@ class Backend extends Singleton
             $this->settings->version = Frontend::VERSION;
 
             // Store updated settings.
-            // $this->settings->cleanOptions($defaults);
             $this->settings->save();
         }
     }
@@ -131,6 +130,15 @@ class Backend extends Singleton
      */
     public static function activate()
     {
+        global $wp_version;
+        if (version_compare(PHP_VERSION, Settings::MIN_PHP_VERSION, '<')) {
+            deactivate_plugins('cision-block');
+            wp_die(__('Unsupported PHP version. Minimum supported version is 5.6.', Settings::TEXTDOMAIN));
+        }
+        if (version_compare($wp_version, Settings::MIN_WP_VERSION, '<')) {
+            deactivate_plugins('cision-block');
+            wp_die(__('Unsupported Wordpress version. Minimum supported version is 3.1.0.', Settings::TEXTDOMAIN));
+        }
     }
 
     /**

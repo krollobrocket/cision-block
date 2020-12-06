@@ -16,7 +16,7 @@ class Frontend extends Singleton
     const SETTINGS_NAME = 'cision_block_settings';
     const TRANSIENT_KEY = 'cision_block_data';
     const USER_AGENT = 'cision-block/' . self::VERSION;
-    const VERSION = '2.3.0';
+    const VERSION = '2.3.1';
 
     /**
      *
@@ -273,9 +273,7 @@ class Frontend extends Singleton
      */
     public function addQueryVars(array $vars)
     {
-        $vars[] = 'cb_id';
-        $vars[] = 'cb_page';
-        return $vars;
+        return array_merge($vars, array('cb_id', 'cb_page'));
     }
 
     /**
@@ -358,13 +356,17 @@ class Frontend extends Singleton
 
             // special for widget
             'widget' => 'widget',
+            'source' => 'source_uid',
+            'view_mode' => 'view_mode',
+            'start_date' => 'start_date',
+            'end_date' => 'end_date',
         );
 
         $result = array(
-            'use_https' => false,
-            'mark_regulatory' => false,
-            'show_filters' => false,
-            'internal_links' => false,
+            'use_https' => $this->settings->get('use_https'),
+            'mark_regulatory' => $this->settings->get('mark_regulatory'),
+            'show_filters' => $this->settings->get('show_filters'),
+            'internal_links' => $this->settings->get('internal_links'),
         );
 
         foreach ($settings as $name => $value) {
@@ -399,10 +401,13 @@ class Frontend extends Singleton
                         );
                     }
                     break;
+                case 'source':
                 case 'source_uid':
                 case 'readmore':
                 case 'start':
                 case 'end':
+                case 'start_date':
+                case 'end_date':
                 case 'date_format':
                 case 'tags':
                 case 'search_term':
@@ -492,6 +497,7 @@ class Frontend extends Singleton
                     }
                     break;
                 case 'view':
+                case 'view_mode':
                     $result[$mapping[$name]] = filter_var(
                         $value,
                         FILTER_VALIDATE_INT,
@@ -520,10 +526,7 @@ class Frontend extends Singleton
                     $result[$mapping['name']] = 2;
                     break;
                 case 'flush':
-                    if (filter_var(
-                        $value,
-                        FILTER_VALIDATE_BOOLEAN
-                    )) {
+                    if (filter_var($value, FILTER_VALIDATE_BOOLEAN)) {
                         delete_transient(self::TRANSIENT_KEY . '_' . $this->current_block_id . '_' . ($widget_id ? $widget_id : $post->ID));
                     }
                     break;
@@ -533,7 +536,6 @@ class Frontend extends Singleton
                 case 'widget':
                     $widget_id = $value;
                     break;
-
             }
         }
         return $result;

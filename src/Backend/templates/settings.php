@@ -64,6 +64,7 @@ use CisionBlock\Config\Settings;
                     <label for="mark_regulatory"><?php _e('Show regulatory/non-regulatory', Settings::TEXTDOMAIN); ?></label>
                 </th>
                 <td>
+                    <input type="hidden" id="hidden_mark_regulatory" name="mark_regulatory" value="0" />
                     <input type="checkbox" name="mark_regulatory"<?php checked($this->settings->get('mark_regulatory')); ?>" />
                     <p class="description"><?php _e('Emphasis if a release if regulatory or non-regulatory.', Settings::TEXTDOMAIN); ?></p>
                 </td>
@@ -184,6 +185,7 @@ use CisionBlock\Config\Settings;
                     <label for="use_https"><?php _e('Use https', Settings::TEXTDOMAIN); ?></label>
                     </th>
                 <td>
+                    <input type="hidden" id="hidden_use_https" name="use_https" value="0" />
                     <input type="checkbox" name="use_https"<?php checked($this->settings->get('use_https')); ?>" />
                     <p class="description"><?php _e('Ensures that all images is handled over https.', Settings::TEXTDOMAIN); ?></p>
                 </td>

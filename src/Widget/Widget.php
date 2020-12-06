@@ -2,6 +2,7 @@
 
 namespace CisionBlock\Widget;
 
+use Cassandra\Set;
 use CisionBlock\Frontend\Frontend;
 use CisionBlock\Backend\Backend;
 use CisionBlock\Config\Settings;
@@ -41,9 +42,13 @@ class Widget extends Base\Widget
             'readmore' => isset($instance['readmore']) ? $instance['readmore'] : null,
             'date_format' => $instance['date_format'],
             'widget' => $this->id,
-            // Always disable filters and marked releases here.
-            'mark_regulatory' => false,
-            'show_filters' => false,
+            'mark_regulatory' => $instance['mark_regulatory'],
+            'regulatory_text' => $instance['regulatory_text'],
+            'non_regulatory_text' => $instance['non_regulatory_text'],
+            'show_filters' => $instance['show_filters'],
+            'filter_all_text' => $instance['filter_all_text'],
+            'filter_regulatory_text' => $instance['filter_regulatory_text'],
+            'filter_non_regulatory_text' => $instance['filter_non_regulatory_text'],
         );
 
         $shortcode_args = '';
@@ -65,22 +70,32 @@ class Widget extends Base\Widget
     public function form($instance)
     {
         // Make sure so keys are set.
-        if (empty($instance)) {
-            $instance = array(
-                'count' => Settings::DEFAULT_ITEM_COUNT,
-                'source' => '',
-                'types' => array(Settings::DEFAULT_FEED_TYPE),
-                'tags' => '',
-                'items_per_page' => Settings::DEFAULT_ITEMS_PER_PAGE,
-                'view_mode' => 1,
-                'cache_expire' => Settings::DEFAULT_CACHE_LIFETIME,
-                'start_date' => '',
-                'end_date' => '',
-                'image_style' => Settings::DEFAULT_IMAGE_STYLE,
-                'language' => '',
-                'readmore' => Settings::DEFAULT_READ_MORE_TEXT,
-                'date_format' => Settings::DEFAULT_DATE_FORMAT,
-            );
+        $defaults = array(
+            'count' => Settings::DEFAULT_ITEM_COUNT,
+            'source' => '',
+            'types' => array(Settings::DEFAULT_FEED_TYPE),
+            'tags' => '',
+            'items_per_page' => Settings::DEFAULT_ITEMS_PER_PAGE,
+            'view_mode' => Settings::DEFAULT_DISPLAY_MODE,
+            'cache_expire' => Settings::DEFAULT_CACHE_LIFETIME,
+            'start_date' => '',
+            'end_date' => '',
+            'image_style' => Settings::DEFAULT_IMAGE_STYLE,
+            'language' => '',
+            'readmore' => Settings::DEFAULT_READ_MORE_TEXT,
+            'date_format' => Settings::DEFAULT_DATE_FORMAT,
+            'mark_regulatory' => false,
+            'regulatory_text' => Settings::DEFAULT_MARK_REGULATORY_TEXT,
+            'non_regulatory_text' => Settings::DEFAULT_FILTER_NON_REGULATORY_TEXT,
+            'show_filters' => false,
+            'filter_all_text' => Settings::DEFAULT_FILTER_ALL_TEXT,
+            'filter_regulatory_text' => Settings::DEFAULT_FILTER_REGULATORY_TEXT,
+            'filter_non_regulatory_text' => Settings::DEFAULT_FILTER_NON_REGULATORY_TEXT,
+        );
+        foreach ($defaults as $key => $value) {
+            if (!isset($instance[$key])) {
+                $instance[$key] = $value;
+            }
         }
 
         $feed_types = Frontend::getInstance()->getFeedTypes();
@@ -126,6 +141,37 @@ class Widget extends Base\Widget
         $output .= '<label for="' . $this->get_field_id('end_date') . '">' . __('End date', Settings::TEXTDOMAIN) . ': </label>';
         $output .= '<input type="date" name="' . $this->get_field_name('end_date') . '" value="' . $instance['end_date'] . '" />';
         $output .= '</p>';
+        $output .= '<p>';
+        $output .= '<label for="' . $this->get_field_id('mark_regulatory') . '">' . __('Show regulatory/non-regulatory', Settings::TEXTDOMAIN) . ': </label>';
+        $output .= '<input type="checkbox" name="' . $this->get_field_name('mark_regulatory') . '"' . checked($instance['mark_regulatory'], true, false) . '" />';
+        $output .= '</p>';
+        $output .= '<p>';
+        $output .= '<label for="' . $this->get_field_id('regulatory_text') . '">' . __('Regulatory item text', Settings::TEXTDOMAIN) . ': </label>';
+        $output .= '<input type="text" name="' . $this->get_field_name('regulatory_text') . '" value="' . $instance['regulatory_text'] . '" />';
+        $output .= '</p>';
+        $output .= '<p>';
+        $output .= '<label for="' . $this->get_field_id('non_regulatory_text') . '">' . __('Non-regulatory item text', Settings::TEXTDOMAIN) . ': </label>';
+        $output .= '<input type="text" name="' . $this->get_field_name('non_regulatory_text') . '" value="' . $instance['non_regulatory_text'] . '" />';
+        $output .= '</p>';
+        $output .= '<p>';
+        $output .= '<label for="' . $this->get_field_id('show_filters') . '">' . __('Show filters', Settings::TEXTDOMAIN) . ': </label>';
+        $output .= '<input type="checkbox" name="' . $this->get_field_name('show_filters') . '"' . checked($instance['show_filters'], true, false) . '" />';
+        $output .= '</p>';
+        $output .= '<p>';
+        $output .= '<label for="' . $this->get_field_id('filter_all_text') . '">' . __('All item filter text', Settings::TEXTDOMAIN) . ': </label>';
+        $output .= '<input type="text" name="' . $this->get_field_name('filter_all_text') . '" value="' . $instance['filter_all_text'] . '" />';
+        $output .= '</p>';
+        $output .= '<p>';
+        $output .= '<p>';
+        $output .= '<label for="' . $this->get_field_id('filter_regulatory_text') . '">' . __('Regulatory item filter text', Settings::TEXTDOMAIN) . ': </label>';
+        $output .= '<input type="text" name="' . $this->get_field_name('filter_regulatory_text') . '" value="' . $instance['filter_regulatory_text'] . '" />';
+        $output .= '</p>';
+        $output .= '<p>';
+        $output .= '<p>';
+        $output .= '<label for="' . $this->get_field_id('filter_non_regulatory_text') . '">' . __('Non-regulatory item filter text', Settings::TEXTDOMAIN) . ': </label>';
+        $output .= '<input type="text" name="' . $this->get_field_name('filter_non_regulatory_text') . '" value="' . $instance['filter_non_regulatory_text'] . '" />';
+        $output .= '</p>';
+        $output .= '<p>';
         $output .= '<p>';
         $output .= '<label for="' . $this->get_field_id('tags') . '">' . __('Tags', Settings::TEXTDOMAIN) . '</label>';
         $output .= '<input type="text" class="widefat" name="' . $this->get_field_name('tags') . '" value="' . $instance['tags'] . '">';
@@ -176,43 +222,8 @@ class Widget extends Base\Widget
      */
     public function update($new_instance, $old_instance)
     {
-        $instance = array();
-
-        // Filter and sanitize form values.
-        $instance['count'] = isset($new_instance['count']) ? (int)$new_instance['count'] : 0;
-        if ($instance['count'] < 1 || $instance['count'] > Settings::MAX_ITEMS_PER_FEED) {
-            $instance['count'] = Settings::DEFAULT_ITEM_COUNT;
-        }
-        $instance['source'] = isset($new_instance['source']) ? $new_instance['source'] : '';
-        $instance['types'] = array();
-        if (!isset($new_instance['types'])) {
-            // Set default options.
-            $instance['types'] = array(Settings::DEFAULT_FEED_TYPE);
-        } else {
-            $types = $new_instance['types'];
-            $all_feed_types = array_keys(Frontend::getInstance()->getFeedTypes());
-            $feed_types = array();
-            foreach ($types as $type) {
-                if (in_array($type, $all_feed_types)) {
-                    $feed_types[] = $type;
-                }
-            }
-            $instance['types'] = $feed_types;
-        }
-        $instance['tags'] = isset($new_instance['tags']) ? $new_instance['tags'] : '';
-        $instance['items_per_page'] = isset($new_instance['items_per_page']) ? (int)$new_instance['items_per_page'] : 0;
-        if ($instance['items_per_page'] < 0 || $instance['items_per_page'] > Settings::MAX_ITEMS_PER_PAGE) {
-            $instance['items_per_page'] = Settings::DEFAULT_ITEMS_PER_PAGE;
-        }
-        $instance['view_mode'] = isset($new_instance['view_mode']) ? (int)$new_instance['view_mode'] : 1;
-        $instance['cache_expire'] = isset($new_instance['cache_expire']) ? (int)$new_instance['cache_expire'] : Settings::DEFAULT_CACHE_LIFETIME;
-        $instance['start_date'] = isset($new_instance['start_date']) ? $new_instance['start_date'] : '';
-        $instance['end_date'] = isset($new_instance['end_date']) ? $new_instance['end_date'] : '';
-        $instance['image_style'] = isset($new_instance['image_style']) ? $new_instance['image_style'] : Settings::DEFAULT_IMAGE_STYLE;
-        $instance['language'] = isset($new_instance['language']) ? $new_instance['language'] : '';
-        $instance['readmore'] = isset($new_instance['readmore']) ? $new_instance['readmore'] : null;
-        $instance['date_format'] = isset($new_instance['date_format']) ? $new_instance['date_format'] : '';
-
-        return $instance;
+        $config = Frontend::getInstance()->verifySettings($new_instance);
+        $config['source'] = $config['source_uid'];
+        return $config;
     }
 }
