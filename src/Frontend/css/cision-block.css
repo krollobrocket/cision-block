@@ -27,6 +27,9 @@
   padding: 0;
   overflow: hidden;
 }
+.cision-feed-wrapper ul.cision-feed-filters li {
+  display: inline;
+}
 .cision-feed-wrapper ul.cision-feed-filters li button {
   display: inline-block;
   float: left;

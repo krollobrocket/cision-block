@@ -5,7 +5,7 @@ Tags: cision, feed, cision feed, shortcode, widget, content
 Requires at least: 3.1.0
 Tested up to: 5.5.3
 Requires PHP: 5.6
-Stable tag: 2.3.1
+Stable tag: 2.3.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -73,13 +73,13 @@ Text to display for non-regulatory items.
 Enable filtering of feed items.
 
 - filter_all_text
-Button text for \'all\' filter.
+Button text for 'all' filter.
 
 - filter_regulatory_text
-Button text for \'regulatory\' filter.
+Button text for 'regulatory' filter.
 
 - filter_non_regulatory_text
-Button text for \'non-regulatory\' filter.
+Button text for 'non-regulatory' filter.
 
 - items_per_page
 Sets the number of feed items to display on each page.
@@ -109,7 +109,7 @@ Clears the cache for the block.
 
 Here is an example using all of the above attributes:
 
-`[cision-block id=example_block source_uid=A275C0BF733048FFAE9126ACA64DD08F language=sv date_format=m-d-Y readmore="Read more" view=1 count=6 items_per_page=2 tags="cision,company" categories="New Year,Summer camp" types="PRM, RDV" start=2016-01-12 end=2019-06-12 image_style=UrlTo400x400ArResized mark_regulatory=1 regulatory_text=Regulatory non_regulatory_text=[none] show_filters=1 filter_all_text=[none] filter_regulatory_text=Regulatory filter_non_regulatory_text=Non-regulatory flush=true]`
+`[cision-block id=example_block source_uid=A275C0BF733048FFAE9126ACA64DD08F language=sv date_format=m-d-Y readmore="Read more" view=1 count=6 items_per_page=2 tags="cision,company" categories="New Year,Summer camp" types="PRM, RDV" start=2016-01-12 end=2019-06-12 image_style=UrlTo400x400ArResized mark_regulatory=1 regulatory_text=Regulatory non_regulatory_text=*none* show_filters=1 filter_all_text=*none* filter_regulatory_text=Regulatory filter_non_regulatory_text=Non-regulatory flush=true]`
 
 **Notice** that all shortcode attributes are optional and that they **must** be on a single line.
 Default values is taken from the plugins settings page.
@@ -130,10 +130,10 @@ To use more than one block in a single page you will need to set a unique id for
 = Filter and marking feed items =
 
 On the 'Filters' tab you can enable filtering on you feed and add a text for the different kind of filters or use the default ones.
-If for some reason you would like to hide a specific filter button you can enter the special value `[none]` in the corresponding text field.
+If for some reason you would like to hide a specific filter button you can enter the special value `*none*` in the corresponding text field.
 
 You can add a text for each feed item stating if it is regulatory or not by checking the 'Mark regulatory' checkbox in the settings page.
-If you wish to hide the text for regulatory or non-regulatory releases you can use the special value `[none]` in the corresponding text field.
+If you wish to hide the text for regulatory or non-regulatory releases you can use the special value `*none*` in the corresponding text field.
 
 = Template =
 
