@@ -6,21 +6,6 @@ use CisionBlock\Frontend\Frontend;
 
 class Settings extends Base\Settings
 {
-
-    /**
-    * Name of configuration option.
-    *
-    * @var string
-    */
-    private $optionName = '';
-
-    /**
-    * An array of settings.
-    *
-    * @var array
-    */
-    public $settings = array();
-
     const DEFAULT_ITEMS_PER_PAGE = 0;
     const DEFAULT_ITEM_COUNT = 50;
     const DEFAULT_CACHE_LIFETIME = 60 * 5;
@@ -74,11 +59,12 @@ class Settings extends Base\Settings
         'types' => array(self::DEFAULT_FEED_TYPE),
         'internal_links' => false,
         'base_slug' => 'cision',
+        'exclude_css' => false,
         'version' => Frontend::VERSION,
     );
 
     /**
-     * @return mixed|null
+     * @return array
      */
     public function getDefaults()
     {

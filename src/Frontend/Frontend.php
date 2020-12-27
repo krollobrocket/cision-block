@@ -2,6 +2,8 @@
 
 namespace CisionBlock\Frontend;
 
+use CisionBlock\Cision\Feed;
+use CisionBlock\Cision\FeedItem;
 use CisionBlock\Common\Singleton;
 use CisionBlock\Config\Settings;
 use CisionBlock\Widget\Widget;
@@ -9,14 +11,17 @@ use stdClass;
 
 class Frontend extends Singleton
 {
+    const FEED_BASE_LEVEL = 'base';
     const FEED_DETAIL_LEVEL = 'detail';
-    const FEED_FORMAT = 'json';
+    const FEED_MEDIUM_LEVEL = 'medium';
+    const FEED_FORMAT_JSON = 'json';
+    const FEED_FORMAT_XML = 'xml';
     const FEED_RELEASE_URL = 'http://publish.ne.cision.com/papi/Release/';
     const FEED_URL = 'https://publish.ne.cision.com/papi/NewsFeed/';
     const SETTINGS_NAME = 'cision_block_settings';
     const TRANSIENT_KEY = 'cision_block_data';
     const USER_AGENT = 'cision-block/' . self::VERSION;
-    const VERSION = '2.3.1';
+    const VERSION = '2.3.3';
 
     /**
      *
@@ -167,19 +172,37 @@ class Frontend extends Singleton
                 return;
             }
 
-            add_filter('template_include', function () {
-                $template = locate_template(array(
-                    'cision-block-post.php',
-                    'templates/cision-block-post.php'
-                ));
-                if ($template) {
-                    // Include theme overridden template.
-                    return $template;
-                } else {
-                    // Include the default plugin supplied template.
-                    return __DIR__ . '/templates/cision-block-post.php';
-                }
-            });
+            add_filter('template_include', array($this, 'locateTemplate'));
+        }
+    }
+
+    /**
+     * Locates a template in either the current theme folder or in the plugin.
+     *
+     * @param $template
+     * @return string
+     */
+    public function locateTemplate($template)
+    {
+        if (
+            !in_array($template, array(
+            'cision-block.php',
+            'cision-block-post.php',
+            ))
+        ) {
+            $template = 'cision-block-post.php';
+        }
+
+        $located = locate_template(array(
+            $template,
+            "templates/$template",
+        ));
+        if ($located) {
+            // Include theme overridden template.
+            return $located;
+        } else {
+            // Include the default plugin supplied template.
+            return __DIR__ . "/templates/$template";
         }
     }
 
@@ -281,14 +304,23 @@ class Frontend extends Singleton
      */
     public function addStyles()
     {
-        wp_register_style('cision-block', $this->getPluginUrl('css/cision-block.css'));
-        wp_enqueue_script(
-            'cision-block',
-            $this->getPluginUrl('js/cision-block.js'),
-            array('jquery'),
-            '',
-            true
-        );
+        if (!$this->settings->get('exclude_css')) {
+            wp_register_style(
+                'cision-block',
+                $this->getPluginUrl('css/cision-block.css'),
+                array(),
+                self::VERSION
+            );
+        }
+        if ($this->settings->get('show_filters')) {
+            wp_register_script(
+                'cision-block',
+                $this->getPluginUrl('js/cision-block.js'),
+                array('jquery'),
+                self::VERSION,
+                true
+            );
+        }
     }
 
     /**
@@ -336,6 +368,7 @@ class Frontend extends Singleton
             'categories' => 'categories',
             'view' => 'view_mode',
             'use_https' => 'use_https',
+            'exclude_css' => 'exclude_css',
             'image_style' => 'image_style',
             'items_per_page' => 'items_per_page',
 
@@ -364,6 +397,7 @@ class Frontend extends Singleton
 
         $result = array(
             'use_https' => $this->settings->get('use_https'),
+            'exclude_css' => $this->settings->get('exclude_css'),
             'mark_regulatory' => $this->settings->get('mark_regulatory'),
             'show_filters' => $this->settings->get('show_filters'),
             'internal_links' => $this->settings->get('internal_links'),
@@ -434,6 +468,7 @@ class Frontend extends Singleton
                     break;
                 case 'mark_regulatory':
                 case 'use_https':
+                case 'exclude_css':
                 case 'internal_links':
                 case 'show_filters':
                     $result[$mapping[$name]] = filter_var(
@@ -552,7 +587,13 @@ class Frontend extends Singleton
     public function displayFeed($atts)
     {
         // Add stylesheet.
-        wp_enqueue_style('cision-block');
+        if (!$this->settings->get('exclude_css')) {
+            wp_enqueue_style('cision-block');
+        }
+        // Add javascript.
+        if ($this->settings->get('show_filters')) {
+            wp_enqueue_script('cision-block');
+        }
 
         // Reload settings since they might be overwritten.
         $this->settings->load();
@@ -564,15 +605,16 @@ class Frontend extends Singleton
             $verified = $this->verifySettings($atts);
             $this->settings->setFromArray($verified);
         }
-        $feed_items = $this->getFeed();
-        $pager = $this->getPagination($feed_items);
+        $items = $this->getFeed();
+        $pager = $this->getPagination($items);
 
         // Add variables to symbol table.
         extract(array(
-            'cision_feed' => $feed_items,
+            'cision_feed' => $items,
             'pager' => $pager,
             'id' => $this->current_block_id,
             'readmore' => $this->settings->get('readmore'),
+            'image_style' => $this->settings->get('image_style'),
             'mark_regulatory' => $this->settings->get('mark_regulatory'),
             'regulatory_text' => $this->settings->get('regulatory_text'),
             'non_regulatory_text' => $this->settings->get('non_regulatory_text'),
@@ -598,16 +640,9 @@ class Frontend extends Singleton
         ));
 
         ob_start();
-        $template = locate_template(array(
-            'cision-block.php',
-            'templates/cision-block.php'
-        ));
+        $template = $this->locateTemplate('cision-block.php');
         if ($template) {
-            // Include theme overridden template.
-            include $template;
-        } else {
-            // Include the default plugin supplied template.
-            include __DIR__ . '/templates/cision-block.php';
+            include_once $template;
         }
         return ob_get_clean();
     }
@@ -699,7 +734,7 @@ class Frontend extends Singleton
     /**
      * Retrieve a feed from the specified source URL.
      *
-     * @return array
+     * @return FeedItem[]
      *   Returns an array of feed items.
      */
     protected function getFeed()
@@ -714,7 +749,7 @@ class Frontend extends Singleton
                 'PageIndex' => Settings::DEFAULT_PAGE_INDEX,
                 'PageSize' => $this->settings->get('count'),
                 'DetailLevel' => self::FEED_DETAIL_LEVEL,
-                'Format' => self::FEED_FORMAT,
+                'Format' => self::FEED_FORMAT_JSON,
                 'Tags' => $this->settings->get('tags'),
                 'StartDate' => $this->settings->get('start_date'),
                 'EndDate' => $this->settings->get('end_date'),
@@ -742,105 +777,69 @@ class Frontend extends Singleton
     }
 
     /**
-     * @param stdClass $release
-     * @param $image_style
+     * @param FeedItem $feedItem
+     * @param string $image_style
      * @param bool $use_https
      *
      * @return object
      */
-    protected function mapFeedItem(stdClass $release, $image_style, $use_https = false)
+    protected function mapFeedItem(FeedItem $feedItem, $image_style, $use_https = false)
     {
-        $item = array();
-
-        // Clean up data.
-        $item['Title'] = sanitize_text_field($release->Title);
-        $item['PublishDate'] = strtotime($release->PublishDate);
-        $item['Intro'] = sanitize_text_field($release->Intro);
-        $item['Body'] = sanitize_text_field($release->Body);
+        $item = clone $feedItem;
         if ($this->settings->get('internal_links')) {
-            $item['CisionWireUrl'] = get_bloginfo('url') . '/' . $this->settings->get('base_slug') . '/' . $release->EncryptedId;
-            $item['LinkTarget'] = '_self';
-        } else {
-            $item['CisionWireUrl'] = esc_url_raw($release->CisionWireUrl);
-            $item['LinkTarget'] = '_blank';
+            $item->setCisionWireUrl(get_bloginfo('url') . '/' . $this->settings->get('base_slug') . '/' . $item->EncryptedId);
+            $item->setLinkTarget('_self');
         }
-        $item['IsRegulatory'] = (int) $release->IsRegulatory;
+
         if (!empty($image_style)) {
-            foreach ($release->Images as $image) {
+            foreach ($item->Images as $index => $image) {
                 if ($use_https) {
                     $image->{$image_style} = str_replace('http:', 'https:', $image->{$image_style});
                 }
-                $item['Images'][] = (object) array(
-                    'DownloadUrl' => esc_url_raw($image->{$image_style}),
-                    'Description' => sanitize_text_field($image->Description),
-                    'Title' => sanitize_text_field($image->Title),
-                );
             }
-        } else {
-            $release->Images = array();
         }
 
         // Let user modify the data.
-        return (object) apply_filters('cision_map_source_item', $item, $release, $this->current_block_id);
-    }
-
-    /**
-     * Check if an item is connected to any category.
-     *
-     * @param stdClass $item
-     * @param array $categories
-     *
-     * @return bool
-     */
-    protected function hasCategory(stdClass $item, array $categories)
-    {
-        foreach ($item->Categories as $category) {
-            if (in_array(strtolower($category->Name), $categories)) {
-                return true;
-            }
-        }
+        return (object) apply_filters('cision_map_source_item', $item, $feedItem, $this->current_block_id);
     }
 
     /**
      * Creates an array of feed items.
      *
-     * @param stdClass $feed
+     * @param stdClass $data
      *   A cision feed object.
      *
-     * @return array
+     * @return FeedItem[]
      *   An array of mapped feed items.
      */
-    protected function mapSources(stdClass $feed)
+    protected function mapSources(stdClass $data)
     {
+        $feed = new Feed($data);
         $items = array();
         $image_style = $this->settings->get('image_style');
         $use_https = $this->settings->get('use_https');
         $language = $this->settings->get('language');
         $types = $this->settings->get('types');
+        $categories = array();
         if ($this->settings->get('categories') !== '') {
             $categories = array_map('trim', explode(',', $this->settings->get('categories')));
-        } else {
-            $categories = array();
         }
-        if (isset($feed->Releases) && count($feed->Releases)) {
-            foreach ($feed->Releases as $release) {
-                if (!is_object($release) || in_array($release->InformationType, $types) == false) {
-                    continue;
-                }
-                if (!empty($language) && $release->LanguageCode != $language) {
-                    continue;
-                }
-                if (count($categories) && !$this->hasCategory($release, $categories)) {
-                    continue;
-                }
-                $items[] = $this->mapFeedItem($release, $image_style, $use_https);
+        foreach ($feed as $item) {
+            if (!$item->hasInformationType($types)) {
+                continue;
             }
-
-            if (count($items)) {
-                $items = apply_filters('cision_block_sort', $items, $this->current_block_id);
+            if (!empty($language) && !$item->hasLanguage($language)) {
+                continue;
             }
+            if (count($categories) && !$item->hasCategory($categories)) {
+                continue;
+            }
+            $items[] = $this->mapFeedItem($item, $image_style, $use_https);
         }
 
-        return count($items) ? $items : null;
+        if (count($items)) {
+            $items = apply_filters('cision_block_sort', $items, $this->current_block_id);
+            return $items;
+        }
     }
 }

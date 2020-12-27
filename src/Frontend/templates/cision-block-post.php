@@ -8,10 +8,12 @@
  *
  * @package Cision Block
  * @since 2.0.0
- * @version 2.3.0
+ * @version 2.3.3
  */
 
 get_header();
+
+global $CisionItem;
 ?>
     <div class="wrap">
         <section id="primary" class="content-area">

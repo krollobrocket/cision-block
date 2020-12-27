@@ -104,12 +104,15 @@ The image style to use:
  - UrlTo100x100Thumbnail
  - UrlTo200x200Thumbnail
 
+- exclude_css
+Do not load the stylesheet.
+
 - flush
 Clears the cache for the block.
 
 Here is an example using all of the above attributes:
 
-`[cision-block id=example_block source_uid=A275C0BF733048FFAE9126ACA64DD08F language=sv date_format=m-d-Y readmore="Read more" view=1 count=6 items_per_page=2 tags="cision,company" categories="New Year,Summer camp" types="PRM, RDV" start=2016-01-12 end=2019-06-12 image_style=UrlTo400x400ArResized mark_regulatory=1 regulatory_text=Regulatory non_regulatory_text=*none* show_filters=1 filter_all_text=*none* filter_regulatory_text=Regulatory filter_non_regulatory_text=Non-regulatory flush=true]`
+`[cision-block id=example_block source_uid=A275C0BF733048FFAE9126ACA64DD08F language=sv date_format=m-d-Y readmore="Read more" view=1 count=6 items_per_page=2 tags="cision,company" categories="New Year,Summer camp" types="PRM, RDV" start=2016-01-12 end=2019-06-12 image_style=UrlTo400x400ArResized mark_regulatory=1 regulatory_text=Regulatory non_regulatory_text=*none* show_filters=1 filter_all_text=*none* filter_regulatory_text=Regulatory filter_non_regulatory_text=Non-regulatory exclude_css=true flush=true]`
 
 **Notice** that all shortcode attributes are optional and that they **must** be on a single line.
 Default values is taken from the plugins settings page.
@@ -153,29 +156,9 @@ css since this contains pre formated html which may include inline css and so on
 
 = Fields =
 
-By default only the following fields are collected for each feed item:
-
-* Title
-* Intro
-* Body
-* PublishDate
-* CisionWireUrl
-* IsRegulatory
-* Images[0]
- * DownloadUrl
- * Description
+A complete list of fields can be found at: [https://websolutions.ne.cision.com/documents/P2_Feed.pdf](https://websolutions.ne.cision.com/documents/P2_Feed.pdf).
 
 = Filters =
-
-Add more fields to each feed item:
-
-    add_filter('cision_map_source_item', function($item, $data, $block_id) {
-      $item['Header'] = sanitize_text_field($data->Header);
-      $item['LogoUrl'] = esc_url_raw($data->LogoUrl);
-      $item['SocialMediaPitch'] = sanitize_text_field($data->SocialMediaPitch);
-
-      return $item;
-    }, 10, 3);
 
 Customize the sorting of the feed items:
 
@@ -308,6 +291,12 @@ Fixed a bug where source id from widget was never used.
 
 == Changelog ==
 
-= 2.3.2
-- Add mark release and filter settings to widget.
-- Check PHP and Wordpress version on activation.
+= 2.3.3
+- Use a select control instead of text input for language.
+- Add version argument to script and style.
+- Check env for debug mode.
+- Add rss, chat and other info to composer.json.
+- Use include_once instead of include when including templates.
+- Only load javascript if needed.
+- Add support to exclude stylesheet.
+- Fix use of undefined constants.

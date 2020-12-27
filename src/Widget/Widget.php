@@ -182,7 +182,12 @@ class Widget extends Base\Widget
         $output .= '</p>';
         $output .= '<p>';
         $output .= '<label for="' . $this->get_field_id('language') . '">' . __('Language', Settings::TEXTDOMAIN) . ': </label>';
-        $output .= '<input type="text" name="' . $this->get_field_name('language') . '" value="' . $instance['language'] . '" />';
+        $output .= '<select name="' . $this->get_field_name('language') . '">';
+        $output .= '<option>' . __('Select', Settings::TEXTDOMAIN) . '</option>';
+        foreach (Backend::getInstance()->getLanguages() as $key => $value) :
+            $output .= '<option value="' . $key . '"' . selected($instance['language'] === $key, true, false) . '>' . $value . '</option>';
+        endforeach;
+        $output .= '</select>';
         $output .= '</p>';
         $output .= '<p>';
         $output .= '<label for="' . $this->get_field_id('view_mode') . '">' . __('View mode', Settings::TEXTDOMAIN) . ': </label>';

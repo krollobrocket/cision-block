@@ -1,3 +1,7 @@
+= 2.3.2
+- Add mark release and filter settings to widget.
+- Check PHP and Wordpress version on activation.
+
 = 2.3.1
 - Fix bug with select inputs.
 

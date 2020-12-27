@@ -1,6 +1,7 @@
 <?php
 
 use CisionBlock\Config\Settings;
+use CisionBlock\Frontend\Frontend;
 
 ?>
 <div class="wrap">
@@ -15,7 +16,7 @@ use CisionBlock\Config\Settings;
                     <label for="count"><?php _e('Number of feed items', Settings::TEXTDOMAIN); ?></label>
                     </th>
                 <td>
-                    <input type="number" min="1" max="<?php echo CISION_BLOCK_MAX_ITEMS_PER_FEED; ?>" name="count" value="<?php echo intval($this->settings->get('count')); ?>" />
+                    <input type="number" min="1" max="<?php echo Settings::MAX_ITEMS_PER_FEED; ?>" name="count" value="<?php echo intval($this->settings->get('count')); ?>" />
                     <p class="description"><?php _e('The maximum number of items in the feed.', Settings::TEXTDOMAIN); ?></p>
                 </td>
             </tr>
@@ -34,7 +35,7 @@ use CisionBlock\Config\Settings;
                     </th>
                 <td>
                     <select class="regular-text" name="types[]" multiple>
-                        <?php foreach (\CisionBlock\Frontend\Frontend::getInstance()->getFeedTypes() as $key => $value) : ?>
+                        <?php foreach (Frontend::getInstance()->getFeedTypes() as $key => $value) : ?>
                         <option value="<?php echo $key; ?>"<?php selected(in_array($key, $this->settings->get('types'))); ?>><?php echo $value; ?></option>
                         <?php endforeach; ?>
                     </select>
@@ -121,7 +122,7 @@ use CisionBlock\Config\Settings;
                     <label for="items_per_page"><?php _e('Items per page', Settings::TEXTDOMAIN); ?></label>
                     </th>
                 <td>
-                    <input type="number" min="0" max="<?php echo CISION_BLOCK_MAX_ITEMS_PER_PAGE; ?>" name="items_per_page" value="<?php echo $this->settings->get('items_per_page'); ?>" />
+                    <input type="number" min="0" max="<?php echo Settings::MAX_ITEMS_PER_PAGE; ?>" name="items_per_page" value="<?php echo $this->settings->get('items_per_page'); ?>" />
                     <p class="description"><?php _e('Number of items on each page (set to 0 to disable).', Settings::TEXTDOMAIN); ?></p>
                 </td>
             </tr>
@@ -130,8 +131,14 @@ use CisionBlock\Config\Settings;
                     <label for="language"><?php _e('Language', Settings::TEXTDOMAIN); ?></label>
                     </th>
                 <td>
-                    <input type="text" name="language" value="<?php echo $this->settings->get('language'); ?>" />
-                    <p class="description"><?php _e('The language code for each feed item. For example \'en\' for english.', Settings::TEXTDOMAIN); ?></p>
+                    <select name="language">
+                        <option value=""><?php _e('Select'); ?></option>
+                        <?php foreach ($this->getLanguages() as $code => $name) : ?>
+                        <option value="<?php echo $code; ?>"<?php selected($code === $this->settings->get('language')) ?>><?php echo $name; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                    <p class="description"><?php _e('The language for each feed item.'); ?></p>
+                    <p class="description"><?php _e('If not set all items will be displayed.'); ?></p>
                 </td>
             </tr>
             <tr>
@@ -183,11 +190,21 @@ use CisionBlock\Config\Settings;
             <tr>
                 <th scope="row">
                     <label for="use_https"><?php _e('Use https', Settings::TEXTDOMAIN); ?></label>
-                    </th>
+                </th>
                 <td>
                     <input type="hidden" id="hidden_use_https" name="use_https" value="0" />
                     <input type="checkbox" name="use_https"<?php checked($this->settings->get('use_https')); ?>" />
                     <p class="description"><?php _e('Ensures that all images is handled over https.', Settings::TEXTDOMAIN); ?></p>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    <label for="exclude_css"><?php _e('Exclude css', Settings::TEXTDOMAIN); ?></label>
+                </th>
+                <td>
+                    <input type="hidden" id="hidden_exclude_css" name="exclude_css" value="0" />
+                    <input type="checkbox" name="exclude_css"<?php checked($this->settings->get('exclude_css')); ?>" />
+                    <p class="description"><?php _e('Do not load any stylesheet for the frontend.', Settings::TEXTDOMAIN); ?></p>
                 </td>
             </tr>
             <tr>
@@ -204,8 +221,11 @@ use CisionBlock\Config\Settings;
                     <label for="json-markup"><?php _e('Json configuration', Settings::TEXTDOMAIN); ?></label>
                 </th>
                 <td>
-                    <textarea cols="60" rows="10" name="json_markup"><?php echo $this->settings->toJson(); ?></textarea>
+                    <textarea<?php echo $this->isDebugEnabled() ? '' : ' onclick="this.focus(); this.select();"'; ?> cols="60" rows="10" name="settings"<?php echo $this->isDebugEnabled() ? '' : ' readonly="readonly"'; ?>><?php echo $this->settings->toJson(); ?></textarea>
                     <p class="description"><?php _e('The settings in json format.', Settings::TEXTDOMAIN); ?></p>
+                    <?php if ($this->isDebugEnabled()) : ?>
+                        <?php echo get_submit_button(__('Save settings', Settings::TEXTDOMAIN), 'primary', 'cision-block-import-settings'); ?>
+                    <?php endif ?>
                 </td>
             </tr>
         </table>
