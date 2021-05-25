@@ -2,7 +2,7 @@
 
 namespace CisionBlock\Backend;
 
-use CisionBlock\Common\Singleton;
+use CisionBlock\Plugin\Singleton;
 use CisionBlock\Config\Settings;
 use CisionBlock\Widget\Widget;
 use CisionBlock\Frontend\Frontend;
@@ -11,10 +11,6 @@ class Backend extends Singleton
 {
     const PARENT_MENU_SLUG = 'options-general.php';
     const MENU_SLUG = 'cision-block';
-
-    const DISPLAY_MODE_ALL = 1;
-    const DISPLAY_MODE_REGULATORY = 2;
-    const DISPLAY_MODE_NONE_REGULATORY = 3;
 
     /**
      *
@@ -62,8 +58,11 @@ class Backend extends Singleton
     public function addActions()
     {
         add_action('admin_menu', array($this, 'addMenu'));
+        add_action('in_admin_header', array($this, 'addHeader'));
         add_action('admin_post_cision_block_save_settings', array($this, 'saveSettings'));
         add_action('admin_enqueue_scripts', array($this, 'registerStyles'));
+        add_action('cision_block_admin_notices', array($this, 'renderNotices'));
+        add_action('wp_ajax_cision_block_dismiss_notice', array($this, 'doDismissNotice'));
     }
 
     /**
@@ -72,6 +71,144 @@ class Backend extends Singleton
     public function addFilters()
     {
         add_filter('plugin_action_links', array($this, 'addActionLinks'), 10, 2);
+        add_filter('plugin_row_meta', array($this, 'filterPluginRowMeta'), 10, 4);
+    }
+
+    /**
+     * Marks a notification as dismissed.
+     *
+     * @param string $id
+     * @return bool
+     */
+    private function dismissNotice($id)
+    {
+        $notes = $this->settings->get('notes');
+        foreach ($notes as $key => $note) {
+            if ($note['id'] === (int) $id) {
+                $notes[$key]['dismissed'] = true;
+                $notes[$key]['time'] = time();
+                $this->settings->set('notes', $notes);
+                $this->settings->save();
+                return true;
+            }
+        }
+    }
+
+    /**
+     * Resets a notification.
+     *
+     * @param string $id
+     * @return bool
+     */
+    public function resetNotice($id)
+    {
+        $notes = $this->settings->get('notes');
+        foreach ($notes as $key => $note) {
+            if ($note['id'] === (int) $id) {
+                $notes[$key]['dismissed'] = false;
+                $notes[$key]['time'] = time();
+                $this->settings->set('notes', $notes);
+                $this->settings->save();
+                return true;
+            }
+        }
+    }
+
+    /**
+     * Returns a notification by name.
+     *
+     * @param string $name
+     * @return mixed|null
+     */
+    public function getNoticeByName($name)
+    {
+        $notes = $this->settings->get('notes');
+        return isset($notes[$name]) ? $notes[$name] : null;
+    }
+
+    /**
+     * Render any notifications.
+     */
+    public function renderNotices()
+    {
+        foreach ($this->settings->get('notes') as $note) {
+            if (!$note['dismissed'] || ($note['dismissed'] && !$note['persistent'] && time() - $note['time'] > 30 * 24 * 60 * 60)) {
+                echo call_user_func(array($this, $note['callback']));
+            }
+        }
+    }
+
+    /**
+     * Ajax handler for dismissing notifications.
+     */
+    public function doDismissNotice()
+    {
+        check_ajax_referer('cision_block_dismiss_notice');
+        if (!current_user_can('administrator')) {
+            return wp_send_json_error(__('You are not allowed to perform this action.', Settings::TEXTDOMAIN));
+        }
+        if (!filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT)) {
+            return wp_send_json_error(__('No valid notification id supplied.', Settings::TEXTDOMAIN));
+        }
+        if (!$this->dismissNotice($_POST['id'])) {
+            return wp_send_json_error(__('Notification could not be found.', Settings::TEXTDOMAIN));
+        }
+        wp_send_json_success();
+    }
+
+    /**
+     * Adds review admin notification.
+     */
+    public function addReviewNotice()
+    {
+        ?>
+        <div id="note-1" class="cision-block-notice notice-info notice is-dismissible inline" style="position: relative;">
+            <h3><?php _e('Thank you for using Cision Block!', Settings::TEXTDOMAIN); ?></h3>
+            <p><?php echo sprintf(__('If you use and enjoy Cision Block, I would be really happy if you could give it a positive review at <a href="%s" target="_blank">Wordpress.org</a>.', Settings::TEXTDOMAIN), 'https://wordpress.org/support/plugin/cision-block/reviews/?rate=5#new-post'); ?></p>
+            <p><?php _e('Doing this would help me keeping the plugin free and up to date.', Settings::TEXTDOMAIN); ?></p>
+            <p><?php _e('Also, if you would like to support me you can always buy me a cup of coffee at:', Settings::TEXTDOMAIN); ?> <a target="_blank" href="https://www.buymeacoffee.com/cyclonecode">https://www.buymeacoffee.com/cyclonecode</a></p>
+            <p><?php _e('Thank you very much!', Settings::TEXTDOMAIN); ?></p>
+        </div>
+        <?php
+    }
+
+    /**
+     * Adds support admin notification.
+     */
+    public function addSupportNotice()
+    {
+        ?>
+        <div id="note-2" class="cision-block-notice notice notice-info is-dismissible" style="position: relative;">
+            <h3><?php _e('Do you have any feedback or need support?', Settings::TEXTDOMAIN); ?></h3>
+            <p><?php echo sprintf(__('If you have any request for improvement or just need some help. Do not hesitate to open a ticket in the <a href="%s" target="_blank">support section</a>.', Settings::TEXTDOMAIN), 'https://wordpress.org/support/plugin/cision-block/#new-topic-0'); ?></p>
+            <p><?php echo sprintf(__('I can also be reached by email at <a href="%s">%s</a>', Settings::TEXTDOMAIN), 'mailto:cyclonecode.help@gmail.com?subject=Cision Block', 'cyclonecode.help@gmail.com'); ?></p>
+            <p><?php echo sprintf(__('There is also a slack channel that you can <a target="_blank" href="%s">join</a>.', Settings::TEXTDOMAIN), 'https://join.slack.com/t/cyclonecode/shared_invite/zt-6bdtbdab-n9QaMLM~exHP19zFDPN~AQ'); ?></p>
+            <p><?php _e('I hope you will have an awesome day!', Settings::TEXTDOMAIN); ?></p>
+        </div>
+        <?php
+    }
+
+    /**
+     * Render admin header.
+     */
+    public function addHeader()
+    {
+        if (get_current_screen()->id !== 'settings_page_cision-block') {
+            return;
+        }
+        $sectionText = $this->getTabs();
+        if ($this->currentTab === 'info' && !empty($this->currentSection)) {
+            $title = ' | ' . $sectionText[$this->currentSection];
+        } else {
+            $title = $this->currentTab ? ' | ' . $sectionText[$this->currentTab] : '';
+        }
+        ?>
+        <div id="cision-block-admin-header">
+            <span><img width="64" src="<?php echo plugin_dir_url(__FILE__); ?>assets/icon-128x128.png" alt="<?php _e('Cision Block', Settings::TEXTDOMAIN); ?>" />
+                <h1><?php _e('Cision Block', Settings::TEXTDOMAIN); ?><?php echo $title; ?></h1>
+            </span>
+        </div>
+        <?php
     }
 
     /**
@@ -88,6 +225,38 @@ class Backend extends Singleton
         }
 
         return $links;
+    }
+
+    /**
+     * Filters the array of row meta for each plugin in the Plugins list table.
+     *
+     * @param string[] $plugin_meta An array of the plugin's metadata.
+     * @param string   $plugin_file Path to the plugin file relative to the plugins directory.
+     * @return string[] An array of the plugin's metadata.
+     */
+    public function filterPluginRowMeta(array $plugin_meta, $plugin_file)
+    {
+        if ($plugin_file !== 'cision-block/bootstrap.php') {
+            return $plugin_meta;
+        }
+
+        $plugin_meta[] = sprintf(
+            '<a target="_blank" href="%1$s"><span class="dashicons dashicons-star-filled" aria-hidden="true" style="font-size:14px;line-height:1.3"></span>%2$s</a>',
+            'https://www.buymeacoffee.com/cyclonecode',
+            esc_html_x('Sponsor', 'verb', Settings::TEXTDOMAIN)
+        );
+        $plugin_meta[] = sprintf(
+            '<a target="_blank" href="%1$s"><span class="dashicons dashicons-thumbs-up" aria-hidden="true" style="font-size:14px;line-height:1.3"></span>%2$s</a>',
+            'https://wordpress.org/support/plugin/cision-block/reviews/?rate=5#new-post',
+            esc_html_x('Rate', 'verb', Settings::TEXTDOMAIN)
+        );
+        $plugin_meta[] = sprintf(
+            '<a target="_blank" href="%1$s"><span class="dashicons dashicons-editor-help" aria-hidden="true" style="font-size:14px;line-height:1.3"></span>%2$s</a>',
+            'https://wordpress.org/support/plugin/cision-block/#new-topic-0',
+            esc_html_x('Support', 'verb', Settings::TEXTDOMAIN)
+        );
+
+        return $plugin_meta;
     }
 
     /**
@@ -109,19 +278,54 @@ class Backend extends Singleton
                 $this->settings->add($key, $value);
             }
 
+            // Setup notifications
+            $defaults['notes'] = array(
+                'review' => array(
+                    'id' => 1,
+                    'weight' => 1,
+                    'persistent' => false,
+                    'time' => 0,
+                    'type' => 'info',
+                    'name' => 'review',
+                    'callback' => 'addReviewNotice',
+                    'dismissed' => false,
+                    'dismissible' => true,
+                ),
+                'support' => array(
+                    'id' => 2,
+                    'weight' => 2,
+                    'persistent' => true,
+                    'time' => 0,
+                    'type' => 'warning',
+                    'name' => 'support',
+                    'callback' => 'addSupportNotice',
+                    'dismissed' => true,
+                    'dismissible' => false,
+                )
+            );
+            $notes = $this->settings->get('notes');
+
+            // Special handling for persistent notes.
+            foreach ($defaults['notes'] as $id => $note) {
+                if ($note['persistent'] && isset($notes[$id])) {
+                    $defaults['notes'][$id]['dismissed'] = $notes[$id]['dismissed'];
+                }
+            }
+            $this->settings->set('notes', $defaults['notes']);
+
             // Handle our view_mode
             if (version_compare($this->settings->get('version'), '1.5.4', '<')) {
                 $regulatory = $this->settings->get('is_regulatory');
                 if ($regulatory) {
-                    $this->settings->set('view_mode', self::DISPLAY_MODE_REGULATORY);
+                    $this->settings->set('view_mode', Settings::DISPLAY_MODE_REGULATORY);
                 }
                 $this->settings->remove('is_regulatory');
             }
 
-            $this->settings->version = Frontend::VERSION;
-
             // Store updated settings.
-            $this->settings->save();
+            $this->settings
+                ->set('version', Frontend::VERSION)
+                ->save();
         }
     }
 
@@ -163,6 +367,12 @@ class Backend extends Singleton
      */
     public function registerStyles()
     {
+        wp_enqueue_style(
+            'cision-block-admin',
+            plugin_dir_url(__FILE__) . 'css/admin.css',
+            array(),
+            Frontend::VERSION
+        );
         wp_enqueue_script(
             'cision-block-admin',
             plugin_dir_url(__FILE__) . 'js/cision-block-admin.js',
@@ -170,6 +380,9 @@ class Backend extends Singleton
             Frontend::VERSION,
             true
         );
+        wp_localize_script('cision-block-admin', 'data', array(
+            '_nonce' => wp_create_nonce('cision_block_dismiss_notice'),
+        ));
     }
 
     /**
@@ -179,7 +392,7 @@ class Backend extends Singleton
      */
     public function saveSettings()
     {
-        $tab = 'settings';
+        $tab = '';
         $settings = array();
 
         // Validate so user has correct privileges.
@@ -187,34 +400,80 @@ class Backend extends Singleton
             die(__('You are not allowed to perform this action.', Settings::TEXTDOMAIN));
         }
         // Verify nonce and referer.
-        if (check_admin_referer('cision-block-settings-action', 'cision-block-settings-nonce')) {
-            // Check if a settings form is submitted.
-            if (filter_input(INPUT_POST, 'cision-block-settings', FILTER_SANITIZE_STRING)) {
-                $settings = Frontend::getInstance()->verifySettings($_POST);
-            }
-            if (filter_input(INPUT_POST, 'cision-block-permalinks', FILTER_SANITIZE_STRING)) {
-                $settings = Frontend::getInstance()->verifySettings($_POST);
-                // Make sure we flush the rewrite rules.
-                set_transient('cision_block_flush_rewrite_rules', 1);
-                $tab = 'permalinks';
-            }
-            if (filter_input(INPUT_POST, 'cision-block-filters', FILTER_SANITIZE_STRING)) {
-                $settings = Frontend::getInstance()->verifySettings($_POST);
-                $tab = 'filters';
-            }
-            if (filter_input(INPUT_POST, 'cision-block-import-settings')) {
-                $settings = (array)json_decode(str_replace(array("\r\n", "\n"), array("", ""), stripslashes($_POST['settings'])));
-                $settings = Frontend::getInstance()->verifySettings($settings);
-                $tab = 'settings';
-            }
-            $this->settings->setFromArray($settings)->save();
-            Frontend::clearCache();
+        check_admin_referer('cision-block-settings-action', 'cision-block-settings-nonce');
+
+        $settings = Frontend::getInstance()->verifySettings($_POST);
+
+        // Check if settings form is submitted.
+        if (filter_input(INPUT_POST, 'cision-block-settings', FILTER_SANITIZE_STRING)) {
+            $tab = 'settings';
         }
-        wp_redirect(admin_url(self::PARENT_MENU_SLUG . '?page=' . self::MENU_SLUG . '&tab=' . $tab));
+        // Check if settings form is submitted.
+        if (filter_input(INPUT_POST, 'cision-block-permalinks', FILTER_SANITIZE_STRING)) {
+            // Make sure we flush the rewrite rules.
+            set_transient('cision_block_flush_rewrite_rules', 1);
+            $tab = 'permalinks';
+        }
+        // Check if settings form is submitted.
+        if (filter_input(INPUT_POST, 'cision-block-filters', FILTER_SANITIZE_STRING)) {
+            $tab = 'filters';
+        }
+        $this->settings
+            ->setFromArray($settings)
+            ->save();
+        Frontend::clearCache();
+
+        // Check if we should activate the support notification.
+        if (($notice = $this->getNoticeByName('support')) && $notice['time'] === 0) {
+            $this->resetNotice($notice['id']);
+        }
+        wp_safe_redirect(add_query_arg(array(
+            'page' => self::MENU_SLUG,
+            'tab' => $tab,
+        ), self::PARENT_MENU_SLUG));
     }
 
     /**
-     * Returns an array of available languages.
+     * Returns an array of available image styles.
+     *
+     * @return array
+     */
+    public function getImageStyles()
+    {
+        return array(
+            'DownloadUrl' => array(
+                'label' => __('Original Image', Settings::TEXTDOMAIN),
+                'class' => 'image-original',
+            ),
+            'UrlTo100x100ArResized' => array(
+                'label' => __('100x100 Resized', Settings::TEXTDOMAIN),
+                'class' => 'image-100x100-resized',
+            ),
+            'UrlTo200x200ArResized' => array(
+                'label' => __('200x200 Resized', Settings::TEXTDOMAIN),
+                'class' => 'image-200x200-resized',
+            ),
+            'UrlTo400x400ArResized' => array(
+                'label' => __('400x400 Resized', Settings::TEXTDOMAIN),
+                'class' => 'image-400x400-resized',
+            ),
+            'UrlTo800x800ArResized' => array(
+                'label' => __('800x800 Resized', Settings::TEXTDOMAIN),
+                'class' => 'image-800x800-resized',
+            ),
+            'UrlTo100x100Thumbnail' => array(
+                'label' => __('100x100 Thumbnail', Settings::TEXTDOMAIN),
+                'class' => 'image-100x100-thumbnail',
+            ),
+            'UrlTo200x200Thumbnail' => array(
+                'label' => __('200x200 Thumbnail', Settings::TEXTDOMAIN),
+                'class' => 'image-200x200-thumbnail',
+            ),
+        );
+    }
+
+    /**
+     * Return a list of languages.
      *
      * @return array
      */
@@ -409,45 +668,6 @@ class Backend extends Singleton
     }
 
     /**
-     * Returns an array of available image styles.
-     *
-     * @return array
-     */
-    public function getImageStyles()
-    {
-        return array(
-            'DownloadUrl' => array(
-                'label' => __('Original Image', Settings::TEXTDOMAIN),
-                'class' => 'image-original',
-            ),
-            'UrlTo100x100ArResized' => array(
-                'label' => __('100x100 Resized', Settings::TEXTDOMAIN),
-                'class' => 'image-100x100-resized',
-            ),
-            'UrlTo200x200ArResized' => array(
-                'label' => __('200x200 Resized', Settings::TEXTDOMAIN),
-                'class' => 'image-200x200-resized',
-            ),
-            'UrlTo400x400ArResized' => array(
-                'label' => __('400x400 Resized', Settings::TEXTDOMAIN),
-                'class' => 'image-400x400-resized',
-            ),
-            'UrlTo800x800ArResized' => array(
-                'label' => __('800x800 Resized', Settings::TEXTDOMAIN),
-                'class' => 'image-800x800-resized',
-            ),
-            'UrlTo100x100Thumbnail' => array(
-                'label' => __('100x100 Thumbnail', Settings::TEXTDOMAIN),
-                'class' => 'image-100x100-thumbnail',
-            ),
-            'UrlTo200x200Thumbnail' => array(
-                'label' => __('200x200 Thumbnail', Settings::TEXTDOMAIN),
-                'class' => 'image-200x200-thumbnail',
-            ),
-        );
-    }
-
-    /**
      * Sets the current tab.
      */
     public function setTabs()
@@ -464,17 +684,8 @@ class Backend extends Singleton
             'settings' => __('General Settings', Settings::TEXTDOMAIN),
             'permalinks' => __('Permalinks', Settings::TEXTDOMAIN),
             'filters' => __('Filters', Settings::TEXTDOMAIN),
+            'status' => __('Status', Settings::TEXTDOMAIN),
         );
-    }
-
-    /**
-     * Check if we are in debug mode.
-     *
-     * @return bool
-     */
-    public function isDebugEnabled()
-    {
-        return (int) getenv('CISION_BLOCK_DEBUG') === 1;
     }
 
     /**

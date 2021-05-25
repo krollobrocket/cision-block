@@ -1,3 +1,7 @@
+= 2.3.3
+- Fix a bug which triggered PHP warnings caused by undefined constants.
+- Fix a bug where cached could not be cleared since widget_id was not set.
+
 = 2.3.2
 - Add mark release and filter settings to widget.
 - Check PHP and Wordpress version on activation.

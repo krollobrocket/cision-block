@@ -3,9 +3,9 @@ Contributors: cyclonecode
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=VUK8LYLAN2DA6&source=url&lc=US&item_name=Cision+Block
 Tags: cision, feed, cision feed, shortcode, widget, content
 Requires at least: 3.1.0
-Tested up to: 5.5.3
+Tested up to: 5.7.1
 Requires PHP: 5.6
-Stable tag: 2.3.2
+Stable tag: 2.4.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -104,15 +104,12 @@ The image style to use:
  - UrlTo100x100Thumbnail
  - UrlTo200x200Thumbnail
 
-- exclude_css
-Do not load the stylesheet.
-
 - flush
 Clears the cache for the block.
 
 Here is an example using all of the above attributes:
 
-`[cision-block id=example_block source_uid=A275C0BF733048FFAE9126ACA64DD08F language=sv date_format=m-d-Y readmore="Read more" view=1 count=6 items_per_page=2 tags="cision,company" categories="New Year,Summer camp" types="PRM, RDV" start=2016-01-12 end=2019-06-12 image_style=UrlTo400x400ArResized mark_regulatory=1 regulatory_text=Regulatory non_regulatory_text=*none* show_filters=1 filter_all_text=*none* filter_regulatory_text=Regulatory filter_non_regulatory_text=Non-regulatory exclude_css=true flush=true]`
+`[cision-block id=example_block source_uid=A275C0BF733048FFAE9126ACA64DD08F language=sv date_format=m-d-Y readmore="Read more" view=1 count=6 items_per_page=2 tags="cision,company" categories="New Year,Summer camp" types="PRM, RDV" start=2016-01-12 end=2019-06-12 image_style=UrlTo400x400ArResized mark_regulatory=1 regulatory_text=Regulatory non_regulatory_text=*none* show_filters=1 filter_all_text=*none* filter_regulatory_text=Regulatory filter_non_regulatory_text=Non-regulatory flush=true]`
 
 **Notice** that all shortcode attributes are optional and that they **must** be on a single line.
 Default values is taken from the plugins settings page.
@@ -156,9 +153,29 @@ css since this contains pre formated html which may include inline css and so on
 
 = Fields =
 
-A complete list of fields can be found at: [https://websolutions.ne.cision.com/documents/P2_Feed.pdf](https://websolutions.ne.cision.com/documents/P2_Feed.pdf).
+By default only the following fields are collected for each feed item:
+
+* Title
+* Intro
+* Body
+* PublishDate
+* CisionWireUrl
+* IsRegulatory
+* Images[0]
+ * DownloadUrl
+ * Description
 
 = Filters =
+
+Add more fields to each feed item:
+
+    add_filter('cision_map_source_item', function($item, $data, $block_id) {
+      $item['Header'] = sanitize_text_field($data->Header);
+      $item['LogoUrl'] = esc_url_raw($data->LogoUrl);
+      $item['SocialMediaPitch'] = sanitize_text_field($data->SocialMediaPitch);
+
+      return $item;
+    }, 10, 3);
 
 Customize the sorting of the feed items:
 
@@ -227,21 +244,9 @@ A complete list of fields can be found at: [https://websolutions.ne.cision.com/d
 
 The following Feed identifier can be used for testing: **A275C0BF733048FFAE9126ACA64DD08F**
 
-== Ideas and upcoming features ==
+== Improvements ==
 
-- Add plugin specific css classes to single article page.
-- Integrate support for Cision PUSH events.
-- Support to fetch feeds in XML format.
-- Add "test" button to configuration page. This would check so the feed can be retrieved successfully.
-- Support to hide feed items which does not have any picture.
-- Add new settings page where the user can select which field to include. This fields will then be available in the themes template file.
-- Support to grab the entire feeds, not just the 100 last entries.
-- Add checkbox to settings page which can be used to enabled/disable the rendering of shortcode and widget.
-- Extended error handling for debug purposes.
-- Autoloader.
-- Register and use custom posts for each fetched release.
-
-If you have any ideas for improvements, don't hesitate to email me at cyclonecode@gmail.com or send me a message on [slack](https://join.slack.com/t/cyclonecode/shared_invite/zt-6bdtbdab-n9QaMLM~exHP19zFDPN~AQ).
+If you have any ideas for improvements, don't hesitate to email me at cyclonecode.help@gmail.com or send me a message on [slack](https://join.slack.com/t/cyclonecode/shared_invite/zt-6bdtbdab-n9QaMLM~exHP19zFDPN~AQ).
 
 == Support ==
 
@@ -291,12 +296,13 @@ Fixed a bug where source id from widget was never used.
 
 == Changelog ==
 
-= 2.3.3
-- Use a select control instead of text input for language.
-- Add version argument to script and style.
-- Check env for debug mode.
-- Add rss, chat and other info to composer.json.
-- Use include_once instead of include when including templates.
-- Only load javascript if needed.
-- Add support to exclude stylesheet.
-- Fix use of undefined constants.
+= 2.4.0
+- Use plugin package.
+- Remove settings textarea from configuration page.
+- Refactor save settings method.
+- Add language dropdown.
+- Add possibility to exclude stylesheet.
+- Add version to script and stylesheet.
+- Add status page.
+- Add admin header.
+- Add admin notifications.

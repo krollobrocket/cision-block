@@ -1,11 +1,11 @@
 <?php
 
 use CisionBlock\Config\Settings;
-use CisionBlock\Frontend\Frontend;
 
 ?>
 <div class="wrap">
-    <h1><?php _e('Cision Block', Settings::TEXTDOMAIN); ?></h1>
+    <?php do_action('cision_block_admin_notices'); ?>
+    <h1></h1>
     <?php $this->displayTabs(); ?>
     <form action="<?php echo admin_url('admin-post.php'); ?>" method="POST">
         <?php wp_nonce_field('cision-block-settings-action', 'cision-block-settings-nonce'); ?>
@@ -14,7 +14,7 @@ use CisionBlock\Frontend\Frontend;
             <tr>
                 <th scope="row">
                     <label for="count"><?php _e('Number of feed items', Settings::TEXTDOMAIN); ?></label>
-                    </th>
+                </th>
                 <td>
                     <input type="number" min="1" max="<?php echo Settings::MAX_ITEMS_PER_FEED; ?>" name="count" value="<?php echo intval($this->settings->get('count')); ?>" />
                     <p class="description"><?php _e('The maximum number of items in the feed.', Settings::TEXTDOMAIN); ?></p>
@@ -32,10 +32,10 @@ use CisionBlock\Frontend\Frontend;
             <tr>
                 <th scope="row">
                     <label for="types"><?php _e('Type of feed items', Settings::TEXTDOMAIN); ?></label>
-                    </th>
+                </th>
                 <td>
                     <select class="regular-text" name="types[]" multiple>
-                        <?php foreach (Frontend::getInstance()->getFeedTypes() as $key => $value) : ?>
+                        <?php foreach (\CisionBlock\Frontend\Frontend::getInstance()->getFeedTypes() as $key => $value) : ?>
                         <option value="<?php echo $key; ?>"<?php selected(in_array($key, $this->settings->get('types'))); ?>><?php echo $value; ?></option>
                         <?php endforeach; ?>
                     </select>
@@ -45,7 +45,7 @@ use CisionBlock\Frontend\Frontend;
             <tr>
                 <th scope="row">
                     <label for="start"><?php _e('Start date', Settings::TEXTDOMAIN); ?></label>
-                    </th>
+                </th>
                 <td>
                     <input type="date" name="start" value="<?php echo $this->settings->get('start_date'); ?>" />
                     <p class="description"><?php _e('Defines the start date of the date interval the press releases and/or reports are collected from. The format is 2001-12-31.', Settings::TEXTDOMAIN); ?></p>
@@ -54,7 +54,7 @@ use CisionBlock\Frontend\Frontend;
             <tr>
                 <th scope="row">
                     <label for="end"><?php _e('End date', Settings::TEXTDOMAIN); ?></label>
-                    </th>
+                </th>
                 <td>
                     <input type="date" name="end" value="<?php echo $this->settings->get('end_date'); ?>" />
                     <p class="description"><?php _e('Defines the end date of the date interval the press releases and/or reports are collected from. The format is 2001-12-31.', Settings::TEXTDOMAIN); ?></p>
@@ -91,7 +91,7 @@ use CisionBlock\Frontend\Frontend;
             <tr>
                 <th scope="row">
                     <label for="tags"><?php _e('Tags', Settings::TEXTDOMAIN); ?></label>
-                    </th>
+                </th>
                 <td>
                     <input type="text" class="regular-text" name="tags" value="<?php echo $this->settings->get('tags'); ?>">
                     <p class="description"><?php _e('Defines a filter on tags, this will return releases with these tags. One or several
@@ -120,7 +120,7 @@ use CisionBlock\Frontend\Frontend;
             <tr>
                 <th scope="row">
                     <label for="items_per_page"><?php _e('Items per page', Settings::TEXTDOMAIN); ?></label>
-                    </th>
+                </th>
                 <td>
                     <input type="number" min="0" max="<?php echo Settings::MAX_ITEMS_PER_PAGE; ?>" name="items_per_page" value="<?php echo $this->settings->get('items_per_page'); ?>" />
                     <p class="description"><?php _e('Number of items on each page (set to 0 to disable).', Settings::TEXTDOMAIN); ?></p>
@@ -129,22 +129,21 @@ use CisionBlock\Frontend\Frontend;
             <tr>
                 <th scope="row">
                     <label for="language"><?php _e('Language', Settings::TEXTDOMAIN); ?></label>
-                    </th>
+                </th>
                 <td>
                     <select name="language">
                         <option value=""><?php _e('Select'); ?></option>
                         <?php foreach ($this->getLanguages() as $code => $name) : ?>
-                        <option value="<?php echo $code; ?>"<?php selected($code === $this->settings->get('language')) ?>><?php echo $name; ?></option>
+                            <option value="<?php echo $code; ?>"<?php selected($code === $this->settings->get('language')) ?>><?php echo $name; ?></option>
                         <?php endforeach; ?>
                     </select>
                     <p class="description"><?php _e('The language for each feed item.'); ?></p>
-                    <p class="description"><?php _e('If not set all items will be displayed.'); ?></p>
                 </td>
             </tr>
             <tr>
                 <th scope="row">
                     <label for="readmore"><?php _e('Read more text', Settings::TEXTDOMAIN); ?></label>
-                    </th>
+                </th>
                 <td>
                     <input type="text" name="readmore" value="<?php echo $this->settings->get('readmore'); ?>" />
                     <p class="description"><?php _e('The \'Read more\' button text. If this value is empty then the button will not be visible.', Settings::TEXTDOMAIN); ?></p>
@@ -166,7 +165,7 @@ use CisionBlock\Frontend\Frontend;
             <tr>
                 <th scope="row">
                     <label for="date_format"><?php _e('Date format', Settings::TEXTDOMAIN); ?></label>
-                    </th>
+                </th>
                 <td>
                     <input type="text" name="date_format" value="<?php echo $this->settings->get('date_format'); ?>" />
                     <p class="description"><?php _e('The format to use for dates.', Settings::TEXTDOMAIN); ?></p>
@@ -176,7 +175,7 @@ use CisionBlock\Frontend\Frontend;
             <tr>
                 <th scope="row">
                     <label for="image_style"><?php _e('Image style', Settings::TEXTDOMAIN); ?></label>
-                    </th>
+                </th>
                 <td>
                     <select name="image_style">
                         <option value=""><?php _e('Select', Settings::TEXTDOMAIN); ?></option>
@@ -203,8 +202,8 @@ use CisionBlock\Frontend\Frontend;
                 </th>
                 <td>
                     <input type="hidden" id="hidden_exclude_css" name="exclude_css" value="0" />
-                    <input type="checkbox" name="exclude_css"<?php checked($this->settings->get('exclude_css')); ?>" />
-                    <p class="description"><?php _e('Do not load any stylesheet for the frontend.', Settings::TEXTDOMAIN); ?></p>
+                    <input type="checkbox" name="exclude_css"<?php checked($this->settings->get('exclude_css')); ?> />
+                    <p class="description"><?php _e('Do not load stylesheet.', Settings::TEXTDOMAIN); ?></p>
                 </td>
             </tr>
             <tr>
@@ -214,18 +213,6 @@ use CisionBlock\Frontend\Frontend;
                 <td>
                     <input type="number" min="0" name="cache_expire" value="<?php echo $this->settings->get('cache_expire'); ?>" />
                     <p class="description"><?php _e('The cache lifetime.', Settings::TEXTDOMAIN); ?></p>
-                </td>
-            </tr>
-            <tr>
-                <th scope="row">
-                    <label for="json-markup"><?php _e('Json configuration', Settings::TEXTDOMAIN); ?></label>
-                </th>
-                <td>
-                    <textarea<?php echo $this->isDebugEnabled() ? '' : ' onclick="this.focus(); this.select();"'; ?> cols="60" rows="10" name="settings"<?php echo $this->isDebugEnabled() ? '' : ' readonly="readonly"'; ?>><?php echo $this->settings->toJson(); ?></textarea>
-                    <p class="description"><?php _e('The settings in json format.', Settings::TEXTDOMAIN); ?></p>
-                    <?php if ($this->isDebugEnabled()) : ?>
-                        <?php echo get_submit_button(__('Save settings', Settings::TEXTDOMAIN), 'primary', 'cision-block-import-settings'); ?>
-                    <?php endif ?>
                 </td>
             </tr>
         </table>

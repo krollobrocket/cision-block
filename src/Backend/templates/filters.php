@@ -4,7 +4,6 @@ use CisionBlock\Config\Settings;
 
 ?>
 <div class="wrap">
-    <h1><?php _e('Cision Block', Settings::TEXTDOMAIN); ?></h1>
     <?php $this->displayTabs(); ?>
     <form action="<?php echo admin_url('admin-post.php'); ?>" method="POST">
         <?php wp_nonce_field('cision-block-settings-action', 'cision-block-settings-nonce'); ?>

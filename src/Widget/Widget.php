@@ -7,7 +7,7 @@ use CisionBlock\Frontend\Frontend;
 use CisionBlock\Backend\Backend;
 use CisionBlock\Config\Settings;
 
-class Widget extends Base\Widget
+class Widget extends \CisionBlock\Plugin\Widget
 {
     /**
      * Constructor.
@@ -183,9 +183,9 @@ class Widget extends Base\Widget
         $output .= '<p>';
         $output .= '<label for="' . $this->get_field_id('language') . '">' . __('Language', Settings::TEXTDOMAIN) . ': </label>';
         $output .= '<select name="' . $this->get_field_name('language') . '">';
-        $output .= '<option>' . __('Select', Settings::TEXTDOMAIN) . '</option>';
-        foreach (Backend::getInstance()->getLanguages() as $key => $value) :
-            $output .= '<option value="' . $key . '"' . selected($instance['language'] === $key, true, false) . '>' . $value . '</option>';
+        $output .= '<option value="">' . __('Select', Settings::TEXTDOMAIN) . '</option>';
+        foreach (Backend::getInstance()->getLanguages() as $key => $language) :
+            $output .= '<option value="' . $key . '"' . selected($instance['language'] === $key, true, false) . '>' . $language . '</option>';
         endforeach;
         $output .= '</select>';
         $output .= '</p>';
