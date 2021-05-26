@@ -2,12 +2,11 @@
 
 namespace CisionBlock\Widget;
 
-use Cassandra\Set;
 use CisionBlock\Frontend\Frontend;
 use CisionBlock\Backend\Backend;
-use CisionBlock\Config\Settings;
+use CisionBlock\Settings\Settings;
 
-class Widget extends \CisionBlock\Plugin\Widget
+class Widget extends \CisionBlock\Plugin\Widget\Widget
 {
     /**
      * Constructor.

@@ -2,8 +2,8 @@
 
 namespace CisionBlock\Backend;
 
-use CisionBlock\Plugin\Singleton;
-use CisionBlock\Config\Settings;
+use CisionBlock\Plugin\Common\Singleton;
+use CisionBlock\Settings\Settings;
 use CisionBlock\Widget\Widget;
 use CisionBlock\Frontend\Frontend;
 

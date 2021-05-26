@@ -20,6 +20,18 @@ You can also change how many feed items to pull, type of feed items, enable pagi
 
 If you have questions or perhaps some idea on things that should be added you can also try [slack](https://join.slack.com/t/cyclonecode/shared_invite/zt-6bdtbdab-n9QaMLM~exHP19zFDPN~AQ).
 
+= Pro Version =
+
+There is a PRO version of this plugin, which includes extended features. For instance:
+
+- Support to fetch entire feed and not only the last 100 entries.
+- Custom post types. Creates a post for each item in Wordpress. This means that all news have standard Wordpress links.
+- Custom taxonomies for categories and tags fetched from Cision.
+- Use standard article template from your active theme.
+- Annual free support and quicker response times.
+
+To get more information about the Pro version, send me an email at [cyclonecode@gmail.com](mailto:cyclonecode@gmail.com).
+
 = Widget =
 
 You can display a feed in any sidebar by adding and configure a widget.
@@ -296,13 +308,7 @@ Fixed a bug where source id from widget was never used.
 
 == Changelog ==
 
-= 2.4.0
-- Use plugin package.
-- Remove settings textarea from configuration page.
-- Refactor save settings method.
-- Add language dropdown.
-- Add possibility to exclude stylesheet.
-- Add version to script and stylesheet.
-- Add status page.
-- Add admin header.
-- Add admin notifications.
+= 2.4.1
+- Add Http classes.
+- Handle remote request exceptions.
+- Prevent unserialization of singleton.

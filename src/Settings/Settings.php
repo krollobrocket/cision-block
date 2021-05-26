@@ -1,10 +1,10 @@
 <?php
 
-namespace CisionBlock\Config;
+namespace CisionBlock\Settings;
 
 use CisionBlock\Frontend\Frontend;
 
-class Settings extends \CisionBlock\Plugin\Settings
+class Settings extends \CisionBlock\Plugin\Settings\Settings
 {
     const DEFAULT_ITEMS_PER_PAGE = 0;
     const DEFAULT_ITEM_COUNT = 50;

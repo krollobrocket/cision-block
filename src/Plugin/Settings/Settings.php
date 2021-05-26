@@ -1,6 +1,6 @@
 <?php
 
-namespace CisionBlock\Plugin;
+namespace CisionBlock\Plugin\Settings;
 
 class Settings implements \IteratorAggregate, \Countable, \ArrayAccess
 {

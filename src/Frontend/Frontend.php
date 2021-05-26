@@ -2,8 +2,9 @@
 
 namespace CisionBlock\Frontend;
 
-use CisionBlock\Plugin\Singleton;
-use CisionBlock\Config\Settings;
+use CisionBlock\Plugin\Common\Singleton;
+use CisionBlock\Plugin\Http\RemoteRequest;
+use CisionBlock\Settings\Settings;
 use CisionBlock\Widget\Widget;
 use stdClass;
 
@@ -16,7 +17,7 @@ class Frontend extends Singleton
     const SETTINGS_NAME = 'cision_block_settings';
     const TRANSIENT_KEY = 'cision_block_data';
     const USER_AGENT = 'cision-block/' . self::VERSION;
-    const VERSION = '2.4.0';
+    const VERSION = '2.4.1';
 
     /**
      *
@@ -29,6 +30,12 @@ class Frontend extends Singleton
      * @var Widget
      */
     private $widget;
+
+    /**
+     *
+     * @var RemoteRequest
+     */
+    private $request;
 
     /**
      * @var string
@@ -77,6 +84,7 @@ class Frontend extends Singleton
     public function init()
     {
         $this->settings = new Settings(self::SETTINGS_NAME);
+        $this->request = new RemoteRequest();
 
         // Setup widget.
         $this->widget = new Widget();
@@ -100,12 +108,11 @@ class Frontend extends Singleton
             $regex = get_shortcode_regex();
             $matches = array();
             $block_id = 'cision_block';
-            if (
-                preg_match_all('/' . $regex . '/', $content, $matches) &&
+            if (preg_match_all('/' . $regex . '/', $content, $matches) &&
                 array_key_exists(2, $matches)
             ) {
                 foreach ($matches[2] as $key => $match) {
-                    if ($match == 'cision-block') {
+                    if ($match === 'cision-block') {
                         if (array_key_exists(3, $matches)) {
                             $atts = shortcode_parse_atts($matches[3][$key]);
                             if (isset($atts['id'])) {
@@ -149,8 +156,18 @@ class Frontend extends Singleton
         global $wp_query;
         if (get_query_var('cision_release_id')) {
             $release_id = get_query_var('cision_release_id');
-            $response = $this->remoteRequest(self::FEED_RELEASE_URL . $release_id);
-
+            try {
+                $response = $this->request->get(self::FEED_RELEASE_URL . $release_id, array(
+                    'headers' => array(
+                        'User-agent' => self::USER_AGENT,
+                    ),
+                ))->toJSON();
+            } catch (\Exception $e) {
+                // Return a 404 page.
+                $wp_query->set_404();
+                status_header(404);
+                return;
+            }
             if ($response) {
                 $CisionItem = $response->Release;
 
@@ -664,12 +681,12 @@ class Frontend extends Singleton
             $max = (int) ceil(count($items) / $this->settings->get('items_per_page'));
             $id = get_query_var('cb_id');
             $page = (int) get_query_var('cb_page', -1);
-            $active = ($id == 'cision_block' ? $page : 0);
+            $active = ($id === 'cision_block' ? $page : 0);
             if ($max > 1) {
                 $output = '<ul' . $attributes . '>';
                 for ($i = 0; $i < $max; $i++) {
                     $output .= '<li><a href="' . add_query_arg(array('cb_id' => 'cision_block', 'cb_page' => $i)) . '"' .
-                        ($active == $i ? ' class="' . $active_class . '"' : '') . '>' . ($i + 1) . '</a></li>';
+                        ($active === $i ? ' class="' . $active_class . '"' : '') . '>' . ($i + 1) . '</a></li>';
                 }
                 if ($active >= 0 && $active < $max) {
                     $items = array_slice(
@@ -685,29 +702,6 @@ class Frontend extends Singleton
     }
 
     /**
-     * Performs a remote request.
-     *
-     * @param string $url
-     *   A valid url.
-     *
-     * @return mixed
-     *   The json decoded feed or null.
-     */
-    protected function remoteRequest($url)
-    {
-        $result = null;
-        $response = wp_safe_remote_request($url, array(
-            'headers' => array(
-                'User-Agent' => self::USER_AGENT,
-            ),
-        ));
-        if (!is_wp_error($response) && ($response['response']['code'] == 200 || $response['response']['code'] == 201)) {
-            $result = json_decode($response['body']);
-        }
-        return $result;
-    }
-
-    /**
      * Retrieve a feed from the specified source URL.
      *
      * @return array
@@ -719,7 +713,8 @@ class Frontend extends Singleton
         global $widget_id;
 
         // Try to get data from transient.
-        $data = get_transient(self::TRANSIENT_KEY . '_' . $this->current_block_id . '_' . ($widget_id ? $widget_id : $post->ID));
+        $cacheKey = self::TRANSIENT_KEY . '_' . $this->current_block_id . '_' . ($widget_id ? $widget_id : $post->ID);
+        $data = get_transient($cacheKey);
         if ($data === false) {
             $params = array(
                 'PageIndex' => Settings::DEFAULT_PAGE_INDEX,
@@ -735,15 +730,22 @@ class Frontend extends Singleton
                         'true' :
                         ($this->settings->get('view_mode') === Settings::DISPLAY_MODE_NON_REGULATORY ? 'false' : null),
             );
-            $response = $this->remoteRequest(
-                self::FEED_URL . $this->settings->get('source_uid') . '?' . http_build_query($params)
-            );
+            try {
+                $response = $this->request->get(self::FEED_URL . $this->settings->get('source_uid'), array(
+                    'headers' => array(
+                        'User-agent' => self::USER_AGENT,
+                    ),
+                    'body' => $params,
+                ))->toJSON();
+            } catch (\Exception $e) {
+                $response = null;
+            }
             $data = ($response ? $this->mapSources($response) : null);
 
             // Store transient data.
             if ($data && $this->settings->get('cache_expire') > 0) {
                 set_transient(
-                    self::TRANSIENT_KEY . '_' . $this->current_block_id . '_' . ($widget_id ? $widget_id : $post->ID),
+                    $cacheKey,
                     $data,
                     $this->settings->get('cache_expire')
                 );

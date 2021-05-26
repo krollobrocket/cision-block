@@ -1,3 +1,14 @@
+= 2.4.0
+- Use plugin package.
+- Remove settings textarea from configuration page.
+- Refactor save settings method.
+- Add language dropdown.
+- Add possibility to exclude stylesheet.
+- Add version to script and stylesheet.
+- Add status page.
+- Add admin header.
+- Add admin notifications.
+
 = 2.3.3
 - Fix a bug which triggered PHP warnings caused by undefined constants.
 - Fix a bug where cached could not be cleared since widget_id was not set.

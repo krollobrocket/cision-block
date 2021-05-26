@@ -1,6 +1,6 @@
 <?php
 
-namespace CisionBlock\Plugin;
+namespace CisionBlock\Plugin\Widget;
 
 abstract class Widget extends \WP_Widget
 {
@@ -33,8 +33,8 @@ abstract class Widget extends \WP_Widget
 
     /**
      *
-     * @param type $args
-     * @param type $instance
+     * @param array $args
+     * @param array $instance
      */
     public function widget($args, $instance)
     {

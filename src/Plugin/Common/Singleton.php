@@ -1,6 +1,6 @@
 <?php
 
-namespace CisionBlock\Plugin;
+namespace CisionBlock\Plugin\Common;
 
 abstract class Singleton
 {
@@ -10,7 +10,7 @@ abstract class Singleton
     protected static $instance = array();
 
     /**
-     * @return Singleton|null
+     * @return mixed
      */
     final public static function getInstance()
     {
@@ -34,6 +34,14 @@ abstract class Singleton
      */
     final private function __clone()
     {
+    }
+
+    /**
+     * Singletons can not be unserialized.
+     */
+    final public function __wakeup()
+    {
+        throw new \Exception('Cannot unserialize singleton');
     }
 
     protected function init()

@@ -1,6 +1,6 @@
 <?php
 
-use CisionBlock\Config\Settings;
+use CisionBlock\Settings\Settings;
 
 ?>
 <div class="wrap">
