@@ -361,6 +361,7 @@ class Frontend extends Singleton
             'image_style' => 'image_style',
             'items_per_page' => 'items_per_page',
             'exclude_css' => 'exclude_css',
+            'template' => 'template',
 
             // permalinks
             'internal_links' => 'internal_links',
@@ -423,6 +424,18 @@ class Frontend extends Singleton
                             FILTER_SANITIZE_STRING,
                             FILTER_REQUIRE_ARRAY
                         );
+                    }
+                    break;
+                case 'template':
+                    include_once ABSPATH . '/wp-admin/includes/theme.php';
+                    $template = filter_var(
+                        $value,
+                        FILTER_SANITIZE_STRING
+                    );
+                    if (array_search($template, get_page_templates())) {
+                        $result[$mapping[$name]] = $template;
+                    } else {
+                        $result[$mapping[$name]] = null;
                     }
                     break;
                 case 'source':
@@ -626,10 +639,14 @@ class Frontend extends Singleton
         ));
 
         ob_start();
-        $template = locate_template(array(
+        $templates = array(
             'cision-block.php',
             'templates/cision-block.php'
-        ));
+        );
+        if ($this->settings->get('template')) {
+            array_unshift($templates, $this->settings->get('template'));
+        }
+        $template = locate_template($templates);
         if ($template) {
             // Include theme overridden template.
             include $template;

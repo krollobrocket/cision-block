@@ -2,6 +2,7 @@
 
 use CisionBlock\Settings\Settings;
 
+$templates = get_page_templates();
 ?>
 <div class="wrap">
     <?php do_action('cision_block_admin_notices'); ?>
@@ -204,6 +205,20 @@ use CisionBlock\Settings\Settings;
                     <input type="hidden" id="hidden_exclude_css" name="exclude_css" value="0" />
                     <input type="checkbox" name="exclude_css"<?php checked($this->settings->get('exclude_css')); ?> />
                     <p class="description"><?php _e('Do not load stylesheet.', Settings::TEXTDOMAIN); ?></p>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    <label for="template"><?php _e('Template', Settings::TEXTDOMAIN); ?></label>
+                </th>
+                <td>
+                    <select name="template">
+                        <option value="0"><?php _e('Select', Settings::TEXTDOMAIN); ?></option>
+                        <?php foreach ($templates as $key => $template) : ?>
+                            <option value="<?php echo $template; ?>"<?php selected($this->settings->get('template') === $template); ?>><?php echo $key; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                    <p class="description"><?php _e('The template used for rendering the feed.', Settings::TEXTDOMAIN); ?></p>
                 </td>
             </tr>
             <tr>

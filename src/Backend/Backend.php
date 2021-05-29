@@ -393,7 +393,6 @@ class Backend extends Singleton
     public function saveSettings()
     {
         $tab = '';
-        $settings = array();
 
         // Validate so user has correct privileges.
         if (!current_user_can($this->capability)) {

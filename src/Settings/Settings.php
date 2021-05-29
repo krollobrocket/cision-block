@@ -60,6 +60,7 @@ class Settings extends \CisionBlock\Plugin\Settings\Settings
         'internal_links' => false,
         'base_slug' => 'cision',
         'exclude_css' => false,
+        'template' => null,
         'version' => Frontend::VERSION,
     );
 

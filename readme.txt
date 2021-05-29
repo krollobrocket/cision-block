@@ -116,12 +116,16 @@ The image style to use:
  - UrlTo100x100Thumbnail
  - UrlTo200x200Thumbnail
 
+- template
+Template file to use. If no template is set in settings and this parameter is not set then cision-block.php in either the active
+theme or in the plugin will be used as a default.
+
 - flush
 Clears the cache for the block.
 
 Here is an example using all of the above attributes:
 
-`[cision-block id=example_block source_uid=A275C0BF733048FFAE9126ACA64DD08F language=sv date_format=m-d-Y readmore="Read more" view=1 count=6 items_per_page=2 tags="cision,company" categories="New Year,Summer camp" types="PRM, RDV" start=2016-01-12 end=2019-06-12 image_style=UrlTo400x400ArResized mark_regulatory=1 regulatory_text=Regulatory non_regulatory_text=*none* show_filters=1 filter_all_text=*none* filter_regulatory_text=Regulatory filter_non_regulatory_text=Non-regulatory flush=true]`
+`[cision-block id=example_block source_uid=A275C0BF733048FFAE9126ACA64DD08F language=sv date_format=m-d-Y readmore="Read more" view=1 count=6 items_per_page=2 tags="cision,company" categories="New Year,Summer camp" types="PRM, RDV" start=2016-01-12 end=2019-06-12 image_style=UrlTo400x400ArResized mark_regulatory=1 regulatory_text=Regulatory non_regulatory_text=*none* show_filters=1 filter_all_text=*none* filter_regulatory_text=Regulatory filter_non_regulatory_text=Non-regulatory template=foo.php flush=true]`
 
 **Notice** that all shortcode attributes are optional and that they **must** be on a single line.
 Default values is taken from the plugins settings page.
@@ -311,4 +315,5 @@ Fixed a bug where source id from widget was never used.
 = 2.4.1
 - Add Http classes.
 - Handle remote request exceptions.
-- Prevent unserialization of singleton.
+- Prevent un-serialization of singleton.
+- Add support to set template for feed.
