@@ -5,18 +5,18 @@
     "keywords": ["wordpress", "plugin", "cision", "feed", "cision feed", "shortcode", "widget", "content"],
     "description": "This plugin adds a shortcode and a widget that can be used for pulling and displaying press releases from cision.",
     "require": {
-        "composer/installers": "^1.6",
+        "composer/installers": "^1.11",
         "php": ">=5.6"
     },
     "require-dev": {
-        "squizlabs/php_codesniffer": "^3.5.8"
+        "squizlabs/php_codesniffer": "^3.6"
     },
     "license": "GPL-2.0-or-later",
     "readme": "readme.txt",
     "homepage": "https://wordpress.org/plugins/cision-block/",
     "authors": [
         {
-            "name": "Cyclonecode",
+            "name": "Krister Andersson",
             "email": "cyclonecode@gmail.com",
             "role": "Maintainer"
         }
