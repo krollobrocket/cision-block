@@ -17,7 +17,7 @@ class Frontend extends Singleton
     const SETTINGS_NAME = 'cision_block_settings';
     const TRANSIENT_KEY = 'cision_block_data';
     const USER_AGENT = 'cision-block/' . self::VERSION;
-    const VERSION = '2.4.1';
+    const VERSION = '2.4.2';
 
     /**
      *
@@ -432,8 +432,11 @@ class Frontend extends Singleton
                         $value,
                         FILTER_SANITIZE_STRING
                     );
-                    if (array_search($template, get_page_templates())) {
+                    $templates = get_page_templates();
+                    if (array_search($template, $templates) !== false) {
                         $result[$mapping[$name]] = $template;
+                    } elseif (array_key_exists($template, $templates)) {
+                        $result[$mapping[$name]] = $templates[$template];
                     } else {
                         $result[$mapping[$name]] = null;
                     }

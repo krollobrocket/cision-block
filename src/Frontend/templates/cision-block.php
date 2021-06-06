@@ -1,6 +1,8 @@
 <?php
 
 /**
+ * Template name: Cision Block
+ *
  * Template used to display a feed from Cision.
  *
  * @var string $id
@@ -38,7 +40,7 @@
  *
  * @package Cision Block
  * @since   1.0
- * @version 2.3.2
+ * @version 2.4.2
  */
 
 ?>

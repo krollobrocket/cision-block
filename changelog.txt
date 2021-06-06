@@ -1,3 +1,9 @@
+= 2.4.1
+- Add Http classes.
+- Handle remote request exceptions.
+- Prevent un-serialization of singleton.
+- Add support to set template for feed.
+
 = 2.4.0
 - Use plugin package.
 - Remove settings textarea from configuration page.

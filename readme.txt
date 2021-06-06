@@ -1,11 +1,11 @@
 === Cision Block ===
 Contributors: cyclonecode
-Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=VUK8LYLAN2DA6&source=url&lc=US&item_name=Cision+Block
+Donate link: https://www.buymeacoffee.com/cyclonecode
 Tags: cision, feed, cision feed, shortcode, widget, content
 Requires at least: 3.1.0
 Tested up to: 5.7.1
 Requires PHP: 5.6
-Stable tag: 2.4.0
+Stable tag: 2.4.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -119,6 +119,7 @@ The image style to use:
 - template
 Template file to use. If no template is set in settings and this parameter is not set then cision-block.php in either the active
 theme or in the plugin will be used as a default.
+You can either use the name of the template as given in the template header e.g 'Foo' or the actual filename e.g foo.php.
 
 - flush
 Clears the cache for the block.
@@ -155,6 +156,13 @@ If you wish to hide the text for regulatory or non-regulatory releases you can u
 
 The template used to render the feed is **cision-block/templates/cision-block.php**, you can override
 this template by copying it to either the root or under a **templates** folder in your theme.
+
+You can also select a specific template which will be used to render the feed under the plugins settings page.
+To create a new template, you can follow the steps as described in this link: [Page Templates](https://developer.wordpress.org/themes/template-files-section/page-template-files/):
+
+For instance adding a file with the following header comment would create a new 'Foo' template:
+
+    <?php /* Template Name: Foo */ ?>
 
 = Display single press releases in Wordpress =
 
@@ -312,8 +320,5 @@ Fixed a bug where source id from widget was never used.
 
 == Changelog ==
 
-= 2.4.1
-- Add Http classes.
-- Handle remote request exceptions.
-- Prevent un-serialization of singleton.
-- Add support to set template for feed.
+= 2.4.2
+- Support to use either name or filename of page template.
