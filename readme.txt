@@ -26,9 +26,26 @@ There is a PRO version of this plugin, which includes extended features. For ins
 
 - Support to fetch entire feed and not only the last 100 entries.
 - Custom post types. Creates a post for each item in Wordpress. This means that all news have standard Wordpress links.
+- Manually created posts can be added to the feed.
 - Custom taxonomies for categories and tags fetched from Cision.
 - Use standard article template from your active theme.
+- Support to create, update and delete posts based on PUSH events sent from Cision.
+- Support to create, update and delete posts during CRON at configurable intervals.
+- Subscription support.
 - Annual free support and quicker response times.
+- Discount for multisite licenses.
+
+There is also a backlog with features yet to be implemented on github, some of the tasks in the list includes:
+
+- Implement support to fetch and display ticker information.
+- Pin feed items to top of list.
+- Import and export settings between environments.
+- Preview functionality.
+- Disclaimer support.
+- Improved SEO.
+- Support for multiple templates.
+- Display estimated reading time for reach feed item.
+- And much, much more.
 
 To get more information about the Pro version, send me an email at [cyclonecode@gmail.com](mailto:cyclonecode@gmail.com).
 
