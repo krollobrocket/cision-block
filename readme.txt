@@ -3,9 +3,9 @@ Contributors: cyclonecode
 Donate link: https://www.buymeacoffee.com/cyclonecode
 Tags: cision, feed, cision feed, shortcode, widget, content
 Requires at least: 3.1.0
-Tested up to: 5.7.1
+Tested up to: 5.8
 Requires PHP: 5.6
-Stable tag: 2.4.2
+Stable tag: 2.4.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -22,7 +22,7 @@ If you have questions or perhaps some idea on things that should be added you ca
 
 = Pro Version =
 
-There is a PRO version of this plugin, which includes extended features. For instance:
+There is a **PRO** version of this plugin, which includes extended features. For instance:
 
 - Support to fetch entire feed and not only the last 100 entries.
 - Custom post types. Creates a post for each item in Wordpress. This means that all news have standard Wordpress links.
@@ -32,22 +32,27 @@ There is a PRO version of this plugin, which includes extended features. For ins
 - Support to create, update and delete posts based on PUSH events sent from Cision.
 - Support to create, update and delete posts during CRON at configurable intervals.
 - Subscription support.
+- Basic ticker support.
+- Use normal or ajax based load more button for pagination.
 - Annual free support and quicker response times.
 - Discount for multisite licenses.
 
+I usually have an initial meeting where I talk about the plugin, explain the different features and answer any questions.
+
 There is also a backlog with features yet to be implemented on github, some of the tasks in the list includes:
 
-- Implement support to fetch and display ticker information.
+- Implement support to fetch and display extended ticker information.
+- Event module.
 - Pin feed items to top of list.
 - Import and export settings between environments.
 - Preview functionality.
 - Disclaimer support.
 - Improved SEO.
 - Support for multiple templates.
-- Display estimated reading time for reach feed item.
+- Display estimated reading time for each feed item.
 - And much, much more.
 
-To get more information about the Pro version, send me an email at [cyclonecode@gmail.com](mailto:cyclonecode@gmail.com).
+To get more information about the Pro version, send me an email at [cyclonecode@gmail.com](mailto:cyclonecode@gmail.com) or give me a call at +(46)-730334088.
 
 = Widget =
 
@@ -296,13 +301,19 @@ If you run into any trouble, don’t hesitate to add a new topic under the suppo
 
 You can also try contacting me on [slack](https://join.slack.com/t/cyclonecode/shared_invite/zt-6bdtbdab-n9QaMLM~exHP19zFDPN~AQ).
 
-
 == Installation ==
 
 1. Upload cision block to the **/wp-content/plugins/** directory,
 2. Activate the plugin through the **Plugins** menu in WordPress.
+3. Add your feed identifier and configure the plugin at **/wp-admin/options-general.php?page=cision-block** in Wordpress.
+4. You can then add either a shortcode or setup a widget in order to display the feed.
 
 == Frequently Asked Questions ==
+
+= How do I get a unique feed identifier? =
+
+This is something that Cision will provide you with.
+You can contact them at support@cision.com.
 
 = Possible to have more than 1 identifier? =
 
@@ -337,5 +348,7 @@ Fixed a bug where source id from widget was never used.
 
 == Changelog ==
 
-= 2.4.2
-- Support to use either name or filename of page template.
+= 2.4.3
+- Minor update on how notifications are managed.
+- Change from *none* to <none> to disable buttons and text.
+- Add PRO version notice.

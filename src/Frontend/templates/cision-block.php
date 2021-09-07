@@ -40,7 +40,7 @@
  *
  * @package Cision Block
  * @since   1.0
- * @version 2.4.2
+ * @version 2.4.3
  */
 
 ?>
@@ -49,21 +49,21 @@
     <?php echo $prefix; ?>
         <?php if ($show_filters) : ?>
             <ul class="cision-feed-filters">
-                <?php if ($filter_all_text !== '*none*') : ?>
+                <?php if ($filter_all_text !== '<none>') : ?>
                 <li>
                     <button class="all">
                         <?php echo $filter_all_text; ?>
                     </button>
                 </li>
                 <?php endif; ?>
-                <?php if ($filter_regulatory_text !== '*none*') : ?>
+                <?php if ($filter_regulatory_text !== '<none>') : ?>
                 <li>
                     <button class="regulatory">
                         <?php echo $filter_regulatory_text; ?>
                     </button>
                 </li>
                 <?php endif; ?>
-                <?php if ($filter_non_regulatory_text !== '*none*') : ?>
+                <?php if ($filter_non_regulatory_text !== '<none>') : ?>
                 <li>
                     <button class="non-regulatory">
                         <?php echo $filter_non_regulatory_text; ?>
@@ -76,7 +76,7 @@
         <article data-regulatory="<?php echo $item->IsRegulatory ? 1 : 0; ?>"<?php echo $attributes; ?>>
             <h2><?php echo esc_html($item->Title); ?></h2>
             <time><?php echo date($options['date_format'], $item->PublishDate); ?></time>
-            <?php if ($mark_regulatory && (($item->IsRegulatory && $regulatory_text !== '*none*') || (!$item->IsRegulatory && $non_regulatory_text !== '*none*'))) : ?>
+            <?php if ($mark_regulatory && (($item->IsRegulatory && $regulatory_text !== '<none>') || (!$item->IsRegulatory && $non_regulatory_text !== '<none>'))) : ?>
             <span class="cision-feed-regulatory"><?php echo $item->IsRegulatory ? $regulatory_text : $non_regulatory_text; ?></span>
             <?php endif; ?>
             <p>

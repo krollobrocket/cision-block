@@ -132,8 +132,13 @@ class Backend extends Singleton
     public function renderNotices()
     {
         foreach ($this->settings->get('notes') as $note) {
+            // TODO: Check so it is callable.
             if (!$note['dismissed'] || ($note['dismissed'] && !$note['persistent'] && time() - $note['time'] > 30 * 24 * 60 * 60)) {
-                echo call_user_func(array($this, $note['callback']));
+                ?>
+                <div id="note-<?php echo note['id']; ?>" class="cision-block-notice notice-<?php echo $note['type']; ?> notice is-dismissible inline">
+                <?php echo call_user_func(array($this, $note['callback'])); ?>
+                </div>
+                <?php
             }
         }
     }
@@ -157,18 +162,42 @@ class Backend extends Singleton
     }
 
     /**
+     * Adds premium admin notification.
+     */
+    public function addPremiumNotice()
+    {
+        ?>
+        <h3><?php _e('Pro Version', Settings::TEXTDOMAIN); ?></h3>
+        <p><?php _e('There is now a <b>PRO</b> version of this plugin, which includes extended features. For instance:', Settings::TEXTDOMAIN); ?></p>
+        <div>
+            <ul style="">
+                <li><?php _e('Support to fetch entire feed and not only the last 100 entries.', Settings::TEXTDOMAIN); ?></li>
+                <li><?php _e('Custom post types. Creates a post for each item in Wordpress. This means that all news have standard Wordpress links.', Settings::TEXTDOMAIN); ?></li>
+                <li><?php _e('Manually created posts can be added to the feed.', Settings::TEXTDOMAIN); ?></li>
+                <li><?php _e('Custom taxonomies for categories and tags fetched from Cision.', Settings::TEXTDOMAIN); ?></li>
+                <li><?php _e('Support to create, update and delete posts based on PUSH events sent from Cision.', Settings::TEXTDOMAIN); ?></li>
+                <li><?php _e('Support to create, update and delete posts during CRON at configurable intervals.', Settings::TEXTDOMAIN); ?></li>
+                <li><?php _e('Extension support.', Settings::TEXTDOMAIN); ?></li>
+                <li><?php _e('Subscription module.', Settings::TEXTDOMAIN); ?></li>
+                <li><?php _e('Ticker module.', Settings::TEXTDOMAIN); ?></li>
+                <li><?php _e('Free support and quicker response times.', Settings::TEXTDOMAIN); ?></li>
+            </ul>
+        </div>
+        <p><?php echo sprintf(__('To get more information about the Pro version, please send me an email at <a href="mailto:cyclonecode@gmail.com?subject=%s" target="_blank" rel="noopener noreferrer">cyclonecode@gmail.com</a>, you can also contact me at my <a href="%s" target="_blank" rel="noopener noreferrer">slack channel</a>.', Settings::TEXTDOMAIN), 'Cision%20Block%20Pro', 'https://join.slack.com/t/cyclonecode/shared_invite/zt-6bdtbdab-n9QaMLM~exHP19zFDPN~AQ'); ?></p>
+        <?php
+    }
+
+    /**
      * Adds review admin notification.
      */
     public function addReviewNotice()
     {
         ?>
-        <div id="note-1" class="cision-block-notice notice-info notice is-dismissible inline" style="position: relative;">
-            <h3><?php _e('Thank you for using Cision Block!', Settings::TEXTDOMAIN); ?></h3>
-            <p><?php echo sprintf(__('If you use and enjoy Cision Block, I would be really happy if you could give it a positive review at <a href="%s" target="_blank">Wordpress.org</a>.', Settings::TEXTDOMAIN), 'https://wordpress.org/support/plugin/cision-block/reviews/?rate=5#new-post'); ?></p>
-            <p><?php _e('Doing this would help me keeping the plugin free and up to date.', Settings::TEXTDOMAIN); ?></p>
-            <p><?php _e('Also, if you would like to support me you can always buy me a cup of coffee at:', Settings::TEXTDOMAIN); ?> <a target="_blank" href="https://www.buymeacoffee.com/cyclonecode">https://www.buymeacoffee.com/cyclonecode</a></p>
-            <p><?php _e('Thank you very much!', Settings::TEXTDOMAIN); ?></p>
-        </div>
+        <h3><?php _e('Thank you for using Cision Block!', Settings::TEXTDOMAIN); ?></h3>
+        <p><?php echo sprintf(__('If you use and enjoy Cision Block, I would be really happy if you could give it a positive review at <a href="%s" target="_blank" rel="noopener noreferrer">Wordpress.org</a>.', Settings::TEXTDOMAIN), 'https://wordpress.org/support/plugin/cision-block/reviews/?rate=5#new-post'); ?></p>
+        <p><?php _e('Doing this would help me keeping the plugin free and up to date.', Settings::TEXTDOMAIN); ?></p>
+        <p><?php _e('Also, if you would like to support me you can always buy me a cup of coffee at:', Settings::TEXTDOMAIN); ?> <a href="https://www.buymeacoffee.com/cyclonecode" target="_blank" rel="noopener noreferrer">https://www.buymeacoffee.com/cyclonecode</a></p>
+        <p><?php _e('Thank you very much!', Settings::TEXTDOMAIN); ?></p>
         <?php
     }
 
@@ -178,13 +207,11 @@ class Backend extends Singleton
     public function addSupportNotice()
     {
         ?>
-        <div id="note-2" class="cision-block-notice notice notice-info is-dismissible" style="position: relative;">
-            <h3><?php _e('Do you have any feedback or need support?', Settings::TEXTDOMAIN); ?></h3>
-            <p><?php echo sprintf(__('If you have any request for improvement or just need some help. Do not hesitate to open a ticket in the <a href="%s" target="_blank">support section</a>.', Settings::TEXTDOMAIN), 'https://wordpress.org/support/plugin/cision-block/#new-topic-0'); ?></p>
-            <p><?php echo sprintf(__('I can also be reached by email at <a href="%s">%s</a>', Settings::TEXTDOMAIN), 'mailto:cyclonecode.help@gmail.com?subject=Cision Block', 'cyclonecode.help@gmail.com'); ?></p>
-            <p><?php echo sprintf(__('There is also a slack channel that you can <a target="_blank" href="%s">join</a>.', Settings::TEXTDOMAIN), 'https://join.slack.com/t/cyclonecode/shared_invite/zt-6bdtbdab-n9QaMLM~exHP19zFDPN~AQ'); ?></p>
-            <p><?php _e('I hope you will have an awesome day!', Settings::TEXTDOMAIN); ?></p>
-        </div>
+        <h3><?php _e('Do you have any feedback or need support?', Settings::TEXTDOMAIN); ?></h3>
+        <p><?php echo sprintf(__('If you have any request for improvement or just need some help. Do not hesitate to open a ticket in the <a href="%s" target="_blank">support section</a>.', Settings::TEXTDOMAIN), 'https://wordpress.org/support/plugin/cision-block/#new-topic-0'); ?></p>
+        <p><?php echo sprintf(__('I can also be reached by email at <a href="%s" target="_blank" rel="noopener noreferrer">%s</a>', Settings::TEXTDOMAIN), 'mailto:cyclonecode.help@gmail.com?subject=Cision%20Block', 'cyclonecode.help@gmail.com'); ?></p>
+        <p><?php echo sprintf(__('There is also a slack channel that you can <a href="%s" target="_blank" rel="noopener noreferrer">join</a>.', Settings::TEXTDOMAIN), 'https://join.slack.com/t/cyclonecode/shared_invite/zt-6bdtbdab-n9QaMLM~exHP19zFDPN~AQ'); ?></p>
+        <p><?php _e('I hope you will have an awesome day!', Settings::TEXTDOMAIN); ?></p>
         <?php
     }
 
@@ -280,6 +307,17 @@ class Backend extends Singleton
 
             // Setup notifications
             $defaults['notes'] = array(
+                'pro' => array(
+                    'id' => 3,
+                    'weight' => 1,
+                    'persistent' => false,
+                    'time' => 0,
+                    'type' => 'warning',
+                    'name' => 'pro',
+                    'callback' => 'addPremiumNotice',
+                    'dismissed' => false,
+                    'dismissible' => true,
+                ),
                 'review' => array(
                     'id' => 1,
                     'weight' => 1,

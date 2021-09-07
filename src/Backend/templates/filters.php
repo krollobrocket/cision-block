@@ -17,6 +17,7 @@ use CisionBlock\Settings\Settings;
                     <input type="hidden" id="hidden_show_filters" name="show_filters" value="0" />
                     <input type="checkbox" name="show_filters"<?php checked($this->settings->get('show_filters')); ?>" />
                     <p class="description"><?php _e('Enable filtering of feed items.', Settings::TEXTDOMAIN); ?></p>
+                    <p class="description"><?php _e(sprintf('You can use the special value <b>%s</b> to hide any of the buttons.', htmlspecialchars('<none>')), Settings::TEXTDOMAIN); ?></p>
                 </td>
             </tr>
             <tr>

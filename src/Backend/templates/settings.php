@@ -69,6 +69,7 @@ $templates = get_page_templates();
                     <input type="hidden" id="hidden_mark_regulatory" name="mark_regulatory" value="0" />
                     <input type="checkbox" name="mark_regulatory"<?php checked($this->settings->get('mark_regulatory')); ?>" />
                     <p class="description"><?php _e('Emphasis if a release if regulatory or non-regulatory.', Settings::TEXTDOMAIN); ?></p>
+                    <p class="description"><?php _e(sprintf('Use the special value <b>%s</b> to skip marking a type of releases.', htmlspecialchars('<none>')), Settings::TEXTDOMAIN); ?></p>
                 </td>
             </tr>
             <tr>

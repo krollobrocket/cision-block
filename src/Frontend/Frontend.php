@@ -17,7 +17,7 @@ class Frontend extends Singleton
     const SETTINGS_NAME = 'cision_block_settings';
     const TRANSIENT_KEY = 'cision_block_data';
     const USER_AGENT = 'cision-block/' . self::VERSION;
-    const VERSION = '2.4.2';
+    const VERSION = '2.4.3';
 
     /**
      *
@@ -485,57 +485,37 @@ class Frontend extends Singleton
                 case 'regulatory_text':
                     $text = filter_var(
                         $value,
-                        FILTER_SANITIZE_STRING
+                        FILTER_SANITIZE_SPECIAL_CHARS
                     );
-                    if ($text === '') {
-                        $result[$mapping[$name]] = Settings::DEFAULT_MARK_REGULATORY_TEXT;
-                    } else {
-                        $result[$mapping[$name]] = $text;
-                    }
+                    $result[$mapping[$name]] = !empty($text) ? $text : Settings::DEFAULT_MARK_REGULATORY_TEXT;
                     break;
                 case 'non_regulatory_text':
                     $text = filter_var(
                         $value,
-                        FILTER_SANITIZE_STRING
+                        FILTER_SANITIZE_SPECIAL_CHARS
                     );
-                    if ($text === '') {
-                        $result[$mapping[$name]] = Settings::DEFAULT_MARK_NON_REGULATORY_TEXT;
-                    } else {
-                        $result[$mapping[$name]] = $text;
-                    }
+                    $result[$mapping[$name]] = !empty($text) ? $text : Settings::DEFAULT_MARK_NON_REGULATORY_TEXT;
                     break;
                 case 'filter_all_text':
                     $text = filter_var(
                         $value,
-                        FILTER_SANITIZE_STRING
+                        FILTER_SANITIZE_SPECIAL_CHARS
                     );
-                    if ($text === '') {
-                        $result[$mapping[$name]] = Settings::DEFAULT_FILTER_ALL_TEXT;
-                    } else {
-                        $result[$mapping[$name]] = $text;
-                    }
+                    $result[$mapping[$name]] = !empty($text) ? $text : Settings::DEFAULT_FILTER_ALL_TEXT;
                     break;
                 case 'filter_regulatory_text':
                     $text = filter_var(
                         $value,
-                        FILTER_SANITIZE_STRING
+                        FILTER_SANITIZE_SPECIAL_CHARS
                     );
-                    if ($text === '') {
-                        $result[$mapping[$name]] = Settings::DEFAULT_FILTER_REGULATORY_TEXT;
-                    } else {
-                        $result[$mapping[$name]] = $text;
-                    }
+                    $result[$mapping[$name]] = !empty($text) ? $text : Settings::DEFAULT_FILTER_REGULATORY_TEXT;
                     break;
                 case 'filter_non_regulatory_text':
                     $text = filter_var(
                         $value,
-                        FILTER_SANITIZE_STRING
+                        FILTER_SANITIZE_SPECIAL_CHARS
                     );
-                    if ($text === '') {
-                        $result[$mapping[$name]] = Settings::DEFAULT_FILTER_NON_REGULATORY_TEXT;
-                    } else {
-                        $result[$mapping[$name]] = $text;
-                    }
+                    $result[$mapping[$name]] = !empty($text) ? $text : Settings::DEFAULT_FILTER_NON_REGULATORY_TEXT;
                     break;
                 case 'view':
                 case 'view_mode':
@@ -618,12 +598,12 @@ class Frontend extends Singleton
             'id' => $this->current_block_id,
             'readmore' => $this->settings->get('readmore'),
             'mark_regulatory' => $this->settings->get('mark_regulatory'),
-            'regulatory_text' => $this->settings->get('regulatory_text'),
-            'non_regulatory_text' => $this->settings->get('non_regulatory_text'),
+            'regulatory_text' => htmlspecialchars_decode($this->settings->get('regulatory_text')),
+            'non_regulatory_text' => htmlspecialchars_decode($this->settings->get('non_regulatory_text')),
             'show_filters' => $this->settings->get('show_filters'),
-            'filter_all_text' => $this->settings->get('filter_all_text'),
-            'filter_regulatory_text' => $this->settings->get('filter_regulatory_text'),
-            'filter_non_regulatory_text' => $this->settings->get('filter_non_regulatory_text'),
+            'filter_all_text' => htmlspecialchars_decode($this->settings->get('filter_all_text')),
+            'filter_regulatory_text' => htmlspecialchars_decode($this->settings->get('filter_regulatory_text')),
+            'filter_non_regulatory_text' => htmlspecialchars_decode($this->settings->get('filter_non_regulatory_text')),
             'prefix' => apply_filters('cision_block_prefix', '', $this->current_block_id),
             'suffix' => apply_filters('cision_block_suffix', '', $this->current_block_id),
             'attributes' => $this->parseAttributes(apply_filters('cision_block_media_attributes', array(
