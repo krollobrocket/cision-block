@@ -135,7 +135,7 @@ class Backend extends Singleton
             // TODO: Check so it is callable.
             if (!$note['dismissed'] || ($note['dismissed'] && !$note['persistent'] && time() - $note['time'] > 30 * 24 * 60 * 60)) {
                 ?>
-                <div id="note-<?php echo note['id']; ?>" class="cision-block-notice notice-<?php echo $note['type']; ?> notice is-dismissible inline">
+                <div id="note-<?php echo $note['id']; ?>" class="cision-block-notice notice-<?php echo $note['type']; ?> notice is-dismissible inline">
                 <?php echo call_user_func(array($this, $note['callback'])); ?>
                 </div>
                 <?php

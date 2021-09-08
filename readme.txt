@@ -5,7 +5,7 @@ Tags: cision, feed, cision feed, shortcode, widget, content
 Requires at least: 3.1.0
 Tested up to: 5.8
 Requires PHP: 5.6
-Stable tag: 2.4.3
+Stable tag: 2.4.3.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -329,16 +329,19 @@ Yes it is possible to have multiple blocks by simply adding shortcode arguments 
 == Upgrade Notice ==
 
 = 1.4.4 =
-Fixed a bug that made the plugin throw an error if no attributes was used in the shortcode.
+- Fixed a bug that made the plugin throw an error if no attributes was used in the shortcode.
 
 = 1.4.8 =
-Fixed a bug where preview mode was not working correctly.
+- Fixed a bug where preview mode was not working correctly.
 
 = 1.4.9.1 =
-Fixed a bug where source id from widget was never used.
+- Fixed a bug where source id from widget was never used.
 
 = 2.1.0 =
 - Fixes a bug where the plugin could not be deleted.
+
+= 2.4.3.1 =
+- Fixes a bug where notifications could not be dismissed.
 
 == Screenshots ==
 
@@ -348,7 +351,5 @@ Fixed a bug where source id from widget was never used.
 
 == Changelog ==
 
-= 2.4.3
-- Minor update on how notifications are managed.
-- Change from *none* to <none> to disable buttons and text.
-- Add PRO version notice.
+= 2.4.3.1
+- Fix bug where notifications could not be closed.
