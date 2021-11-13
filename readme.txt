@@ -54,6 +54,27 @@ There is also a backlog with features yet to be implemented on github, some of t
 
 To get more information about the Pro version, send me an email at [cyclonecode@gmail.com](mailto:cyclonecode@gmail.com) or give me a call at +(46)-730334088.
 
+= Looking for help =
+
+I am currently in the search for someone who would like to help me with something of the following:
+
+- Create a dashboard icon which can be used in the admin menu.
+- Create a banner that would be displayed on the plugins homepage at wordpress.org.
+- Design a nicer and more intuitive admin interface.
+- Create a solid looking icon that can be used on multiple places.
+
+If you would like to help with anything of the above, please do not hesitate and contact me either on slack or by email.
+
+= Developers =
+
+I am looking for developers that would be interested in contributing to either the free or premium version of the plugin.
+
+Would be great just to get some ideas and input from others who have some experience in Wordpress plugin development.
+
+At this point I am pretty much on my own, which will sometimes result in me just thinking around some issues in my own way; here I think it would be awesome to have others to talk to and collaborate.
+
+If you think this sounds interesting, please drop me an email or ping me on Slack.
+
 = Widget =
 
 You can display a feed in any sidebar by adding and configure a widget.
@@ -310,6 +331,10 @@ You can also try contacting me on [slack](https://join.slack.com/t/cyclonecode/s
 
 == Frequently Asked Questions ==
 
+= Can I fetch more than the last 100 news? =
+
+You will need to use the **Pro** version to do this.
+
 = How do I get a unique feed identifier? =
 
 This is something that Cision will provide you with.
@@ -325,6 +350,10 @@ There is possible to use separate feed identifiers for different blocks by using
 = Possible to create multiple cision blocks? =
 
 Yes it is possible to have multiple blocks by simply adding shortcode arguments for each block.
+
+= Can I use normal permalinks for the news? =
+
+This is something that is possible using the **Pro** version, since all news are imported as custom posts into Wordpress.
 
 == Upgrade Notice ==
 
