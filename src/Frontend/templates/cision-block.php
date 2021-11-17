@@ -92,7 +92,7 @@
             </span>
             <?php endif; ?>
             <?php if ($show_excerpt) : ?>
-            <?php echo wp_trim_words(esc_html($item->Intro ? $item->Intro : $item->Body)); ?>
+                <?php echo wp_trim_words(esc_html($item->Intro ? $item->Intro : $item->Body)); ?>
             <?php endif; ?>
             </p>
             <?php if (isset($item->CisionWireUrl, $readmore)) : ?>
