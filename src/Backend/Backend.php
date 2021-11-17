@@ -375,11 +375,11 @@ class Backend extends Singleton
         global $wp_version;
         if (version_compare(PHP_VERSION, Settings::MIN_PHP_VERSION, '<')) {
             deactivate_plugins('cision-block');
-            wp_die(__('Unsupported PHP version. Minimum supported version is 5.6.', Settings::TEXTDOMAIN));
+            wp_die(__(sprintf('Unsupported PHP version. Minimum supported version is %s.', Settings::MIN_PHP_VERSION), Settings::TEXTDOMAIN));
         }
         if (version_compare($wp_version, Settings::MIN_WP_VERSION, '<')) {
             deactivate_plugins('cision-block');
-            wp_die(__('Unsupported Wordpress version. Minimum supported version is 3.1.0.', Settings::TEXTDOMAIN));
+            wp_die(__(sprintf('Unsupported Wordpress version. Minimum supported version is %s.', Settings::MIN_WP_VERSION), Settings::TEXTDOMAIN));
         }
     }
 
