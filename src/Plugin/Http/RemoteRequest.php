@@ -16,6 +16,7 @@ class RemoteRequest extends AbstractRequest
         $defaults = array(
             'method' => self::VERB_GET,
             'timeout' => self::CURL_TIMEOUT,
+            'headers' => $this->headers,
         );
         $args = array_merge($defaults, $args);
         $response = wp_safe_remote_request($url, $args);

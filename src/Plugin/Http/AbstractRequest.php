@@ -4,6 +4,38 @@ namespace CisionBlock\Plugin\Http;
 
 abstract class AbstractRequest implements RequestInterface
 {
+    protected $headers = array();
+
+    /**
+     * Set HTTP headers
+     *
+     * @param array $headers
+     */
+    public function setHeaders(array $headers)
+    {
+        $this->headers = $headers;
+    }
+
+    /**
+     * Set a HTTP header
+     *
+     * @param string $name
+     * @param $value
+     */
+    public function addHeader(string $name, $value)
+    {
+        $this->headers[$name] = $value;
+    }
+
+    /**
+     * Remove a HTTP header
+     * @param string $name
+     */
+    public function removeHeader(string $name)
+    {
+        unset($this->headers[$name]);
+    }
+
     /**
      * Performs a HEAD request
      *
