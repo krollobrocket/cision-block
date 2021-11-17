@@ -5,7 +5,7 @@
     "keywords": ["wordpress", "plugin", "cision", "feed", "cision feed", "shortcode", "widget", "content"],
     "description": "This plugin adds a shortcode and a widget that can be used for pulling and displaying press releases from cision.",
     "require": {
-        "composer/installers": "^1.11",
+        "composer/installers": "^2.0",
         "php": ">=5.6"
     },
     "require-dev": {
