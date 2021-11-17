@@ -71,16 +71,4 @@ class Settings extends \CisionBlock\Plugin\Settings\Settings
     {
         return $this->defaultSettings;
     }
-
-    /**
-     * @param array $options
-     * @return $this
-     */
-    public function setFromArray(array $options)
-    {
-        foreach ($options as $name => $value) {
-            $this->set($name, $value);
-        }
-        return $this;
-    }
 }
