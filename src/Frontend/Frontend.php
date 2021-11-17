@@ -549,7 +549,7 @@ class Frontend extends Singleton
                     break;
                 case 'regulatory':
                     // This is a fallback for old argument
-                    $result[$mapping['name']] = 2;
+                    $result[$mapping[$name]] = Settings::DISPLAY_MODE_REGULATORY;
                     break;
                 case 'id':
                     self::$current_block_id = $value;
