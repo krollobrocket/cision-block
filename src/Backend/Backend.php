@@ -177,10 +177,13 @@ class Backend extends Singleton
                 <li><?php _e('Custom taxonomies for categories and tags fetched from Cision.', 'cision-block'); ?></li>
                 <li><?php _e('Support to create, update and delete posts based on PUSH events sent from Cision.', 'cision-block'); ?></li>
                 <li><?php _e('Support to create, update and delete posts during CRON at configurable intervals.', 'cision-block'); ?></li>
+                <li><?php _e('Import categories and tags for each feed item.', 'cision-block'); ?></li>
+                <li><?php _e('Support to hide news based on id.', 'cision-block'); ?></li>
+                <li><?php _e('Make changes to imported posts and mark them as locally modified.', 'cision-block'); ?></li>
                 <li><?php _e('Extension support.', 'cision-block'); ?></li>
                 <li><?php _e('Subscription module.', 'cision-block'); ?></li>
                 <li><?php _e('Ticker module.', 'cision-block'); ?></li>
-                <li><?php _e('Free support and quicker response times.', 'cision-block'); ?></li>
+                <li><?php _e('Free support, installation and configuration help.', 'cision-block'); ?></li>
             </ul>
         </div>
         <p><?php echo sprintf(__('To get more information about the Pro version, please send me an email at <a href="mailto:cyclonecode@gmail.com?subject=%s" target="_blank" rel="noopener noreferrer">cyclonecode@gmail.com</a>, you can also contact me at my <a href="%s" target="_blank" rel="noopener noreferrer">slack channel</a>.', 'cision-block'), 'Cision%20Block%20Pro', 'https://join.slack.com/t/cyclonecode/shared_invite/zt-6bdtbdab-n9QaMLM~exHP19zFDPN~AQ'); ?></p>

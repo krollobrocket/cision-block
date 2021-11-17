@@ -37,6 +37,7 @@ class Widget extends \CisionBlock\Plugin\Widget\Widget
             'start' => $instance['start_date'],
             'end' => $instance['end_date'],
             'image_style' => $instance['image_style'],
+            'show_excerpt' => $instance['show_excerpt'],
             'language' => $instance['language'],
             'readmore' => isset($instance['readmore']) ? $instance['readmore'] : null,
             'date_format' => $instance['date_format'],
@@ -80,6 +81,7 @@ class Widget extends \CisionBlock\Plugin\Widget\Widget
             'start_date' => '',
             'end_date' => '',
             'image_style' => Settings::DEFAULT_IMAGE_STYLE,
+            'show_excerpt' => true,
             'language' => '',
             'readmore' => Settings::DEFAULT_READ_MORE_TEXT,
             'date_format' => Settings::DEFAULT_DATE_FORMAT,
@@ -206,6 +208,10 @@ class Widget extends \CisionBlock\Plugin\Widget\Widget
         $output .= '<option value="">' . __('Select', 'cision-block') . '</option>';
         $output .= $image_style_options;
         $output .= '</select>';
+        $output .= '</p>';
+        $output .= '<p>';
+        $output .= '<label for="' . $this->get_field_id('show_excerpt') . '">' . __('Show excerpt', 'cision-block') . ': <label>';
+        $output .= '<input type="checkbox" name="' . $this->get_field_name('show_excerpt') . '"' . checked($instance['show_excerpt'], true, false) . '" />';
         $output .= '</p>';
         $output .= '<p>';
         $output .= '<label for="' . $this->get_field_id('cache_expire') . '">' . __('Cache lifetime', 'cision-block') . ': </label>';

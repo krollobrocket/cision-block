@@ -67,7 +67,7 @@ $templates = get_page_templates();
                 </th>
                 <td>
                     <input type="hidden" id="hidden_mark_regulatory" name="mark_regulatory" value="0" />
-                    <input type="checkbox" name="mark_regulatory"<?php checked($this->settings->get('mark_regulatory')); ?>" />
+                    <input type="checkbox" name="mark_regulatory"<?php checked($this->settings->get('mark_regulatory')); ?> />
                     <p class="description"><?php _e('Emphasis if a release if regulatory or non-regulatory.', 'cision-block'); ?></p>
                     <p class="description"><?php _e(sprintf('Use the special value <b>%s</b> to skip marking a type of releases.', htmlspecialchars('<none>')), 'cision-block'); ?></p>
                 </td>
@@ -77,7 +77,7 @@ $templates = get_page_templates();
                     <label for="regulatory_text"><?php _e('Regulatory item text', 'cision-block'); ?></label>
                 </th>
                 <td>
-                    <input type="text" class="regular-text" name="regulatory_text" value="<?php echo $this->settings->get('regulatory_text'); ?>"<?php echo !$this->settings->get('mark_regulatory') ? ' disabled' : ''; ?>>
+                    <input type="text" class="regular-text" name="regulatory_text" value="<?php echo $this->settings->get('regulatory_text'); ?>"<?php disabled(!$this->settings->get('mark_regulatory')); ?>>
                     <p class="description"><?php _e('Text to display for regulatory items.', 'cision-block'); ?></p>
                 </td>
             </tr>
@@ -86,7 +86,7 @@ $templates = get_page_templates();
                     <label for="non_regulatory_text"><?php _e('Non-regulatory item text', 'cision-block'); ?></label>
                 </th>
                 <td>
-                    <input type="text" class="regular-text" name="non_regulatory_text" value="<?php echo $this->settings->get('non_regulatory_text'); ?>"<?php echo !$this->settings->get('mark_regulatory') ? ' disabled' : ''; ?>>
+                    <input type="text" class="regular-text" name="non_regulatory_text" value="<?php echo $this->settings->get('non_regulatory_text'); ?>"<?php disabled(!$this->settings->get('mark_regulatory')); ?>>
                     <p class="description"><?php _e('Text to display for non-regulatory items.', 'cision-block'); ?></p>
                 </td>
             </tr>
@@ -190,11 +190,21 @@ $templates = get_page_templates();
             </tr>
             <tr>
                 <th scope="row">
+                    <label for="show_excerpt"><?php _e('Show excerpt', 'cision-block'); ?></label>
+                </th>
+                <td>
+                    <input type="hidden" id="hidden_show_excerpt" name="show_excerpt" value="0" />
+                    <input type="checkbox" name="show_excerpt"<?php checked($this->settings->get('show_excerpt')); ?> />
+                    <p class="description"><?php _e('Display excerpt for each feed item.', 'cision-block'); ?></p>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">
                     <label for="use_https"><?php _e('Use https', 'cision-block'); ?></label>
                 </th>
                 <td>
                     <input type="hidden" id="hidden_use_https" name="use_https" value="0" />
-                    <input type="checkbox" name="use_https"<?php checked($this->settings->get('use_https')); ?>" />
+                    <input type="checkbox" name="use_https"<?php checked($this->settings->get('use_https')); ?> />
                     <p class="description"><?php _e('Ensures that all images is handled over https.', 'cision-block'); ?></p>
                 </td>
             </tr>

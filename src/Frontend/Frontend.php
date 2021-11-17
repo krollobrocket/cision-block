@@ -17,7 +17,7 @@ class Frontend extends Singleton
     const SETTINGS_NAME = 'cision_block_settings';
     const TRANSIENT_KEY = 'cision_block_data';
     const USER_AGENT = 'cision-block/' . self::VERSION;
-    const VERSION = '2.4.4';
+    const VERSION = '2.5.0';
 
     /**
      *
@@ -361,6 +361,7 @@ class Frontend extends Singleton
             'view' => 'view_mode',
             'use_https' => 'use_https',
             'image_style' => 'image_style',
+            'show_excerpt' => 'show_excerpt',
             'items_per_page' => 'items_per_page',
             'exclude_css' => 'exclude_css',
             'template' => 'template',
@@ -389,6 +390,7 @@ class Frontend extends Singleton
         );
 
         $result = array(
+            'show_excerpt' => $options->get('show_excerpt'),
             'use_https' => $options->get('use_https'),
             'mark_regulatory' => $options->get('mark_regulatory'),
             'show_filters' => $options->get('show_filters'),
@@ -474,6 +476,7 @@ class Frontend extends Singleton
                     );
                     $result[$mapping[$name]] = trim(strtolower($result[$mapping[$name]]));
                     break;
+                case 'show_excerpt':
                 case 'mark_regulatory':
                 case 'use_https':
                 case 'internal_links':
@@ -603,6 +606,7 @@ class Frontend extends Singleton
             'regulatory_text' => htmlspecialchars_decode(self::$settings->get('regulatory_text')),
             'non_regulatory_text' => htmlspecialchars_decode(self::$settings->get('non_regulatory_text')),
             'show_filters' => self::$settings->get('show_filters'),
+            'show_excerpt' => self::$settings->get('show_excerpt'),
             'filter_all_text' => htmlspecialchars_decode(self::$settings->get('filter_all_text')),
             'filter_regulatory_text' => htmlspecialchars_decode(self::$settings->get('filter_regulatory_text')),
             'filter_non_regulatory_text' => htmlspecialchars_decode(self::$settings->get('filter_non_regulatory_text')),

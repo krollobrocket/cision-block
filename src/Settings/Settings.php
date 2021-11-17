@@ -39,6 +39,7 @@ class Settings extends \CisionBlock\Plugin\Settings\Settings
         'categories' => '',
         'start_date' => '',
         'end_date' => '',
+        'show_excerpt' => true,
         'mark_regulatory' => false,
         'regulatory_text' => self::DEFAULT_MARK_REGULATORY_TEXT,
         'non_regulatory_text' => self::DEFAULT_MARK_NON_REGULATORY_TEXT,

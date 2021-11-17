@@ -5,7 +5,7 @@ Tags: cision, feed, cision feed, shortcode, widget, content
 Requires at least: 3.1.0
 Tested up to: 5.8
 Requires PHP: 5.6
-Stable tag: 2.4.4
+Stable tag: 2.5.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -158,6 +158,9 @@ The image style to use:
  - UrlTo800x800ArResized
  - UrlTo100x100Thumbnail
  - UrlTo200x200Thumbnail
+
+- show_excerpt
+Display excerpt for each feed item.
 
 - template
 Template file to use. If no template is set in settings and this parameter is not set then cision-block.php in either the active
@@ -380,5 +383,11 @@ This is something that is possible using the **Pro** version, since all news are
 
 == Changelog ==
 
-= 2.4.3.1
-- Fix bug where notifications could not be closed.
+= 2.5.0
+- Do not use constant for text domain.
+- Use disabled to set input attribute.
+- Set headers for remote request.
+- Bump composer installers.
+- Use PHP and Wordpress version from settings.
+- Remove unused override in settings.
+- Add settings to toggle excerpts.

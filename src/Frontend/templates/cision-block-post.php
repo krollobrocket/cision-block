@@ -8,7 +8,7 @@
  *
  * @package Cision Block
  * @since 2.0.0
- * @version 2.4.4
+ * @version 2.5.0
  */
 
 get_header();

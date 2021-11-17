@@ -15,6 +15,8 @@
  *   Text to display for regulatory feed items.
  * @var string $non_regulatory_text
  *   Text to display for non-regulatory feed items.
+ * @var boolean $show_excerpt
+ *   Display excerpts or not.
  * @var boolean $show_filters
  *   States if we are to display filters for the feed items or not.
  * @var string $filter_all_text
@@ -40,7 +42,7 @@
  *
  * @package Cision Block
  * @since   1.0
- * @version 2.4.4
+ * @version 2.5.0
  */
 
 ?>
@@ -89,7 +91,9 @@
             />
             </span>
             <?php endif; ?>
+            <?php if ($show_excerpt) : ?>
             <?php echo wp_trim_words(esc_html($item->Intro ? $item->Intro : $item->Body)); ?>
+            <?php endif; ?>
             </p>
             <?php if (isset($item->CisionWireUrl, $readmore)) : ?>
             <a

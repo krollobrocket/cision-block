@@ -1,3 +1,6 @@
+= 2.4.3.1
+- Fix bug where notifications could not be closed.
+
 = 2.4.3
 - Minor update on how notifications are managed.
 - Change from *none* to <none> to disable buttons and text.
