@@ -3,20 +3,6 @@
 $settings = $this->settings->toJson();
 
 ?>
-<style type="text/css">
-#status-form textarea {
-    font-family: monospace;
-    width: 100%;
-    margin: 0;
-    height: 300px;
-    padding: 20px;
-    border-radius: 0;
-    resize: none;
-    font-size: 12px;
-    line-height: 20px;
-    outline: 0;
-}
-</style>
 <div class="wrap">
     <?php $this->displayTabs(); ?>
     <form id="status-form" action="<?php echo admin_url('admin-post.php'); ?>" method="POST">
