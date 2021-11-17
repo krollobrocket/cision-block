@@ -26,7 +26,6 @@ class Settings extends \CisionBlock\Plugin\Settings\Settings
     const DEFAULT_FILTER_ALL_TEXT = 'Show all';
     const DEFAULT_FILTER_REGULATORY_TEXT = 'Regulatory';
     const DEFAULT_FILTER_NON_REGULATORY_TEXT = 'Non-regulatory';
-    const TEXTDOMAIN = 'cision-block';
     const MIN_PHP_VERSION = '5.6';
     const MIN_WP_VERSION = '3.1.0';
 

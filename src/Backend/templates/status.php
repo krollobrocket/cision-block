@@ -1,7 +1,5 @@
 <?php
 
-use CisionBlock\Settings\Settings;
-
 $settings = $this->settings->toJson();
 
 ?>
@@ -28,10 +26,10 @@ $settings = $this->settings->toJson();
             <tr>
                 <td>
                     <textarea name="settings" readonly><?php echo $settings; ?></textarea>
-                    <p class="description"><?php _e('If you need help, copy and paste the above information for faster support.', Settings::TEXTDOMAIN); ?></p>
+                    <p class="description"><?php _e('If you need help, copy and paste the above information for faster support.', 'cision-block'); ?></p>
                 </td>
             </tr>
         </table>
-        <button type="button" class="button" onclick="document.querySelector('textarea').select(); document.execCommand('copy');"><?php _e('Copy for support', Settings::TEXTDOMAIN); ?></button>
+        <button type="button" class="button" onclick="document.querySelector('textarea').select(); document.execCommand('copy');"><?php _e('Copy for support', 'cision-block'); ?></button>
     </form>
 </div>

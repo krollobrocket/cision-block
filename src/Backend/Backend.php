@@ -150,13 +150,13 @@ class Backend extends Singleton
     {
         check_ajax_referer('cision_block_dismiss_notice');
         if (!current_user_can('administrator')) {
-            return wp_send_json_error(__('You are not allowed to perform this action.', Settings::TEXTDOMAIN));
+            return wp_send_json_error(__('You are not allowed to perform this action.', 'cision-block'));
         }
         if (!filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT)) {
-            return wp_send_json_error(__('No valid notification id supplied.', Settings::TEXTDOMAIN));
+            return wp_send_json_error(__('No valid notification id supplied.', 'cision-block'));
         }
         if (!$this->dismissNotice($_POST['id'])) {
-            return wp_send_json_error(__('Notification could not be found.', Settings::TEXTDOMAIN));
+            return wp_send_json_error(__('Notification could not be found.', 'cision-block'));
         }
         wp_send_json_success();
     }
@@ -167,23 +167,23 @@ class Backend extends Singleton
     public function addPremiumNotice()
     {
         ?>
-        <h3><?php _e('Pro Version', Settings::TEXTDOMAIN); ?></h3>
-        <p><?php _e('There is now a <b>PRO</b> version of this plugin, which includes extended features. For instance:', Settings::TEXTDOMAIN); ?></p>
+        <h3><?php _e('Pro Version', 'cision-block'); ?></h3>
+        <p><?php _e('There is now a <b>PRO</b> version of this plugin, which includes extended features. For instance:', 'cision-block'); ?></p>
         <div>
             <ul style="">
-                <li><?php _e('Support to fetch entire feed and not only the last 100 entries.', Settings::TEXTDOMAIN); ?></li>
-                <li><?php _e('Custom post types. Creates a post for each item in Wordpress. This means that all news have standard Wordpress links.', Settings::TEXTDOMAIN); ?></li>
-                <li><?php _e('Manually created posts can be added to the feed.', Settings::TEXTDOMAIN); ?></li>
-                <li><?php _e('Custom taxonomies for categories and tags fetched from Cision.', Settings::TEXTDOMAIN); ?></li>
-                <li><?php _e('Support to create, update and delete posts based on PUSH events sent from Cision.', Settings::TEXTDOMAIN); ?></li>
-                <li><?php _e('Support to create, update and delete posts during CRON at configurable intervals.', Settings::TEXTDOMAIN); ?></li>
-                <li><?php _e('Extension support.', Settings::TEXTDOMAIN); ?></li>
-                <li><?php _e('Subscription module.', Settings::TEXTDOMAIN); ?></li>
-                <li><?php _e('Ticker module.', Settings::TEXTDOMAIN); ?></li>
-                <li><?php _e('Free support and quicker response times.', Settings::TEXTDOMAIN); ?></li>
+                <li><?php _e('Support to fetch entire feed and not only the last 100 entries.', 'cision-block'); ?></li>
+                <li><?php _e('Custom post types. Creates a post for each item in Wordpress. This means that all news have standard Wordpress links.', 'cision-block'); ?></li>
+                <li><?php _e('Manually created posts can be added to the feed.', 'cision-block'); ?></li>
+                <li><?php _e('Custom taxonomies for categories and tags fetched from Cision.', 'cision-block'); ?></li>
+                <li><?php _e('Support to create, update and delete posts based on PUSH events sent from Cision.', 'cision-block'); ?></li>
+                <li><?php _e('Support to create, update and delete posts during CRON at configurable intervals.', 'cision-block'); ?></li>
+                <li><?php _e('Extension support.', 'cision-block'); ?></li>
+                <li><?php _e('Subscription module.', 'cision-block'); ?></li>
+                <li><?php _e('Ticker module.', 'cision-block'); ?></li>
+                <li><?php _e('Free support and quicker response times.', 'cision-block'); ?></li>
             </ul>
         </div>
-        <p><?php echo sprintf(__('To get more information about the Pro version, please send me an email at <a href="mailto:cyclonecode@gmail.com?subject=%s" target="_blank" rel="noopener noreferrer">cyclonecode@gmail.com</a>, you can also contact me at my <a href="%s" target="_blank" rel="noopener noreferrer">slack channel</a>.', Settings::TEXTDOMAIN), 'Cision%20Block%20Pro', 'https://join.slack.com/t/cyclonecode/shared_invite/zt-6bdtbdab-n9QaMLM~exHP19zFDPN~AQ'); ?></p>
+        <p><?php echo sprintf(__('To get more information about the Pro version, please send me an email at <a href="mailto:cyclonecode@gmail.com?subject=%s" target="_blank" rel="noopener noreferrer">cyclonecode@gmail.com</a>, you can also contact me at my <a href="%s" target="_blank" rel="noopener noreferrer">slack channel</a>.', 'cision-block'), 'Cision%20Block%20Pro', 'https://join.slack.com/t/cyclonecode/shared_invite/zt-6bdtbdab-n9QaMLM~exHP19zFDPN~AQ'); ?></p>
         <?php
     }
 
@@ -193,11 +193,11 @@ class Backend extends Singleton
     public function addReviewNotice()
     {
         ?>
-        <h3><?php _e('Thank you for using Cision Block!', Settings::TEXTDOMAIN); ?></h3>
-        <p><?php echo sprintf(__('If you use and enjoy Cision Block, I would be really happy if you could give it a positive review at <a href="%s" target="_blank" rel="noopener noreferrer">Wordpress.org</a>.', Settings::TEXTDOMAIN), 'https://wordpress.org/support/plugin/cision-block/reviews/?rate=5#new-post'); ?></p>
-        <p><?php _e('Doing this would help me keeping the plugin free and up to date.', Settings::TEXTDOMAIN); ?></p>
-        <p><?php _e('Also, if you would like to support me you can always buy me a cup of coffee at:', Settings::TEXTDOMAIN); ?> <a href="https://www.buymeacoffee.com/cyclonecode" target="_blank" rel="noopener noreferrer">https://www.buymeacoffee.com/cyclonecode</a></p>
-        <p><?php _e('Thank you very much!', Settings::TEXTDOMAIN); ?></p>
+        <h3><?php _e('Thank you for using Cision Block!', 'cision-block'); ?></h3>
+        <p><?php echo sprintf(__('If you use and enjoy Cision Block, I would be really happy if you could give it a positive review at <a href="%s" target="_blank" rel="noopener noreferrer">Wordpress.org</a>.', 'cision-block'), 'https://wordpress.org/support/plugin/cision-block/reviews/?rate=5#new-post'); ?></p>
+        <p><?php _e('Doing this would help me keeping the plugin free and up to date.', 'cision-block'); ?></p>
+        <p><?php _e('Also, if you would like to support me you can always buy me a cup of coffee at:', 'cision-block'); ?> <a href="https://www.buymeacoffee.com/cyclonecode" target="_blank" rel="noopener noreferrer">https://www.buymeacoffee.com/cyclonecode</a></p>
+        <p><?php _e('Thank you very much!', 'cision-block'); ?></p>
         <?php
     }
 
@@ -207,11 +207,11 @@ class Backend extends Singleton
     public function addSupportNotice()
     {
         ?>
-        <h3><?php _e('Do you have any feedback or need support?', Settings::TEXTDOMAIN); ?></h3>
-        <p><?php echo sprintf(__('If you have any request for improvement or just need some help. Do not hesitate to open a ticket in the <a href="%s" target="_blank">support section</a>.', Settings::TEXTDOMAIN), 'https://wordpress.org/support/plugin/cision-block/#new-topic-0'); ?></p>
-        <p><?php echo sprintf(__('I can also be reached by email at <a href="%s" target="_blank" rel="noopener noreferrer">%s</a>', Settings::TEXTDOMAIN), 'mailto:cyclonecode.help@gmail.com?subject=Cision%20Block', 'cyclonecode.help@gmail.com'); ?></p>
-        <p><?php echo sprintf(__('There is also a slack channel that you can <a href="%s" target="_blank" rel="noopener noreferrer">join</a>.', Settings::TEXTDOMAIN), 'https://join.slack.com/t/cyclonecode/shared_invite/zt-6bdtbdab-n9QaMLM~exHP19zFDPN~AQ'); ?></p>
-        <p><?php _e('I hope you will have an awesome day!', Settings::TEXTDOMAIN); ?></p>
+        <h3><?php _e('Do you have any feedback or need support?', 'cision-block'); ?></h3>
+        <p><?php echo sprintf(__('If you have any request for improvement or just need some help. Do not hesitate to open a ticket in the <a href="%s" target="_blank">support section</a>.', 'cision-block'), 'https://wordpress.org/support/plugin/cision-block/#new-topic-0'); ?></p>
+        <p><?php echo sprintf(__('I can also be reached by email at <a href="%s" target="_blank" rel="noopener noreferrer">%s</a>', 'cision-block'), 'mailto:cyclonecode.help@gmail.com?subject=Cision%20Block', 'cyclonecode.help@gmail.com'); ?></p>
+        <p><?php echo sprintf(__('There is also a slack channel that you can <a href="%s" target="_blank" rel="noopener noreferrer">join</a>.', 'cision-block'), 'https://join.slack.com/t/cyclonecode/shared_invite/zt-6bdtbdab-n9QaMLM~exHP19zFDPN~AQ'); ?></p>
+        <p><?php _e('I hope you will have an awesome day!', 'cision-block'); ?></p>
         <?php
     }
 
@@ -231,8 +231,8 @@ class Backend extends Singleton
         }
         ?>
         <div id="cision-block-admin-header">
-            <span><img width="64" src="<?php echo plugin_dir_url(__FILE__); ?>assets/icon-128x128.png" alt="<?php _e('Cision Block', Settings::TEXTDOMAIN); ?>" />
-                <h1><?php _e('Cision Block', Settings::TEXTDOMAIN); ?><?php echo $title; ?></h1>
+            <span><img width="64" src="<?php echo plugin_dir_url(__FILE__); ?>assets/icon-128x128.png" alt="<?php _e('Cision Block', 'cision-block'); ?>" />
+                <h1><?php _e('Cision Block', 'cision-block'); ?><?php echo $title; ?></h1>
             </span>
         </div>
         <?php
@@ -246,7 +246,7 @@ class Backend extends Singleton
      */
     public function addActionLinks($links, $file)
     {
-        $settings_link = '<a href="' . admin_url('options-general.php?page=cision-block') . '">' . __('General Settings', Settings::TEXTDOMAIN) . '</a>';
+        $settings_link = '<a href="' . admin_url('options-general.php?page=cision-block') . '">' . __('General Settings', 'cision-block') . '</a>';
         if ($file == 'cision-block/bootstrap.php') {
             array_unshift($links, $settings_link);
         }
@@ -270,17 +270,17 @@ class Backend extends Singleton
         $plugin_meta[] = sprintf(
             '<a target="_blank" href="%1$s"><span class="dashicons dashicons-star-filled" aria-hidden="true" style="font-size:14px;line-height:1.3"></span>%2$s</a>',
             'https://www.buymeacoffee.com/cyclonecode',
-            esc_html_x('Sponsor', 'verb', Settings::TEXTDOMAIN)
+            esc_html_x('Sponsor', 'verb', 'cision-block')
         );
         $plugin_meta[] = sprintf(
             '<a target="_blank" href="%1$s"><span class="dashicons dashicons-thumbs-up" aria-hidden="true" style="font-size:14px;line-height:1.3"></span>%2$s</a>',
             'https://wordpress.org/support/plugin/cision-block/reviews/?rate=5#new-post',
-            esc_html_x('Rate', 'verb', Settings::TEXTDOMAIN)
+            esc_html_x('Rate', 'verb', 'cision-block')
         );
         $plugin_meta[] = sprintf(
             '<a target="_blank" href="%1$s"><span class="dashicons dashicons-editor-help" aria-hidden="true" style="font-size:14px;line-height:1.3"></span>%2$s</a>',
             'https://wordpress.org/support/plugin/cision-block/#new-topic-0',
-            esc_html_x('Support', 'verb', Settings::TEXTDOMAIN)
+            esc_html_x('Support', 'verb', 'cision-block')
         );
 
         return $plugin_meta;
@@ -375,11 +375,11 @@ class Backend extends Singleton
         global $wp_version;
         if (version_compare(PHP_VERSION, Settings::MIN_PHP_VERSION, '<')) {
             deactivate_plugins('cision-block');
-            wp_die(__(sprintf('Unsupported PHP version. Minimum supported version is %s.', Settings::MIN_PHP_VERSION), Settings::TEXTDOMAIN));
+            wp_die(__(sprintf('Unsupported PHP version. Minimum supported version is %s.', Settings::MIN_PHP_VERSION), 'cision-block'));
         }
         if (version_compare($wp_version, Settings::MIN_WP_VERSION, '<')) {
             deactivate_plugins('cision-block');
-            wp_die(__(sprintf('Unsupported Wordpress version. Minimum supported version is %s.', Settings::MIN_WP_VERSION), Settings::TEXTDOMAIN));
+            wp_die(__(sprintf('Unsupported Wordpress version. Minimum supported version is %s.', Settings::MIN_WP_VERSION), 'cision-block'));
         }
     }
 
@@ -390,8 +390,8 @@ class Backend extends Singleton
     {
         add_submenu_page(
             self::PARENT_MENU_SLUG,
-            __('Cision Block', Settings::TEXTDOMAIN),
-            __('Cision Block', Settings::TEXTDOMAIN),
+            __('Cision Block', 'cision-block'),
+            __('Cision Block', 'cision-block'),
             $this->capability,
             self::MENU_SLUG,
             array($this, 'displaySettingsPage')
@@ -434,12 +434,12 @@ class Backend extends Singleton
 
         // Validate so user has correct privileges.
         if (!current_user_can($this->capability)) {
-            die(__('You are not allowed to perform this action.', Settings::TEXTDOMAIN));
+            die(__('You are not allowed to perform this action.', 'cision-block'));
         }
         // Verify nonce and referer.
         check_admin_referer('cision-block-settings-action', 'cision-block-settings-nonce');
 
-        $settings = Frontend::getInstance()->verifySettings($_POST);
+        $settings = Frontend::verifySettings($_POST, $this->settings);
 
         // Check if settings form is submitted.
         if (filter_input(INPUT_POST, 'cision-block-settings', FILTER_SANITIZE_STRING)) {
@@ -475,35 +475,35 @@ class Backend extends Singleton
      *
      * @return array
      */
-    public function getImageStyles()
+    public static function getImageStyles()
     {
         return array(
             'DownloadUrl' => array(
-                'label' => __('Original Image', Settings::TEXTDOMAIN),
+                'label' => __('Original Image', 'cision-block'),
                 'class' => 'image-original',
             ),
             'UrlTo100x100ArResized' => array(
-                'label' => __('100x100 Resized', Settings::TEXTDOMAIN),
+                'label' => __('100x100 Resized', 'cision-block'),
                 'class' => 'image-100x100-resized',
             ),
             'UrlTo200x200ArResized' => array(
-                'label' => __('200x200 Resized', Settings::TEXTDOMAIN),
+                'label' => __('200x200 Resized', 'cision-block'),
                 'class' => 'image-200x200-resized',
             ),
             'UrlTo400x400ArResized' => array(
-                'label' => __('400x400 Resized', Settings::TEXTDOMAIN),
+                'label' => __('400x400 Resized', 'cision-block'),
                 'class' => 'image-400x400-resized',
             ),
             'UrlTo800x800ArResized' => array(
-                'label' => __('800x800 Resized', Settings::TEXTDOMAIN),
+                'label' => __('800x800 Resized', 'cision-block'),
                 'class' => 'image-800x800-resized',
             ),
             'UrlTo100x100Thumbnail' => array(
-                'label' => __('100x100 Thumbnail', Settings::TEXTDOMAIN),
+                'label' => __('100x100 Thumbnail', 'cision-block'),
                 'class' => 'image-100x100-thumbnail',
             ),
             'UrlTo200x200Thumbnail' => array(
-                'label' => __('200x200 Thumbnail', Settings::TEXTDOMAIN),
+                'label' => __('200x200 Thumbnail', 'cision-block'),
                 'class' => 'image-200x200-thumbnail',
             ),
         );
@@ -517,190 +517,190 @@ class Backend extends Singleton
     public function getLanguages()
     {
         return array(
-            'ab' => __('Abkhazian', Settings::TEXTDOMAIN),
-            'aa' => __('Afar', Settings::TEXTDOMAIN),
-            'af' => __('Afrikaans', Settings::TEXTDOMAIN),
-            'ak' => __('Akan', Settings::TEXTDOMAIN),
-            'sq' => __('Albanian', Settings::TEXTDOMAIN),
-            'am' => __('Amharic', Settings::TEXTDOMAIN),
-            'ar' => __('Arabic', Settings::TEXTDOMAIN),
-            'an' => __('Aragonese', Settings::TEXTDOMAIN),
-            'hy' => __('Armenian', Settings::TEXTDOMAIN),
-            'as' => __('Assamese', Settings::TEXTDOMAIN),
-            'av' => __('Avaric', Settings::TEXTDOMAIN),
-            'ae' => __('Avestan', Settings::TEXTDOMAIN),
-            'ay' => __('Aymara', Settings::TEXTDOMAIN),
-            'az' => __('Azerbaijani', Settings::TEXTDOMAIN),
-            'bm' => __('Bambara', Settings::TEXTDOMAIN),
-            'ba' => __('Bashkir', Settings::TEXTDOMAIN),
-            'eu' => __('Basque', Settings::TEXTDOMAIN),
-            'be' => __('Belarusian', Settings::TEXTDOMAIN),
-            'bn' => __('Bengali', Settings::TEXTDOMAIN),
-            'bh' => __('Bihari languages', Settings::TEXTDOMAIN),
-            'bi' => __('Bislama', Settings::TEXTDOMAIN),
-            'bs' => __('Bosnian', Settings::TEXTDOMAIN),
-            'br' => __('Breton', Settings::TEXTDOMAIN),
-            'bg' => __('Bulgarian', Settings::TEXTDOMAIN),
-            'my' => __('Burmese', Settings::TEXTDOMAIN),
-            'ca' => __('Catalan, Valencian', Settings::TEXTDOMAIN),
-            'km' => __('Central Khmer', Settings::TEXTDOMAIN),
-            'ch' => __('Chamorro', Settings::TEXTDOMAIN),
-            'ce' => __('Chechen', Settings::TEXTDOMAIN),
-            'ny' => __('Chichewa, Chewa, Nyanja', Settings::TEXTDOMAIN),
-            'zh' => __('Chinese', Settings::TEXTDOMAIN),
-            'cu' => __('Church Slavonic, Old Bulgarian, Old Church Slavonic', Settings::TEXTDOMAIN),
-            'cv' => __('Chuvash', Settings::TEXTDOMAIN),
-            'kw' => __('Cornish', Settings::TEXTDOMAIN),
-            'co' => __('Corsican', Settings::TEXTDOMAIN),
-            'cr' => __('Cree', Settings::TEXTDOMAIN),
-            'hr' => __('Croatian', Settings::TEXTDOMAIN),
-            'cs' => __('Czech', Settings::TEXTDOMAIN),
-            'da' => __('Danish', Settings::TEXTDOMAIN),
-            'dv' => __('Divehi, Dhivehi, Maldivian', Settings::TEXTDOMAIN),
-            'nl' => __('Dutch, Flemish', Settings::TEXTDOMAIN),
-            'dz' => __('Dzongkha', Settings::TEXTDOMAIN),
-            'en' => __('English', Settings::TEXTDOMAIN),
-            'eo' => __('Esperanto', Settings::TEXTDOMAIN),
-            'et' => __('Estonian', Settings::TEXTDOMAIN),
-            'ee' => __('Ewe', Settings::TEXTDOMAIN),
-            'fo' => __('Faroese', Settings::TEXTDOMAIN),
-            'fj' => __('Fijian', Settings::TEXTDOMAIN),
-            'fi' => __('Finnish', Settings::TEXTDOMAIN),
-            'fr' => __('French', Settings::TEXTDOMAIN),
-            'ff' => __('Fulah', Settings::TEXTDOMAIN),
-            'gd' => __('Gaelic, Scottish Gaelic', Settings::TEXTDOMAIN),
-            'gl' => __('Galician', Settings::TEXTDOMAIN),
-            'lg' => __('Ganda', Settings::TEXTDOMAIN),
-            'ka' => __('Georgian', Settings::TEXTDOMAIN),
-            'de' => __('German', Settings::TEXTDOMAIN),
-            'ki' => __('Gikuyu, Kikuyu', Settings::TEXTDOMAIN),
-            'el' => __('Greek (Modern)', Settings::TEXTDOMAIN),
-            'kl' => __('Greenlandic, Kalaallisut', Settings::TEXTDOMAIN),
-            'gn' => __('Guarani', Settings::TEXTDOMAIN),
-            'gu' => __('Gujarati', Settings::TEXTDOMAIN),
-            'ht' => __('Haitian, Haitian Creole', Settings::TEXTDOMAIN),
-            'ha' => __('Hausa', Settings::TEXTDOMAIN),
-            'he' => __('Hebrew', Settings::TEXTDOMAIN),
-            'hz' => __('Herero', Settings::TEXTDOMAIN),
-            'hi' => __('Hindi', Settings::TEXTDOMAIN),
-            'ho' => __('Hiri Motu', Settings::TEXTDOMAIN),
-            'hu' => __('Hungarian', Settings::TEXTDOMAIN),
-            'is' => __('Icelandic', Settings::TEXTDOMAIN),
-            'io' => __('Ido', Settings::TEXTDOMAIN),
-            'ig' => __('Igbo', Settings::TEXTDOMAIN),
-            'id' => __('Indonesian', Settings::TEXTDOMAIN),
-            'ia' => __('Interlingua (International Auxiliary Language Association)', Settings::TEXTDOMAIN),
-            'ie' => __('Interlingue', Settings::TEXTDOMAIN),
-            'iu' => __('Inuktitut', Settings::TEXTDOMAIN),
-            'ik' => __('Inupiaq', Settings::TEXTDOMAIN),
-            'ga' => __('Irish', Settings::TEXTDOMAIN),
-            'it' => __('Italian', Settings::TEXTDOMAIN),
-            'ja' => __('Japanese', Settings::TEXTDOMAIN),
-            'jv' => __('Javanese', Settings::TEXTDOMAIN),
-            'kn' => __('Kannada', Settings::TEXTDOMAIN),
-            'kr' => __('Kanuri', Settings::TEXTDOMAIN),
-            'ks' => __('Kashmiri', Settings::TEXTDOMAIN),
-            'kk' => __('Kazakh', Settings::TEXTDOMAIN),
-            'rw' => __('Kinyarwanda', Settings::TEXTDOMAIN),
-            'kv' => __('Komi', Settings::TEXTDOMAIN),
-            'kg' => __('Kongo', Settings::TEXTDOMAIN),
-            'ko' => __('Korean', Settings::TEXTDOMAIN),
-            'kj' => __('Kwanyama, Kuanyama', Settings::TEXTDOMAIN),
-            'ku' => __('Kurdish', Settings::TEXTDOMAIN),
-            'ky' => __('Kyrgyz', Settings::TEXTDOMAIN),
-            'lo' => __('Lao', Settings::TEXTDOMAIN),
-            'la' => __('Latin', Settings::TEXTDOMAIN),
-            'lv' => __('Latvian', Settings::TEXTDOMAIN),
-            'lb' => __('Letzeburgesch, Luxembourgish', Settings::TEXTDOMAIN),
-            'li' => __('Limburgish, Limburgan, Limburger', Settings::TEXTDOMAIN),
-            'ln' => __('Lingala', Settings::TEXTDOMAIN),
-            'lt' => __('Lithuanian', Settings::TEXTDOMAIN),
-            'lu' => __('Luba-Katanga', Settings::TEXTDOMAIN),
-            'mk' => __('Macedonian', Settings::TEXTDOMAIN),
-            'mg' => __('Malagasy', Settings::TEXTDOMAIN),
-            'ms' => __('Malay', Settings::TEXTDOMAIN),
-            'ml' => __('Malayalam', Settings::TEXTDOMAIN),
-            'mt' => __('Maltese', Settings::TEXTDOMAIN),
-            'gv' => __('Manx', Settings::TEXTDOMAIN),
-            'mi' => __('Maori', Settings::TEXTDOMAIN),
-            'mr' => __('Marathi', Settings::TEXTDOMAIN),
-            'mh' => __('Marshallese', Settings::TEXTDOMAIN),
-            'ro' => __('Moldovan, Moldavian, Romanian', Settings::TEXTDOMAIN),
-            'mn' => __('Mongolian', Settings::TEXTDOMAIN),
-            'na' => __('Nauru', Settings::TEXTDOMAIN),
-            'nv' => __('Navajo, Navaho', Settings::TEXTDOMAIN),
-            'nd' => __('Northern Ndebele', Settings::TEXTDOMAIN),
-            'ng' => __('Ndonga', Settings::TEXTDOMAIN),
-            'ne' => __('Nepali', Settings::TEXTDOMAIN),
-            'se' => __('Northern Sami', Settings::TEXTDOMAIN),
-            'no' => __('Norwegian', Settings::TEXTDOMAIN),
-            'nb' => __('Norwegian Bokmål', Settings::TEXTDOMAIN),
-            'nn' => __('Norwegian Nynorsk', Settings::TEXTDOMAIN),
-            'ii' => __('Nuosu, Sichuan Yi', Settings::TEXTDOMAIN),
-            'oc' => __('Occitan (post 1500)', Settings::TEXTDOMAIN),
-            'oj' => __('Ojibwa', Settings::TEXTDOMAIN),
-            'or' => __('Oriya', Settings::TEXTDOMAIN),
-            'om' => __('Oromo', Settings::TEXTDOMAIN),
-            'os' => __('Ossetian, Ossetic', Settings::TEXTDOMAIN),
-            'pi' => __('Pali', Settings::TEXTDOMAIN),
-            'pa' => __('Panjabi, Punjabi', Settings::TEXTDOMAIN),
-            'ps' => __('Pashto, Pushto', Settings::TEXTDOMAIN),
-            'fa' => __('Persian', Settings::TEXTDOMAIN),
-            'pl' => __('Polish', Settings::TEXTDOMAIN),
-            'pt' => __('Portuguese', Settings::TEXTDOMAIN),
-            'qu' => __('Quechua', Settings::TEXTDOMAIN),
-            'rm' => __('Romansh', Settings::TEXTDOMAIN),
-            'rn' => __('Rundi', Settings::TEXTDOMAIN),
-            'ru' => __('Russian', Settings::TEXTDOMAIN),
-            'sm' => __('Samoan', Settings::TEXTDOMAIN),
-            'sg' => __('Sango', Settings::TEXTDOMAIN),
-            'sa' => __('Sanskrit', Settings::TEXTDOMAIN),
-            'sc' => __('Sardinian', Settings::TEXTDOMAIN),
-            'sr' => __('Serbian', Settings::TEXTDOMAIN),
-            'sn' => __('Shona', Settings::TEXTDOMAIN),
-            'sd' => __('Sindhi', Settings::TEXTDOMAIN),
-            'si' => __('Sinhala, Sinhalese', Settings::TEXTDOMAIN),
-            'sk' => __('Slovak', Settings::TEXTDOMAIN),
-            'sl' => __('Slovenian', Settings::TEXTDOMAIN),
-            'so' => __('Somali', Settings::TEXTDOMAIN),
-            'st' => __('Sotho, Southern', Settings::TEXTDOMAIN),
-            'nr' => __('South Ndebele', Settings::TEXTDOMAIN),
-            'es' => __('Spanish, Castilian', Settings::TEXTDOMAIN),
-            'su' => __('Sundanese', Settings::TEXTDOMAIN),
-            'sw' => __('Swahili', Settings::TEXTDOMAIN),
-            'ss' => __('Swati', Settings::TEXTDOMAIN),
-            'sv' => __('Swedish', Settings::TEXTDOMAIN),
-            'tl' => __('Tagalog', Settings::TEXTDOMAIN),
-            'ty' => __('Tahitian', Settings::TEXTDOMAIN),
-            'tg' => __('Tajik', Settings::TEXTDOMAIN),
-            'ta' => __('Tamil', Settings::TEXTDOMAIN),
-            'tt' => __('Tatar', Settings::TEXTDOMAIN),
-            'te' => __('Telugu', Settings::TEXTDOMAIN),
-            'th' => __('Thai', Settings::TEXTDOMAIN),
-            'bo' => __('Tibetan', Settings::TEXTDOMAIN),
-            'ti' => __('Tigrinya', Settings::TEXTDOMAIN),
-            'to' => __('Tonga (Tonga Islands)', Settings::TEXTDOMAIN),
-            'ts' => __('Tsonga', Settings::TEXTDOMAIN),
-            'tn' => __('Tswana', Settings::TEXTDOMAIN),
-            'tr' => __('Turkish', Settings::TEXTDOMAIN),
-            'tk' => __('Turkmen', Settings::TEXTDOMAIN),
-            'tw' => __('Twi', Settings::TEXTDOMAIN),
-            'ug' => __('Uighur, Uyghur', Settings::TEXTDOMAIN),
-            'uk' => __('Ukrainian', Settings::TEXTDOMAIN),
-            'ur' => __('Urdu', Settings::TEXTDOMAIN),
-            'uz' => __('Uzbek', Settings::TEXTDOMAIN),
-            've' => __('Venda', Settings::TEXTDOMAIN),
-            'vi' => __('Vietnamese', Settings::TEXTDOMAIN),
-            'vo' => __('Volap_k', Settings::TEXTDOMAIN),
-            'wa' => __('Walloon', Settings::TEXTDOMAIN),
-            'cy' => __('Welsh', Settings::TEXTDOMAIN),
-            'fy' => __('Western Frisian', Settings::TEXTDOMAIN),
-            'wo' => __('Wolof', Settings::TEXTDOMAIN),
-            'xh' => __('Xhosa', Settings::TEXTDOMAIN),
-            'yi' => __('Yiddish', Settings::TEXTDOMAIN),
-            'yo' => __('Yoruba', Settings::TEXTDOMAIN),
-            'za' => __('Zhuang, Chuang', Settings::TEXTDOMAIN),
-            'zu' => __('Zulu', Settings::TEXTDOMAIN),
+            'ab' => __('Abkhazian', 'cision-block'),
+            'aa' => __('Afar', 'cision-block'),
+            'af' => __('Afrikaans', 'cision-block'),
+            'ak' => __('Akan', 'cision-block'),
+            'sq' => __('Albanian', 'cision-block'),
+            'am' => __('Amharic', 'cision-block'),
+            'ar' => __('Arabic', 'cision-block'),
+            'an' => __('Aragonese', 'cision-block'),
+            'hy' => __('Armenian', 'cision-block'),
+            'as' => __('Assamese', 'cision-block'),
+            'av' => __('Avaric', 'cision-block'),
+            'ae' => __('Avestan', 'cision-block'),
+            'ay' => __('Aymara', 'cision-block'),
+            'az' => __('Azerbaijani', 'cision-block'),
+            'bm' => __('Bambara', 'cision-block'),
+            'ba' => __('Bashkir', 'cision-block'),
+            'eu' => __('Basque', 'cision-block'),
+            'be' => __('Belarusian', 'cision-block'),
+            'bn' => __('Bengali', 'cision-block'),
+            'bh' => __('Bihari languages', 'cision-block'),
+            'bi' => __('Bislama', 'cision-block'),
+            'bs' => __('Bosnian', 'cision-block'),
+            'br' => __('Breton', 'cision-block'),
+            'bg' => __('Bulgarian', 'cision-block'),
+            'my' => __('Burmese', 'cision-block'),
+            'ca' => __('Catalan, Valencian', 'cision-block'),
+            'km' => __('Central Khmer', 'cision-block'),
+            'ch' => __('Chamorro', 'cision-block'),
+            'ce' => __('Chechen', 'cision-block'),
+            'ny' => __('Chichewa, Chewa, Nyanja', 'cision-block'),
+            'zh' => __('Chinese', 'cision-block'),
+            'cu' => __('Church Slavonic, Old Bulgarian, Old Church Slavonic', 'cision-block'),
+            'cv' => __('Chuvash', 'cision-block'),
+            'kw' => __('Cornish', 'cision-block'),
+            'co' => __('Corsican', 'cision-block'),
+            'cr' => __('Cree', 'cision-block'),
+            'hr' => __('Croatian', 'cision-block'),
+            'cs' => __('Czech', 'cision-block'),
+            'da' => __('Danish', 'cision-block'),
+            'dv' => __('Divehi, Dhivehi, Maldivian', 'cision-block'),
+            'nl' => __('Dutch, Flemish', 'cision-block'),
+            'dz' => __('Dzongkha', 'cision-block'),
+            'en' => __('English', 'cision-block'),
+            'eo' => __('Esperanto', 'cision-block'),
+            'et' => __('Estonian', 'cision-block'),
+            'ee' => __('Ewe', 'cision-block'),
+            'fo' => __('Faroese', 'cision-block'),
+            'fj' => __('Fijian', 'cision-block'),
+            'fi' => __('Finnish', 'cision-block'),
+            'fr' => __('French', 'cision-block'),
+            'ff' => __('Fulah', 'cision-block'),
+            'gd' => __('Gaelic, Scottish Gaelic', 'cision-block'),
+            'gl' => __('Galician', 'cision-block'),
+            'lg' => __('Ganda', 'cision-block'),
+            'ka' => __('Georgian', 'cision-block'),
+            'de' => __('German', 'cision-block'),
+            'ki' => __('Gikuyu, Kikuyu', 'cision-block'),
+            'el' => __('Greek (Modern)', 'cision-block'),
+            'kl' => __('Greenlandic, Kalaallisut', 'cision-block'),
+            'gn' => __('Guarani', 'cision-block'),
+            'gu' => __('Gujarati', 'cision-block'),
+            'ht' => __('Haitian, Haitian Creole', 'cision-block'),
+            'ha' => __('Hausa', 'cision-block'),
+            'he' => __('Hebrew', 'cision-block'),
+            'hz' => __('Herero', 'cision-block'),
+            'hi' => __('Hindi', 'cision-block'),
+            'ho' => __('Hiri Motu', 'cision-block'),
+            'hu' => __('Hungarian', 'cision-block'),
+            'is' => __('Icelandic', 'cision-block'),
+            'io' => __('Ido', 'cision-block'),
+            'ig' => __('Igbo', 'cision-block'),
+            'id' => __('Indonesian', 'cision-block'),
+            'ia' => __('Interlingua (International Auxiliary Language Association)', 'cision-block'),
+            'ie' => __('Interlingue', 'cision-block'),
+            'iu' => __('Inuktitut', 'cision-block'),
+            'ik' => __('Inupiaq', 'cision-block'),
+            'ga' => __('Irish', 'cision-block'),
+            'it' => __('Italian', 'cision-block'),
+            'ja' => __('Japanese', 'cision-block'),
+            'jv' => __('Javanese', 'cision-block'),
+            'kn' => __('Kannada', 'cision-block'),
+            'kr' => __('Kanuri', 'cision-block'),
+            'ks' => __('Kashmiri', 'cision-block'),
+            'kk' => __('Kazakh', 'cision-block'),
+            'rw' => __('Kinyarwanda', 'cision-block'),
+            'kv' => __('Komi', 'cision-block'),
+            'kg' => __('Kongo', 'cision-block'),
+            'ko' => __('Korean', 'cision-block'),
+            'kj' => __('Kwanyama, Kuanyama', 'cision-block'),
+            'ku' => __('Kurdish', 'cision-block'),
+            'ky' => __('Kyrgyz', 'cision-block'),
+            'lo' => __('Lao', 'cision-block'),
+            'la' => __('Latin', 'cision-block'),
+            'lv' => __('Latvian', 'cision-block'),
+            'lb' => __('Letzeburgesch, Luxembourgish', 'cision-block'),
+            'li' => __('Limburgish, Limburgan, Limburger', 'cision-block'),
+            'ln' => __('Lingala', 'cision-block'),
+            'lt' => __('Lithuanian', 'cision-block'),
+            'lu' => __('Luba-Katanga', 'cision-block'),
+            'mk' => __('Macedonian', 'cision-block'),
+            'mg' => __('Malagasy', 'cision-block'),
+            'ms' => __('Malay', 'cision-block'),
+            'ml' => __('Malayalam', 'cision-block'),
+            'mt' => __('Maltese', 'cision-block'),
+            'gv' => __('Manx', 'cision-block'),
+            'mi' => __('Maori', 'cision-block'),
+            'mr' => __('Marathi', 'cision-block'),
+            'mh' => __('Marshallese', 'cision-block'),
+            'ro' => __('Moldovan, Moldavian, Romanian', 'cision-block'),
+            'mn' => __('Mongolian', 'cision-block'),
+            'na' => __('Nauru', 'cision-block'),
+            'nv' => __('Navajo, Navaho', 'cision-block'),
+            'nd' => __('Northern Ndebele', 'cision-block'),
+            'ng' => __('Ndonga', 'cision-block'),
+            'ne' => __('Nepali', 'cision-block'),
+            'se' => __('Northern Sami', 'cision-block'),
+            'no' => __('Norwegian', 'cision-block'),
+            'nb' => __('Norwegian Bokmål', 'cision-block'),
+            'nn' => __('Norwegian Nynorsk', 'cision-block'),
+            'ii' => __('Nuosu, Sichuan Yi', 'cision-block'),
+            'oc' => __('Occitan (post 1500)', 'cision-block'),
+            'oj' => __('Ojibwa', 'cision-block'),
+            'or' => __('Oriya', 'cision-block'),
+            'om' => __('Oromo', 'cision-block'),
+            'os' => __('Ossetian, Ossetic', 'cision-block'),
+            'pi' => __('Pali', 'cision-block'),
+            'pa' => __('Panjabi, Punjabi', 'cision-block'),
+            'ps' => __('Pashto, Pushto', 'cision-block'),
+            'fa' => __('Persian', 'cision-block'),
+            'pl' => __('Polish', 'cision-block'),
+            'pt' => __('Portuguese', 'cision-block'),
+            'qu' => __('Quechua', 'cision-block'),
+            'rm' => __('Romansh', 'cision-block'),
+            'rn' => __('Rundi', 'cision-block'),
+            'ru' => __('Russian', 'cision-block'),
+            'sm' => __('Samoan', 'cision-block'),
+            'sg' => __('Sango', 'cision-block'),
+            'sa' => __('Sanskrit', 'cision-block'),
+            'sc' => __('Sardinian', 'cision-block'),
+            'sr' => __('Serbian', 'cision-block'),
+            'sn' => __('Shona', 'cision-block'),
+            'sd' => __('Sindhi', 'cision-block'),
+            'si' => __('Sinhala, Sinhalese', 'cision-block'),
+            'sk' => __('Slovak', 'cision-block'),
+            'sl' => __('Slovenian', 'cision-block'),
+            'so' => __('Somali', 'cision-block'),
+            'st' => __('Sotho, Southern', 'cision-block'),
+            'nr' => __('South Ndebele', 'cision-block'),
+            'es' => __('Spanish, Castilian', 'cision-block'),
+            'su' => __('Sundanese', 'cision-block'),
+            'sw' => __('Swahili', 'cision-block'),
+            'ss' => __('Swati', 'cision-block'),
+            'sv' => __('Swedish', 'cision-block'),
+            'tl' => __('Tagalog', 'cision-block'),
+            'ty' => __('Tahitian', 'cision-block'),
+            'tg' => __('Tajik', 'cision-block'),
+            'ta' => __('Tamil', 'cision-block'),
+            'tt' => __('Tatar', 'cision-block'),
+            'te' => __('Telugu', 'cision-block'),
+            'th' => __('Thai', 'cision-block'),
+            'bo' => __('Tibetan', 'cision-block'),
+            'ti' => __('Tigrinya', 'cision-block'),
+            'to' => __('Tonga (Tonga Islands)', 'cision-block'),
+            'ts' => __('Tsonga', 'cision-block'),
+            'tn' => __('Tswana', 'cision-block'),
+            'tr' => __('Turkish', 'cision-block'),
+            'tk' => __('Turkmen', 'cision-block'),
+            'tw' => __('Twi', 'cision-block'),
+            'ug' => __('Uighur, Uyghur', 'cision-block'),
+            'uk' => __('Ukrainian', 'cision-block'),
+            'ur' => __('Urdu', 'cision-block'),
+            'uz' => __('Uzbek', 'cision-block'),
+            've' => __('Venda', 'cision-block'),
+            'vi' => __('Vietnamese', 'cision-block'),
+            'vo' => __('Volap_k', 'cision-block'),
+            'wa' => __('Walloon', 'cision-block'),
+            'cy' => __('Welsh', 'cision-block'),
+            'fy' => __('Western Frisian', 'cision-block'),
+            'wo' => __('Wolof', 'cision-block'),
+            'xh' => __('Xhosa', 'cision-block'),
+            'yi' => __('Yiddish', 'cision-block'),
+            'yo' => __('Yoruba', 'cision-block'),
+            'za' => __('Zhuang, Chuang', 'cision-block'),
+            'zu' => __('Zulu', 'cision-block'),
         );
     }
 
@@ -718,10 +718,10 @@ class Backend extends Singleton
     public function getTabs()
     {
         return array(
-            'settings' => __('General Settings', Settings::TEXTDOMAIN),
-            'permalinks' => __('Permalinks', Settings::TEXTDOMAIN),
-            'filters' => __('Filters', Settings::TEXTDOMAIN),
-            'status' => __('Status', Settings::TEXTDOMAIN),
+            'settings' => __('General Settings', 'cision-block'),
+            'permalinks' => __('Permalinks', 'cision-block'),
+            'filters' => __('Filters', 'cision-block'),
+            'status' => __('Status', 'cision-block'),
         );
     }
 
