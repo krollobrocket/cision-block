@@ -38,10 +38,16 @@ abstract class Widget extends \WP_Widget
      */
     public function widget($args, $instance)
     {
-        // Add arguments to widget.
+        /**
+         * Add arguments to widget.
+         *
+         * @var string $before_widget
+         * @var string $before_title
+         * @var string $after_title
+         * @var string $after_widget
+         */
         extract($args);
 
-        // Before widget.
         echo $before_widget;
 
         // Display title if not empty.

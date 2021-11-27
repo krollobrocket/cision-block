@@ -75,7 +75,7 @@
             </ul>
         <?php endif; ?>
         <?php foreach ($cision_feed as $item) : ?>
-        <article data-regulatory="<?php echo $item->IsRegulatory ? 1 : 0; ?>"<?php echo $attributes; ?>>
+        <article data-regulatory="<?php echo $item->IsRegulatory ?: 0; ?>"<?php echo $attributes; ?>>
             <h2><?php echo esc_html($item->Title); ?></h2>
             <time><?php echo date($options['date_format'], $item->PublishDate); ?></time>
             <?php if ($mark_regulatory && (($item->IsRegulatory && $regulatory_text !== '<none>') || (!$item->IsRegulatory && $non_regulatory_text !== '<none>'))) : ?>
@@ -92,7 +92,7 @@
             </span>
             <?php endif; ?>
             <?php if ($show_excerpt) : ?>
-                <?php echo wp_trim_words(esc_html($item->Intro ? $item->Intro : $item->Body)); ?>
+                <?php echo wp_trim_words(esc_html($item->Intro ?: $item->Body)); ?>
             <?php endif; ?>
             </p>
             <?php if (isset($item->CisionWireUrl, $readmore)) : ?>

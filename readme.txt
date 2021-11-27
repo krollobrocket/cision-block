@@ -1,11 +1,11 @@
 === Cision Block ===
 Contributors: cyclonecode
 Donate link: https://www.buymeacoffee.com/cyclonecode
-Tags: cision, feed, cision feed, shortcode, widget, content
+Tags: cision, feed, investor relation, press, stock, shortcode, widget, content
 Requires at least: 3.1.0
 Tested up to: 5.8
 Requires PHP: 5.6
-Stable tag: 2.5.0
+Stable tag: 2.6.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -375,6 +375,9 @@ This is something that is possible using the **Pro** version, since all news are
 = 2.4.3.1 =
 - Fixes a bug where notifications could not be dismissed.
 
+- 2.6.0
+- Fixes a bug where the widget caused a crash when using elementor.
+
 == Screenshots ==
 
 1. A feed from cision with a pager at the bottom.
@@ -383,11 +386,5 @@ This is something that is possible using the **Pro** version, since all news are
 
 == Changelog ==
 
-= 2.5.0
-- Do not use constant for text domain.
-- Use disabled to set input attribute.
-- Set headers for remote request.
-- Bump composer installers.
-- Use PHP and Wordpress version from settings.
-- Remove unused override in settings.
-- Add settings to toggle excerpts.
+= 2.6.0
+- Fixes a bug where the widget caused a crash when using elementor.

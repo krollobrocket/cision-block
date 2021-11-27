@@ -30,16 +30,16 @@ class Widget extends \CisionBlock\Plugin\Widget\Widget
             'source_uid' => $instance['source'],
             'count' => $instance['count'],
             'items_per_page' => $instance['items_per_page'],
-            'flush' => ($instance['cache_expire'] == 0 ? 'true' : 'false'),
+            'flush' => var_export($instance['cache_expire'] === 0, true),
             'view' => $instance['view_mode'],
             'types' => implode(', ', $instance['types']),
             'tags' => $instance['tags'],
             'start' => $instance['start_date'],
             'end' => $instance['end_date'],
             'image_style' => $instance['image_style'],
-            'show_excerpt' => isset($instance['show_excerpt']) ? $instance['show_excerpt'] : true,
+            'show_excerpt' => $instance['show_excerpt'] ?: true,
             'language' => $instance['language'],
-            'readmore' => isset($instance['readmore']) ? $instance['readmore'] : null,
+            'readmore' => $instance['readmore'] ?: null,
             'date_format' => $instance['date_format'],
             'widget' => $this->id,
             'mark_regulatory' => $instance['mark_regulatory'],
@@ -193,9 +193,9 @@ class Widget extends \CisionBlock\Plugin\Widget\Widget
         $output .= '<p>';
         $output .= '<label for="' . $this->get_field_id('view_mode') . '">' . __('View mode', 'cision-block') . ': </label>';
         $output .= '<select class="widefat" name=' . $this->get_field_name('view_mode') . '">';
-        $output .= '<option value="1"' . selected($instance['view_mode'] == 1, true, false) . '>' . __('All', 'cision-block') . '</option>';
-        $output .= '<option value="2"' . selected($instance['view_mode'] == 2, true, false) . '>' . __('Regulatory', 'cision-block') . '</option>';
-        $output .= '<option value="3"' . selected($instance['view_mode'] == 3, true, false) . '>' . __('Non-regulatory', 'cision-block') . '</option>';
+        $output .= '<option value="' . Settings::DISPLAY_MODE_ALL . '"' . selected($instance['view_mode'] === Settings::DISPLAY_MODE_ALL, true, false) . '>' . __('All', 'cision-block') . '</option>';
+        $output .= '<option value="' . Settings::DISPLAY_MODE_REGULATORY . '"' . selected($instance['view_mode'] === Settings::DISPLAY_MODE_REGULATORY, true, false) . '>' . __('Regulatory', 'cision-block') . '</option>';
+        $output .= '<option value="' . Settings::DISPLAY_MODE_NON_REGULATORY . '"' . selected($instance['view_mode'] === Settings::DISPLAY_MODE_NON_REGULATORY, true, false) . '>' . __('Non-regulatory', 'cision-block') . '</option>';
         $output .= '</select>';
         $output .= '</p>';
         $output .= '<p>';

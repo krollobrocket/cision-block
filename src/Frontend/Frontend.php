@@ -324,11 +324,12 @@ class Frontend extends Singleton
     }
 
     /**
-     * @return \CisionBlock\Config\Settings|Settings
+     * @return Settings
      */
     public static function getSettings()
     {
-        return self::$settings;
+        $settings = self::$settings ?: new Settings(self::SETTINGS_NAME);
+        return $settings;
     }
 
     /**
@@ -421,6 +422,7 @@ class Frontend extends Singleton
                     break;
                 case 'types':
                     if (is_string($value)) {
+                        // TODO: Make sure so this is correct.
                         $result[$mapping[$name]] = explode(',', str_replace(' ', '', $value));
                     } else {
                         $result[$mapping[$name]] = filter_var(
@@ -492,35 +494,35 @@ class Frontend extends Singleton
                         $value,
                         FILTER_SANITIZE_SPECIAL_CHARS
                     );
-                    $result[$mapping[$name]] = !empty($text) ? $text : Settings::DEFAULT_MARK_REGULATORY_TEXT;
+                    $result[$mapping[$name]] = $text ?: Settings::DEFAULT_MARK_REGULATORY_TEXT;
                     break;
                 case 'non_regulatory_text':
                     $text = filter_var(
                         $value,
                         FILTER_SANITIZE_SPECIAL_CHARS
                     );
-                    $result[$mapping[$name]] = !empty($text) ? $text : Settings::DEFAULT_MARK_NON_REGULATORY_TEXT;
+                    $result[$mapping[$name]] = $text ?: Settings::DEFAULT_MARK_NON_REGULATORY_TEXT;
                     break;
                 case 'filter_all_text':
                     $text = filter_var(
                         $value,
                         FILTER_SANITIZE_SPECIAL_CHARS
                     );
-                    $result[$mapping[$name]] = !empty($text) ? $text : Settings::DEFAULT_FILTER_ALL_TEXT;
+                    $result[$mapping[$name]] = $text ?: Settings::DEFAULT_FILTER_ALL_TEXT;
                     break;
                 case 'filter_regulatory_text':
                     $text = filter_var(
                         $value,
                         FILTER_SANITIZE_SPECIAL_CHARS
                     );
-                    $result[$mapping[$name]] = !empty($text) ? $text : Settings::DEFAULT_FILTER_REGULATORY_TEXT;
+                    $result[$mapping[$name]] = $text ?: Settings::DEFAULT_FILTER_REGULATORY_TEXT;
                     break;
                 case 'filter_non_regulatory_text':
                     $text = filter_var(
                         $value,
                         FILTER_SANITIZE_SPECIAL_CHARS
                     );
-                    $result[$mapping[$name]] = !empty($text) ? $text : Settings::DEFAULT_FILTER_NON_REGULATORY_TEXT;
+                    $result[$mapping[$name]] = $text ?: Settings::DEFAULT_FILTER_NON_REGULATORY_TEXT;
                     break;
                 case 'view':
                 case 'view_mode':
@@ -754,7 +756,7 @@ class Frontend extends Singleton
                 );
             }
         }
-        return ($data ? $data : array());
+        return ($data ?: array());
     }
 
     /**
@@ -793,6 +795,9 @@ class Frontend extends Singleton
                 );
             }
         } else {
+            // TODO: Why do we need do this
+            //  should not the user have this data available in the filter
+            //  and is not always Images set to an empty array?
             $release->Images = array();
         }
 
@@ -834,17 +839,13 @@ class Frontend extends Singleton
         $use_https = self::$settings->get('use_https');
         $language = self::$settings->get('language');
         $types = self::$settings->get('types');
-        if (self::$settings->get('categories') !== '') {
-            $categories = array_map('trim', explode(',', self::$settings->get('categories')));
-        } else {
-            $categories = array();
-        }
+        $categories = array_filter(array_map('trim', explode(',', self::$settings->get('categories'))));
         if (isset($feed->Releases) && count($feed->Releases)) {
             foreach ($feed->Releases as $release) {
-                if (!is_object($release) || in_array($release->InformationType, $types) == false) {
+                if (!is_object($release) || in_array($release->InformationType, $types) === false) {
                     continue;
                 }
-                if (!empty($language) && $release->LanguageCode != $language) {
+                if (!empty($language) && $release->LanguageCode !== $language) {
                     continue;
                 }
                 if (count($categories) && !$this->hasCategory($release, $categories)) {
@@ -858,6 +859,6 @@ class Frontend extends Singleton
             }
         }
 
-        return count($items) ? $items : null;
+        return $items ?: null;
     }
 }
