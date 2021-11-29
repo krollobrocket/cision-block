@@ -46,7 +46,7 @@
  */
 
 ?>
-<?php if (count($cision_feed)) : ?>
+<?php if ($cision_feed) : ?>
     <section data-block-id="<?php echo $id; ?>"<?php echo $wrapper_attributes; ?>>
     <?php echo $prefix; ?>
         <?php if ($show_filters) : ?>

@@ -422,7 +422,6 @@ class Frontend extends Singleton
                     break;
                 case 'types':
                     if (is_string($value)) {
-                        // TODO: Make sure so this is correct.
                         $result[$mapping[$name]] = explode(',', str_replace(' ', '', $value));
                     } else {
                         $result[$mapping[$name]] = filter_var(
@@ -561,7 +560,7 @@ class Frontend extends Singleton
                     break;
                 case 'flush':
                     if (filter_var($value, FILTER_VALIDATE_BOOLEAN)) {
-                        delete_transient(self::TRANSIENT_KEY . '_' . self::$current_block_id . '_' . ($widget_id ? $widget_id : $post->ID));
+                        delete_transient(self::TRANSIENT_KEY . '_' . self::$current_block_id . '_' . ($widget_id ?: $post->ID));
                     }
             }
         }
@@ -627,7 +626,7 @@ class Frontend extends Singleton
             'options' => array(
                 'date_format' => self::$settings->get('date_format'),
             )
-        ));
+        ), EXTR_SKIP);
 
         ob_start();
         $templates = array(
@@ -794,11 +793,6 @@ class Frontend extends Singleton
                     'Title' => sanitize_text_field($image->Title),
                 );
             }
-        } else {
-            // TODO: Why do we need do this
-            //  should not the user have this data available in the filter
-            //  and is not always Images set to an empty array?
-            $release->Images = array();
         }
 
         // Let user modify the data.
@@ -845,16 +839,16 @@ class Frontend extends Singleton
                 if (!is_object($release) || in_array($release->InformationType, $types) === false) {
                     continue;
                 }
-                if (!empty($language) && $release->LanguageCode !== $language) {
+                if ($language && $release->LanguageCode !== $language) {
                     continue;
                 }
-                if (count($categories) && !$this->hasCategory($release, $categories)) {
+                if ($categories && !$this->hasCategory($release, $categories)) {
                     continue;
                 }
                 $items[] = $this->mapFeedItem($release, $image_style, $use_https);
             }
 
-            if (count($items)) {
+            if ($items) {
                 $items = apply_filters('cision_block_sort', $items, self::$current_block_id);
             }
         }
