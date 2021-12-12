@@ -182,6 +182,7 @@ class Backend extends Singleton
                 <li><?php _e('Make changes to imported posts and mark them as locally modified.', 'cision-block'); ?></li>
                 <li><?php _e('Extension support.', 'cision-block'); ?></li>
                 <li><?php _e('Subscription module.', 'cision-block'); ?></li>
+                <li><?php _e('Shareholder module.', 'cision-block'); ?></li>
                 <li><?php _e('Ticker module.', 'cision-block'); ?></li>
                 <li><?php _e('Free support, installation and configuration help.', 'cision-block'); ?></li>
             </ul>
