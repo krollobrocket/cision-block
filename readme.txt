@@ -31,8 +31,9 @@ There is a **PRO** version of this plugin, which includes extended features. For
 - Use standard article template from your active theme.
 - Support to create, update and delete posts based on PUSH events sent from Cision.
 - Support to create, update and delete posts during CRON at configurable intervals.
-- Subscription support.
-- Basic ticker support.
+- Subscription module.
+- Ticker module.
+- Shareholder module.
 - Use normal or ajax based load more button for pagination.
 - Annual free support and quicker response times.
 - Discount for multisite licenses.
@@ -41,7 +42,6 @@ I usually have an initial meeting where I talk about the plugin, explain the dif
 
 There is also a backlog with features yet to be implemented on github, some of the tasks in the list includes:
 
-- Implement support to fetch and display extended ticker information.
 - Event module.
 - Pin feed items to top of list.
 - Import and export settings between environments.
