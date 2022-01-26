@@ -1,3 +1,6 @@
+= 2.6.0
+- Fixes a bug where the widget caused a crash when using elementor.
+
 = 2.5.0
 - Do not use constant for text domain.
 - Use disabled to set input attribute.

@@ -5,7 +5,7 @@ Tags: cision, feed, investor relation, press, stock, shortcode, widget, content
 Requires at least: 3.1.0
 Tested up to: 5.8
 Requires PHP: 5.6
-Stable tag: 2.6.0
+Stable tag: 2.7.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -42,12 +42,14 @@ I usually have an initial meeting where I talk about the plugin, explain the dif
 
 There is also a backlog with features yet to be implemented on github, some of the tasks in the list includes:
 
-- Event module.
 - Pin feed items to top of list.
 - Import and export settings between environments.
+- Event/Calendar module.
+- Graph module.
+- REST API.
+- Slideshow.
 - Preview functionality.
 - Disclaimer support.
-- Improved SEO.
 - Support for multiple templates.
 - Display estimated reading time for each feed item.
 - And much, much more.
@@ -383,8 +385,12 @@ This is something that is possible using the **Pro** version, since all news are
 1. A feed from cision with a pager at the bottom.
 2. Settings form.
 3. A single press release displayed in Wordpress.
+4. Ticker module. Available in the *Pro* version.
+5. Subscription module. Available in the *Pro* version.
+6. Shareholder module. Available in the *Pro* version.
 
 == Changelog ==
 
-= 2.6.0
-- Fixes a bug where the widget caused a crash when using elementor.
+= 2.7.0
+- Add missing global in article template.
+- Add option to toggle attachment in article.

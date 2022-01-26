@@ -150,6 +150,7 @@ class Frontend extends Singleton
     public function addTemplate()
     {
         global $CisionItem;
+        global $displayFiles;
         global $wp_query;
         if (get_query_var('cision_release_id')) {
             $release_id = get_query_var('cision_release_id');
@@ -177,6 +178,7 @@ class Frontend extends Singleton
                 return;
             }
 
+            $displayFiles = self::$settings->get('show_files', false);
             add_filter('template_include', function () {
                 $template = locate_template(array(
                     'cision-block-post.php',
@@ -363,6 +365,7 @@ class Frontend extends Singleton
             'use_https' => 'use_https',
             'image_style' => 'image_style',
             'show_excerpt' => 'show_excerpt',
+            'show_files' => 'show_files',
             'items_per_page' => 'items_per_page',
             'exclude_css' => 'exclude_css',
             'template' => 'template',
@@ -392,6 +395,7 @@ class Frontend extends Singleton
 
         $result = array(
             'show_excerpt' => $options->get('show_excerpt'),
+            'show_files' => $options->get('show_files'),
             'use_https' => $options->get('use_https'),
             'mark_regulatory' => $options->get('mark_regulatory'),
             'show_filters' => $options->get('show_filters'),
@@ -478,6 +482,7 @@ class Frontend extends Singleton
                     $result[$mapping[$name]] = trim(strtolower($result[$mapping[$name]]));
                     break;
                 case 'show_excerpt':
+                case 'show_files':
                 case 'mark_regulatory':
                 case 'use_https':
                 case 'internal_links':

@@ -5,6 +5,8 @@
  *
  * @var stdClass $CisionItem
  *   A feed item. A reference of all available fields can be found here: https://websolutions.ne.cision.com/documents/P2_Feed.pdf
+ * @var bool $displayFiles
+ *   Display any attachments connected to the release.
  *
  * @package Cision Block
  * @since 2.0.0
@@ -12,6 +14,9 @@
  */
 
 get_header();
+
+global $CisionItem;
+global $displayFiles;
 ?>
     <div class="wrap">
         <section id="primary" class="content-area">
@@ -24,6 +29,16 @@ get_header();
                     <div class="entry-content">
                         <?php echo $CisionItem->HtmlBody; ?>
                     </div><!-- .entry-content -->
+
+                    <?php if ($displayFiles): ?>
+                        <?php if (count($CisionItem->Files)) : ?>
+                            <ul class="attachments">
+                        <?php foreach ($CisionItem->Files as $file) : ?>
+                            <li><a href="<?php echo $file->Url; ?>"><?php echo $file->Description; ?><!-- $file->FileName --></a></li>
+                        <?php endforeach; ?>
+                            </ul>
+                        <?php endif; ?>
+                    <?php endif; ?>
                 </article>
             </main><!-- #main -->
         </section><!-- #primary -->

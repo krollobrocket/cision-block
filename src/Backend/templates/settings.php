@@ -200,6 +200,16 @@ $templates = get_page_templates();
             </tr>
             <tr>
                 <th scope="row">
+                    <label for="show_excerpt"><?php _e('Show files', 'cision-block'); ?></label>
+                </th>
+                <td>
+                    <input type="hidden" id="hidden_show_files" name="show_files" value="0" />
+                    <input type="checkbox" name="show_files"<?php checked($this->settings->get('show_files')); ?> />
+                    <p class="description"><?php _e('Display attachments on article page.', 'cision-block'); ?></p>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">
                     <label for="use_https"><?php _e('Use https', 'cision-block'); ?></label>
                 </th>
                 <td>
