@@ -24,7 +24,7 @@ abstract class Singleton
     /**
      * Singleton constructor.
      */
-    final private function __construct()
+    private function __construct()
     {
         $this->init();
     }
@@ -32,16 +32,18 @@ abstract class Singleton
     /**
      * Prevent instantiation.
      */
-    final private function __clone()
+    private function __clone()
     {
     }
 
     /**
-     * Singletons can not be unserialized.
+     * Prevent instantiation.
+     *
+     * @throws \Exception
      */
     final public function __wakeup()
     {
-        throw new \Exception('Cannot unserialize singleton');
+        throw new \Exception('Cannot unserialize a singleton');
     }
 
     protected function init()

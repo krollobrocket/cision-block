@@ -1,3 +1,7 @@
+= 2.7.0
+- Add missing global in article template.
+- Add option to toggle attachment in article.
+
 = 2.6.0
 - Fixes a bug where the widget caused a crash when using elementor.
 

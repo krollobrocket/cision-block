@@ -391,6 +391,5 @@ This is something that is possible using the **Pro** version, since all news are
 
 == Changelog ==
 
-= 2.7.0
-- Add missing global in article template.
-- Add option to toggle attachment in article.
+= 2.7.1
+- Add PHP 8.0 support.
