@@ -32,5 +32,10 @@
             ]
         }
     },
-    "minimum-stability": "stable"
+    "minimum-stability": "stable",
+    "config": {
+        "allow-plugins": {
+            "composer/installers": true
+        }
+    }
 }
