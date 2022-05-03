@@ -54,7 +54,7 @@ There is also a backlog with features yet to be implemented on github, some of t
 - Display estimated reading time for each feed item.
 - And much, much more.
 
-To get more information about the Pro version, send me an email at [cyclonecode@gmail.com](mailto:cyclonecode@gmail.com) or give me a call at +(46)-730334088.
+To get more information about the Pro version, send me an email at [cyclonecode@gmail.com](mailto:cyclonecode@gmail.com) or give me a call at +(46)-791026643.
 
 = Looking for help =
 
