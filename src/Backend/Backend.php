@@ -184,6 +184,7 @@ class Backend extends Singleton
                 <li><?php _e('Subscription module.', 'cision-block'); ?></li>
                 <li><?php _e('Shareholder module.', 'cision-block'); ?></li>
                 <li><?php _e('Ticker module.', 'cision-block'); ?></li>
+                <li><?php _e('Calendar module.', 'cision-block'); ?></li>
                 <li><?php _e('Free support, installation and configuration help.', 'cision-block'); ?></li>
             </ul>
         </div>
