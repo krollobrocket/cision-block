@@ -34,6 +34,9 @@ There is a **PRO** version of this plugin, which includes extended features. For
 - Subscription module.
 - Ticker module.
 - Shareholder module.
+- Calendar module.
+- Media module.
+- Insider module.
 - Use normal or ajax based load more button for pagination.
 - Annual free support and quicker response times.
 - Discount for multisite licenses.
@@ -44,7 +47,6 @@ There is also a backlog with features yet to be implemented on github, some of t
 
 - Pin feed items to top of list.
 - Import and export settings between environments.
-- Event/Calendar module.
 - Graph module.
 - REST API.
 - Slideshow.
@@ -388,6 +390,7 @@ This is something that is possible using the **Pro** version, since all news are
 4. Ticker module. Available in the *Pro* version.
 5. Subscription module. Available in the *Pro* version.
 6. Shareholder module. Available in the *Pro* version.
+7. Insider module. Available in the *Pro* version.
 
 == Changelog ==
 
