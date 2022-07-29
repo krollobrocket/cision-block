@@ -1,3 +1,6 @@
+= 2.7.2
+- Improve status page.
+
 = 2.7.1
 - Add PHP 8.0 support.
 

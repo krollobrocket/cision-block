@@ -2,7 +2,7 @@
 
 use CisionBlock\Settings\Settings;
 
-$templates = get_page_templates();
+$templates = get_page_templates(null, 'cision-block-post');
 ?>
 <div class="wrap">
     <?php do_action('cision_block_admin_notices'); ?>

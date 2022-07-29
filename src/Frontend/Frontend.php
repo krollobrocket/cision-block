@@ -747,6 +747,7 @@ class Frontend extends Singleton
                     'body' => $params,
                 ))->toJSON();
             } catch (\Exception $e) {
+                error_log('Cision Block :: Failed to fetch feed :: ' . $e->getMessage());
                 $response = null;
             }
             $data = ($response ? $this->mapSources($response) : null);

@@ -394,5 +394,8 @@ This is something that is possible using the **Pro** version, since all news are
 
 == Changelog ==
 
-= 2.7.2
-- Improve status page.
+= 2.7.3
+- Add post type for templates.
+- Throw valid exception in RemoteRequest.
+- Log error when failing to fetch feed.
+

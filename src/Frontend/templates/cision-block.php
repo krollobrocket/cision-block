@@ -2,6 +2,7 @@
 
 /**
  * Template name: Cision Block
+ * Template Post Type: cision-block-post
  *
  * Template used to display a feed from Cision.
  *
@@ -42,7 +43,7 @@
  *
  * @package Cision Block
  * @since   1.0
- * @version 2.5.0
+ * @version 2.7.2
  */
 
 ?>

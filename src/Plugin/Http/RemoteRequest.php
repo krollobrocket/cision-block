@@ -27,9 +27,11 @@ class RemoteRequest extends AbstractRequest
                 wp_remote_retrieve_response_code($response)
             );
         } else {
+            $code = wp_remote_retrieve_response_code($response);
+            /** \WP_Error $response */
             throw new \Exception(
-                wp_remote_retrieve_response_message($response),
-                wp_remote_retrieve_response_code($response)
+                $response->get_error_message(),
+                $code ? $code : 500
             );
         }
         return $result;
