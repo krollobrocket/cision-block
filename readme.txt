@@ -212,7 +212,14 @@ To create a new template, you can follow the steps as described in this link: [P
 
 For instance adding a file with the following header comment would create a new 'Foo' template:
 
-    <?php /* Template Name: Foo */ ?>
+    <?php
+    /**
+     * Template name: Foo
+     * Template Post Type: cision-block-post
+     *
+     * Template used to display a feed from Cision.
+     **/
+    ?>
 
 = Display single press releases in Wordpress =
 

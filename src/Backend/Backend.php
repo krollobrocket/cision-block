@@ -135,7 +135,7 @@ class Backend extends Singleton
             // TODO: Check so it is callable.
             if (!$note['dismissed'] || ($note['dismissed'] && !$note['persistent'] && time() - $note['time'] > 30 * 24 * 60 * 60)) {
                 ?>
-                <div id="note-<?php echo $note['id']; ?>" class="cision-block-notice notice-<?php echo $note['type']; ?> notice is-dismissible inline">
+                <div id="note-<?php echo $note['id']; ?>" class="cision-block-notice notice-<?php echo $note['type']; ?> notice<?php echo ($note['dismissible'] ? ' is-dismissible' : ''); ?> inline">
                 <?php echo call_user_func(array($this, $note['callback'])); ?>
                 </div>
                 <?php
@@ -190,7 +190,7 @@ class Backend extends Singleton
                 <li><?php _e('Free support, installation and configuration help.', 'cision-block'); ?></li>
             </ul>
         </div>
-        <p><?php echo sprintf(__('To get more information about the Pro version, please send me an email at <a href="mailto:cyclonecode@gmail.com?subject=%s" target="_blank" rel="noopener noreferrer">cyclonecode@gmail.com</a>, you can also contact me at my <a href="%s" target="_blank" rel="noopener noreferrer">slack channel</a>.', 'cision-block'), 'Cision%20Block%20Pro', 'https://join.slack.com/t/cyclonecode/shared_invite/zt-6bdtbdab-n9QaMLM~exHP19zFDPN~AQ'); ?></p>
+        <p><?php echo sprintf(__('To get more information about the Pro version, please send me an email at <a href="mailto:cyclonecode@gmail.com?subject=%s" target="_blank" rel="noopener noreferrer">cyclonecode@gmail.com</a> or give me a <a href="%s">call</a>, you can also contact me at my <a href="%s" target="_blank" rel="noopener noreferrer">slack channel</a>.', 'cision-block'), 'Cision%20Block%20Pro', 'tel:+46791026643', 'https://join.slack.com/t/cyclonecode/shared_invite/zt-6bdtbdab-n9QaMLM~exHP19zFDPN~AQ'); ?></p>
         <?php
     }
 
@@ -345,7 +345,7 @@ class Backend extends Singleton
                     'name' => 'support',
                     'callback' => 'addSupportNotice',
                     'dismissed' => true,
-                    'dismissible' => false,
+                    'dismissible' => true,
                 )
             );
             $notes = $this->settings->get('notes');
