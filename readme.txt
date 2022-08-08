@@ -405,4 +405,4 @@ This is something that is possible using the **Pro** version, since all news are
 - Add post type for templates.
 - Throw valid exception in RemoteRequest.
 - Log error when failing to fetch feed.
-
+- Check if notification should be dismissable or not.
