@@ -3,7 +3,7 @@ Contributors: cyclonecode
 Donate link: https://www.buymeacoffee.com/cyclonecode
 Tags: cision, feed, investor relation, press, stock, shortcode, widget, content
 Requires at least: 3.1.0
-Tested up to: 6.0.1
+Tested up to: 6.2
 Requires PHP: 5.6
 Stable tag: 2.7.2
 License: GPLv2 or later
@@ -42,6 +42,8 @@ There is a **PRO** version of this plugin, which includes extended features. For
 - Discount for multisite licenses.
 
 I usually have an initial meeting where I talk about the plugin, explain the different features and answer any questions.
+
+A demo site showing some of the modules can be found [here](https://dev-cision-block-pro.pantheonsite.io/).
 
 There is also a backlog with features yet to be implemented on github, some of the tasks in the list includes:
 
@@ -405,4 +407,4 @@ This is something that is possible using the **Pro** version, since all news are
 - Add post type for templates.
 - Throw valid exception in RemoteRequest.
 - Log error when failing to fetch feed.
-- Check if notification should be dismissable or not.
+- Check if notification should be dismissible or not.
