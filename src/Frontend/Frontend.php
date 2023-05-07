@@ -17,7 +17,7 @@ class Frontend extends Singleton
     const SETTINGS_NAME = 'cision_block_settings';
     const TRANSIENT_KEY = 'cision_block_data';
     const USER_AGENT = 'cision-block/' . self::VERSION;
-    const VERSION = '2.7.2';
+    const VERSION = '2.9.0';
 
     /**
      *
@@ -285,7 +285,7 @@ class Frontend extends Singleton
      */
     public function addQueryVars(array $vars)
     {
-        return array_merge($vars, array('cb_id', 'cb_page'));
+        return array_merge($vars, array('cb_id', 'cb_page', 'cb_filter'));
     }
 
     /**
@@ -298,13 +298,6 @@ class Frontend extends Singleton
             $this->getPluginUrl('css/cision-block.css'),
             array(),
             self::VERSION
-        );
-        wp_enqueue_script(
-            'cision-block',
-            $this->getPluginUrl('js/cision-block.js'),
-            array('jquery'),
-            self::VERSION,
-            true
         );
     }
 
@@ -594,6 +587,11 @@ class Frontend extends Singleton
             self::$settings->setFromArray($verified);
         }
 
+        if (get_query_var('cb_filter')) {
+            $viewMode = (int)get_query_var('cb_filter');
+            self::$settings->set('view_mode', $viewMode);
+        }
+
         // Add stylesheet.
         if (!self::$settings->get('exclude_css')) {
             wp_enqueue_style('cision-block');
@@ -724,8 +722,12 @@ class Frontend extends Singleton
         global $post;
         global $widget_id;
 
+        $args[] = 'f=' . get_query_var('cb_filter', '');
+        $args[] = 'p=' . get_query_var('cb_page', 1);
+        $args = implode('&', $args);
+
         // Try to get data from transient.
-        $cacheKey = self::TRANSIENT_KEY . '_' . self::$current_block_id . '_' . ($widget_id ? $widget_id : $post->ID);
+        $cacheKey = self::TRANSIENT_KEY . '_' . self::$current_block_id . '_' . ($widget_id ? $widget_id : $post->ID) . $args;
         $data = get_transient($cacheKey);
         if ($data === false) {
             $params = array(

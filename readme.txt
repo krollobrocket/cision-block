@@ -5,7 +5,7 @@ Tags: cision, feed, investor relation, press, stock, shortcode, widget, content
 Requires at least: 3.1.0
 Tested up to: 6.2
 Requires PHP: 5.6
-Stable tag: 2.7.2
+Stable tag: 2.9.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -403,8 +403,6 @@ This is something that is possible using the **Pro** version, since all news are
 
 == Changelog ==
 
-= 2.7.3
-- Add post type for templates.
-- Throw valid exception in RemoteRequest.
-- Log error when failing to fetch feed.
-- Check if notification should be dismissible or not.
+= 2.9.0
+
+- Fix caching issue with filters and pagination.

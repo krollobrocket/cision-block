@@ -55,21 +55,21 @@
                 <?php if ($filter_all_text !== '<none>') : ?>
                 <li>
                     <button class="all">
-                        <?php echo $filter_all_text; ?>
+                        <a href="?cb_id=<?php echo $id; ?>&cb_filter=1"><?php echo $filter_all_text; ?></a>
                     </button>
                 </li>
                 <?php endif; ?>
                 <?php if ($filter_regulatory_text !== '<none>') : ?>
                 <li>
                     <button class="regulatory">
-                        <?php echo $filter_regulatory_text; ?>
+                        <a href="?cb_id=<?php echo $id; ?>&cb_filter=2"><?php echo $filter_regulatory_text; ?></a>
                     </button>
                 </li>
                 <?php endif; ?>
                 <?php if ($filter_non_regulatory_text !== '<none>') : ?>
                 <li>
                     <button class="non-regulatory">
-                        <?php echo $filter_non_regulatory_text; ?>
+                        <a href="?cb_id=<?php echo $id; ?>&cb_filter=3"><?php echo $filter_non_regulatory_text; ?></a>
                     </button>
                 </li>
                 <?php endif; ?>

@@ -1,5 +1,12 @@
+= 2.8.0
+- Fix for filter buttons.
+
 = 2.7.2
 - Improve status page.
+- Add post type for templates.
+- Throw valid exception in RemoteRequest.
+- Log error when failing to fetch feed.
+- Check if notification should be dismissible or not.
 
 = 2.7.1
 - Add PHP 8.0 support.
