@@ -5,7 +5,7 @@ Tags: cision, feed, investor relation, press, stock, shortcode, widget, content
 Requires at least: 3.1.0
 Tested up to: 6.2
 Requires PHP: 5.6
-Stable tag: 2.9.0
+Stable tag: 2.9.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -403,6 +403,8 @@ This is something that is possible using the **Pro** version, since all news are
 
 == Changelog ==
 
-= 2.9.0
+= 2.9.1
 
-- Fix caching issue with filters and pagination.
+- Fix unique cache key depending on shortcode arguments.
+- Add WPML string translations.
+- Fix deprecation warning for PHP 8.1.

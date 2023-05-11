@@ -48,6 +48,16 @@ class Backend extends Singleton
         $this->checkForUpdate();
         $this->setTabs();
 
+        // WPML
+        if (has_action('wpml_register_single_string')) {
+            do_action('wpml_register_single_string', 'cision-block', 'Read More Button Text', $this->settings->get('readmore'));
+            do_action('wpml_register_single_string', 'cision-block', 'All Filter Button Text', $this->settings->get('filter_all_text'));
+            do_action('wpml_register_single_string', 'cision-block', 'Non-regulatory Filter Button Text', $this->settings->get('filter_non_regulatory_text'));
+            do_action('wpml_register_single_string', 'cision-block', 'Regulatory Filter Button Text', $this->settings->get('filter_regulatory_text'));
+            do_action('wpml_register_single_string', 'cision-block', 'Text For Non-regulatory Releases', $this->settings->get('non_regulatory_text'));
+            do_action('wpml_register_single_string', 'cision-block', 'Text For Regulatory Releases', $this->settings->get('regulatory_text'));
+        }
+
         // Setup widget.
         $this->widget = new Widget();
     }
@@ -449,17 +459,17 @@ class Backend extends Singleton
         $settings = Frontend::verifySettings($_POST, $this->settings);
 
         // Check if settings form is submitted.
-        if (filter_input(INPUT_POST, 'cision-block-settings', FILTER_SANITIZE_STRING)) {
+        if (filter_input(INPUT_POST, 'cision-block-settings', FILTER_UNSAFE_RAW)) {
             $tab = 'settings';
         }
         // Check if settings form is submitted.
-        if (filter_input(INPUT_POST, 'cision-block-permalinks', FILTER_SANITIZE_STRING)) {
+        if (filter_input(INPUT_POST, 'cision-block-permalinks', FILTER_UNSAFE_RAW)) {
             // Make sure we flush the rewrite rules.
             set_transient('cision_block_flush_rewrite_rules', 1);
             $tab = 'permalinks';
         }
         // Check if settings form is submitted.
-        if (filter_input(INPUT_POST, 'cision-block-filters', FILTER_SANITIZE_STRING)) {
+        if (filter_input(INPUT_POST, 'cision-block-filters', FILTER_UNSAFE_RAW)) {
             $tab = 'filters';
         }
         $this->settings

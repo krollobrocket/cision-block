@@ -26,6 +26,9 @@ class Widget extends \CisionBlock\Plugin\Widget\Widget
      */
     public function render($instance)
     {
+        if (!$instance) {
+            return;
+        }
         $args = array(
             'source_uid' => $instance['source'],
             'count' => $instance['count'],

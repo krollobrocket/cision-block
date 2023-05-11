@@ -334,49 +334,37 @@ class Settings implements \IteratorAggregate, \Countable, \ArrayAccess
         return $this;
     }
 
-    /**
-     * @inheritdoc
-     */
+    #[\ReturnTypeWillChange]
     public function getIterator()
     {
         return new \ArrayIterator($this->settings);
     }
 
-    /**
-     * @inheritdoc
-     */
+    #[\ReturnTypeWillChange]
     public function count()
     {
         return count($this->settings);
     }
 
-    /**
-     * @inheritdoc
-     */
+    #[\ReturnTypeWillChange]
     public function offsetExists($offset)
     {
         return $this->__isset($offset);
     }
 
-    /**
-     * @inheritdoc
-     */
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->__get($offset);
     }
 
-    /**
-     * @inheritdoc
-     */
+    #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
         $this->__set($offset, $value);
     }
 
-    /**
-     * @inheritdoc
-     */
+    #[\ReturnTypeWillChange]
     public function offsetUnset($offset)
     {
         $this->remove($offset);

@@ -17,7 +17,7 @@ class Frontend extends Singleton
     const SETTINGS_NAME = 'cision_block_settings';
     const TRANSIENT_KEY = 'cision_block_data';
     const USER_AGENT = 'cision-block/' . self::VERSION;
-    const VERSION = '2.9.0';
+    const VERSION = '2.9.1';
 
     /**
      *
@@ -423,7 +423,7 @@ class Frontend extends Singleton
                     } else {
                         $result[$mapping[$name]] = filter_var(
                             $value,
-                            FILTER_SANITIZE_STRING,
+                            FILTER_UNSAFE_RAW,
                             FILTER_REQUIRE_ARRAY
                         );
                     }
@@ -432,7 +432,7 @@ class Frontend extends Singleton
                     include_once ABSPATH . '/wp-admin/includes/theme.php';
                     $template = filter_var(
                         $value,
-                        FILTER_SANITIZE_STRING
+                        FILTER_UNSAFE_RAW
                     );
                     $templates = get_page_templates();
                     if (array_search($template, $templates) !== false) {
@@ -457,20 +457,20 @@ class Frontend extends Singleton
                 case 'base_slug':
                     $result[$mapping[$name]] = filter_var(
                         $value,
-                        FILTER_SANITIZE_STRING
+                        FILTER_UNSAFE_RAW
                     );
                     break;
                 case 'language':
                     $result[$mapping[$name]] = filter_var(
                         $value,
-                        FILTER_SANITIZE_STRING
+                        FILTER_UNSAFE_RAW
                     );
                     $result[$mapping[$name]] = strtolower($result[$mapping[$name]]);
                     break;
                 case 'categories':
                     $result[$mapping[$name]] = filter_var(
                         $value,
-                        FILTER_SANITIZE_STRING
+                        FILTER_UNSAFE_RAW
                     );
                     $result[$mapping[$name]] = trim(strtolower($result[$mapping[$name]]));
                     break;
@@ -567,6 +567,19 @@ class Frontend extends Singleton
     }
 
     /**
+     * @return string
+     */
+    protected function getCacheKey()
+    {
+        global $post;
+        global $widget_id;
+        $settings = self::$settings->toOptionsArray();
+        unset($settings['base_slug'], $settings['version'], $settings['notes']);
+        $settings['id'] = self::$current_block_id . '_' . ($widget_id ? $widget_id : $post->ID);
+        return md5(\json_encode($settings));
+    }
+
+    /**
      * Returns the generated markup for the feed.
      *
      * @param mixed $atts
@@ -600,20 +613,36 @@ class Frontend extends Singleton
         $feed_items = $this->getFeed();
         $pager = $this->getPagination($feed_items);
 
+        // Handle translations.
+        $readMore = self::$settings->get('readmore');
+        $regulatoryText = self::$settings->get('regulatory_text');
+        $nonRegulatoryText = self::$settings->get('non_regulatory_text');
+        $filterAllText = self::$settings->get('filter_all_text');
+        $filterRegulatoryText = self::$settings->get('filter_regulatory_text');
+        $filterNonRegulatoryText = self::$settings->get('filter_non_regulatory_text');
+        if (has_filter('wpml_translate_single_string')) {
+            $readMore =  apply_filters('wpml_translate_single_string', self::$settings->get('readmore'), 'cision-block', 'Read More Button Text');
+            $regulatoryText =  apply_filters('wpml_translate_single_string', self::$settings->get('regulatory_text'), 'cision-block', 'Text For Regulatory Releases');
+            $nonRegulatoryText = apply_filters('wpml_translate_single_string', self::$settings->get('non_regulatory_text'), 'cision-block', 'Text For Non-regulatory Releases');
+            $filterAllText =  apply_filters('wpml_translate_single_string', self::$settings->get('filter_all_text'), 'cision-block', 'All Filter Button Text');
+            $filterRegulatoryText =  apply_filters('wpml_translate_single_string', self::$settings->get('filter_regulatory_text'), 'cision-block', 'Regulatory Filter Button Text');
+            $filterNonRegulatoryText = apply_filters('wpml_translate_single_string', self::$settings->get('filter_non_regulatory_text'), 'cision-block', 'Non-regulatory Filter Button Text');
+        }
+
         // Add variables to symbol table.
         extract(array(
             'cision_feed' => $feed_items,
             'pager' => $pager,
             'id' => self::$current_block_id,
-            'readmore' => self::$settings->get('readmore'),
+            'readmore' => $readMore,
             'mark_regulatory' => self::$settings->get('mark_regulatory'),
-            'regulatory_text' => htmlspecialchars_decode(self::$settings->get('regulatory_text')),
-            'non_regulatory_text' => htmlspecialchars_decode(self::$settings->get('non_regulatory_text')),
+            'regulatory_text' => htmlspecialchars_decode($regulatoryText),
+            'non_regulatory_text' => htmlspecialchars_decode($nonRegulatoryText),
             'show_filters' => self::$settings->get('show_filters'),
             'show_excerpt' => self::$settings->get('show_excerpt'),
-            'filter_all_text' => htmlspecialchars_decode(self::$settings->get('filter_all_text')),
-            'filter_regulatory_text' => htmlspecialchars_decode(self::$settings->get('filter_regulatory_text')),
-            'filter_non_regulatory_text' => htmlspecialchars_decode(self::$settings->get('filter_non_regulatory_text')),
+            'filter_all_text' => htmlspecialchars_decode($filterAllText),
+            'filter_regulatory_text' => htmlspecialchars_decode($filterRegulatoryText),
+            'filter_non_regulatory_text' => htmlspecialchars_decode($filterNonRegulatoryText),
             'prefix' => apply_filters('cision_block_prefix', '', self::$current_block_id),
             'suffix' => apply_filters('cision_block_suffix', '', self::$current_block_id),
             'attributes' => $this->parseAttributes(apply_filters('cision_block_media_attributes', array(
@@ -719,15 +748,8 @@ class Frontend extends Singleton
      */
     protected function getFeed()
     {
-        global $post;
-        global $widget_id;
-
-        $args[] = 'f=' . get_query_var('cb_filter', '');
-        $args[] = 'p=' . get_query_var('cb_page', 1);
-        $args = implode('&', $args);
-
         // Try to get data from transient.
-        $cacheKey = self::TRANSIENT_KEY . '_' . self::$current_block_id . '_' . ($widget_id ? $widget_id : $post->ID) . $args;
+        $cacheKey = self::TRANSIENT_KEY . '_' . $this->getCacheKey();
         $data = get_transient($cacheKey);
         if ($data === false) {
             $params = array(

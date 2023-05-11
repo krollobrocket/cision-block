@@ -1,3 +1,7 @@
+= 2.9.0
+
+- Fix caching issue with filters and pagination.
+
 = 2.8.0
 - Fix for filter buttons.
 
