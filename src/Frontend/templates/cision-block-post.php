@@ -17,6 +17,7 @@ get_header();
 
 global $CisionItem;
 global $displayFiles;
+global $attachmentField;
 ?>
     <div class="wrap">
         <section id="primary" class="content-area">
@@ -34,7 +35,7 @@ global $displayFiles;
                         <?php if (count($CisionItem->Files)) : ?>
                             <ul class="attachments">
                         <?php foreach ($CisionItem->Files as $file) : ?>
-                            <li><a href="<?php echo $file->Url; ?>"><?php echo $file->Description; ?><!-- $file->FileName --></a></li>
+                            <li><a href="<?php echo $file->Url; ?>"><?php echo $file->{$attachmentField}; ?></a></li>
                         <?php endforeach; ?>
                             </ul>
                         <?php endif; ?>

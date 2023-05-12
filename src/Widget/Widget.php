@@ -40,7 +40,7 @@ class Widget extends \CisionBlock\Plugin\Widget\Widget
             'start' => $instance['start_date'],
             'end' => $instance['end_date'],
             'image_style' => $instance['image_style'],
-            'show_excerpt' => $instance['show_excerpt'] ?: true,
+            'show_excerpt' => $instance['show_excerpt'],
             'language' => $instance['language'],
             'readmore' => $instance['readmore'] ?: null,
             'date_format' => $instance['date_format'],
@@ -147,7 +147,8 @@ class Widget extends \CisionBlock\Plugin\Widget\Widget
         $output .= '</p>';
         $output .= '<p>';
         $output .= '<label for="' . $this->get_field_id('mark_regulatory') . '">' . __('Show regulatory/non-regulatory', 'cision-block') . ': </label>';
-        $output .= '<input type="checkbox" name="' . $this->get_field_name('mark_regulatory') . '"' . checked($instance['mark_regulatory'], true, false) . '" />';
+        $output .= '<input type="hidden" name="' . $this->get_field_name('mark_regulatory') . '" value="off" />';
+        $output .= '<input type="checkbox" name="' . $this->get_field_name('mark_regulatory') . '"' . checked($instance['mark_regulatory'], true, false) . ' />';
         $output .= '</p>';
         $output .= '<p>';
         $output .= '<label for="' . $this->get_field_id('regulatory_text') . '">' . __('Regulatory item text', 'cision-block') . ': </label>';
@@ -159,7 +160,8 @@ class Widget extends \CisionBlock\Plugin\Widget\Widget
         $output .= '</p>';
         $output .= '<p>';
         $output .= '<label for="' . $this->get_field_id('show_filters') . '">' . __('Show filters', 'cision-block') . ': </label>';
-        $output .= '<input type="checkbox" name="' . $this->get_field_name('show_filters') . '"' . checked($instance['show_filters'], true, false) . '" />';
+        $output .= '<input type="hidden" name="' . $this->get_field_name('show_filters') . '" value="off" />';
+        $output .= '<input type="checkbox" name="' . $this->get_field_name('show_filters') . '"' . checked($instance['show_filters'], true, false) . ' />';
         $output .= '</p>';
         $output .= '<p>';
         $output .= '<label for="' . $this->get_field_id('filter_all_text') . '">' . __('All item filter text', 'cision-block') . ': </label>';
@@ -214,7 +216,8 @@ class Widget extends \CisionBlock\Plugin\Widget\Widget
         $output .= '</p>';
         $output .= '<p>';
         $output .= '<label for="' . $this->get_field_id('show_excerpt') . '">' . __('Show excerpt', 'cision-block') . ': <label>';
-        $output .= '<input type="checkbox" name="' . $this->get_field_name('show_excerpt') . '"' . checked($instance['show_excerpt'], true, false) . '" />';
+        $output .= '<input type="hidden" name="' . $this->get_field_name('show_excerpt') . '" value="off" />';
+        $output .= '<input type="checkbox" name="' . $this->get_field_name('show_excerpt') . '"' . checked($instance['show_excerpt'], true, false) . ' />';
         $output .= '</p>';
         $output .= '<p>';
         $output .= '<label for="' . $this->get_field_id('cache_expire') . '">' . __('Cache lifetime', 'cision-block') . ': </label>';

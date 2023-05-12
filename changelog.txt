@@ -1,5 +1,9 @@
-= 2.9.0
+= 2.9.1
+- Fix unique cache key depending on shortcode arguments.
+- Add WPML string translations.
+- Fix deprecation warning for PHP 8.1.
 
+= 2.9.0
 - Fix caching issue with filters and pagination.
 
 = 2.8.0

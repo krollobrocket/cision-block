@@ -403,8 +403,7 @@ This is something that is possible using the **Pro** version, since all news are
 
 == Changelog ==
 
-= 2.9.1
+= 2.9.2
 
-- Fix unique cache key depending on shortcode arguments.
-- Add WPML string translations.
-- Fix deprecation warning for PHP 8.1.
+- Fix bug in widget were some settings never were saved.
+- Add setting for attachment labels.

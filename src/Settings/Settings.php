@@ -54,6 +54,8 @@ class Settings extends \CisionBlock\Plugin\Settings\Settings
         'view_mode' => self::DEFAULT_DISPLAY_MODE,
         'language' => '',
         'readmore' => self::DEFAULT_READ_MORE_TEXT,
+        'show_files' => false,
+        'attachment_field' => 'FileName',
         'items_per_page' => self::DEFAULT_ITEMS_PER_PAGE,
         'cache_expire' => self::DEFAULT_CACHE_LIFETIME,
         'types' => array(self::DEFAULT_FEED_TYPE),

@@ -210,6 +210,19 @@ $templates = get_page_templates(null, 'cision-block-post');
             </tr>
             <tr>
                 <th scope="row">
+                    <label for="attachment_field"><?php _e('Attachment field', 'cision-block'); ?></label>
+                </th>
+                <td>
+                    <select name="attachment_field">
+                        <option value="Description"<?php selected($this->settings->get('attachment_field') == 'Description'); ?>><?php _e('Description', 'cision-block'); ?></option>
+                        <option value="FileName"<?php selected($this->settings->get('attachment_field') == 'FileName'); ?>><?php _e('FileName', 'cision-block'); ?></option>
+                        <option value="Title"<?php selected($this->settings->get('attachment_field') == 'Title'); ?>><?php _e('Title', 'cision-block'); ?></option>
+                    </select>
+                    <p class="description"><?php _e('The field to use for attachment labels.', 'cision-block'); ?></p>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">
                     <label for="use_https"><?php _e('Use https', 'cision-block'); ?></label>
                 </th>
                 <td>

@@ -151,6 +151,7 @@ class Frontend extends Singleton
     {
         global $CisionItem;
         global $displayFiles;
+        global $attachmentField;
         global $wp_query;
         if (get_query_var('cision_release_id')) {
             $release_id = get_query_var('cision_release_id');
@@ -179,6 +180,7 @@ class Frontend extends Singleton
             }
 
             $displayFiles = self::$settings->get('show_files', false);
+            $attachmentField = self::$settings->get('attachment_field', 'FileName');
             add_filter('template_include', function () {
                 $template = locate_template(array(
                     'cision-block-post.php',
@@ -359,6 +361,7 @@ class Frontend extends Singleton
             'image_style' => 'image_style',
             'show_excerpt' => 'show_excerpt',
             'show_files' => 'show_files',
+            'attachment_field' => 'attachment_field',
             'items_per_page' => 'items_per_page',
             'exclude_css' => 'exclude_css',
             'template' => 'template',
@@ -455,6 +458,7 @@ class Frontend extends Singleton
                 case 'search_term':
                 case 'image_style':
                 case 'base_slug':
+                case 'attachment_field':
                     $result[$mapping[$name]] = filter_var(
                         $value,
                         FILTER_UNSAFE_RAW
