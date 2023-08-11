@@ -215,6 +215,7 @@ class Frontend extends Singleton
      */
     protected function addActions()
     {
+        add_action('init', array($this, 'addRewriteRules'));
         add_action('wp_enqueue_scripts', array($this, 'addStyles'));
         add_action('post_updated', array($this, 'postUpdated'), 10, 3);
         add_action('template_redirect', array($this, 'addTemplate'));
@@ -254,6 +255,22 @@ class Frontend extends Singleton
             'INB' => __('Invitation', 'cision-block'),
             'NBR' => __('Newsletter', 'cision-block'),
         );
+    }
+
+    public function addRewriteRules()
+    {
+        // Flush rewrite rules if needed.
+        if (get_transient('cision_block_flush_rewrite_rules')) {
+            if (self::$settings->get('internal_links')) {
+                add_rewrite_endpoint(
+                    self::$settings->get('base_slug'),
+                    EP_ROOT,
+                    'cision_release_id'
+                );
+            }
+            flush_rewrite_rules();
+            delete_transient('cision_block_flush_rewrite_rules');
+        }
     }
 
     /**

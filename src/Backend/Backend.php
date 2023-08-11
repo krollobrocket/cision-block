@@ -75,29 +75,12 @@ class Backend extends Singleton
      */
     public function addActions()
     {
-        add_action('admin_init', array($this, 'addRewriteRules'));
         add_action('admin_menu', array($this, 'addMenu'));
         add_action('in_admin_header', array($this, 'addHeader'));
         add_action('admin_post_cision_block_save_settings', array($this, 'saveSettings'));
         add_action('admin_enqueue_scripts', array($this, 'registerStyles'));
         add_action('cision_block_admin_notices', array($this, 'renderNotices'));
         add_action('wp_ajax_cision_block_dismiss_notice', array($this, 'doDismissNotice'));
-    }
-
-    public function addRewriteRules()
-    {
-        // Flush rewrite rules if needed.
-        if (get_transient('cision_block_flush_rewrite_rules')) {
-            if ($this->settings->get('internal_links')) {
-                add_rewrite_endpoint(
-                    $this->settings->get('base_slug'),
-                    EP_ROOT,
-                    'cision_release_id'
-                );
-            }
-            flush_rewrite_rules();
-            delete_transient('cision_block_flush_rewrite_rules');
-        }
     }
 
     /**
