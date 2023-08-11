@@ -10,7 +10,7 @@
  *
  * @package Cision Block
  * @since 2.0.0
- * @version 2.5.0
+ * @version 2.9.2
  */
 
 get_header();
@@ -31,12 +31,12 @@ global $attachmentField;
                         <?php echo $CisionItem->HtmlBody; ?>
                     </div><!-- .entry-content -->
 
-                    <?php if ($displayFiles): ?>
+                    <?php if ($displayFiles) : ?>
                         <?php if (count($CisionItem->Files)) : ?>
                             <ul class="attachments">
-                        <?php foreach ($CisionItem->Files as $file) : ?>
-                            <li><a href="<?php echo $file->Url; ?>"><?php echo $file->{$attachmentField}; ?></a></li>
-                        <?php endforeach; ?>
+                            <?php foreach ($CisionItem->Files as $file) : ?>
+                                <li><a href="<?php echo $file->Url; ?>"><?php echo $file->{$attachmentField}; ?></a></li>
+                            <?php endforeach; ?>
                             </ul>
                         <?php endif; ?>
                     <?php endif; ?>

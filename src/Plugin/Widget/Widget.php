@@ -5,13 +5,18 @@ namespace CisionBlock\Plugin\Widget;
 abstract class Widget extends \WP_Widget
 {
     /**
+     * @var string
+     */
+    protected $description;
+
+    /**
      * Constructor.
      */
     public function __construct()
     {
         parent::__construct(
+            $this->id_base,
             $this->name,
-            $this->title,
             array(
                 'description' => $this->description,
             )
@@ -19,6 +24,12 @@ abstract class Widget extends \WP_Widget
 
         $this->register();
     }
+
+    /**
+     * @param array $instance
+     * @return mixed
+     */
+    abstract public function render(array $instance);
 
     /**
      * Register the widget.
@@ -41,10 +52,10 @@ abstract class Widget extends \WP_Widget
         /**
          * Add arguments to widget.
          *
-         * @var string $before_widget
-         * @var string $before_title
-         * @var string $after_title
-         * @var string $after_widget
+         * @var $before_widget string
+         * @var $before_title string
+         * @var $after_title string
+         * @var $after_widget string
          */
         extract($args);
 

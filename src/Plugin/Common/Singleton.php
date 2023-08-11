@@ -24,7 +24,7 @@ abstract class Singleton
     /**
      * Singleton constructor.
      */
-    private function __construct()
+    final private function __construct()
     {
         $this->init();
     }

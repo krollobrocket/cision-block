@@ -63,10 +63,19 @@ class Backend extends Singleton
     }
 
     /**
+     * @return Widget
+     */
+    public function getWidget(): Widget
+    {
+        return $this->widget;
+    }
+
+    /**
      * Add actions.
      */
     public function addActions()
     {
+        add_action('admin_init', array($this, 'addRewriteRules'));
         add_action('admin_menu', array($this, 'addMenu'));
         add_action('in_admin_header', array($this, 'addHeader'));
         add_action('admin_post_cision_block_save_settings', array($this, 'saveSettings'));
@@ -75,13 +84,29 @@ class Backend extends Singleton
         add_action('wp_ajax_cision_block_dismiss_notice', array($this, 'doDismissNotice'));
     }
 
+    public function addRewriteRules()
+    {
+        // Flush rewrite rules if needed.
+        if (get_transient('cision_block_flush_rewrite_rules')) {
+            if ($this->settings->get('internal_links')) {
+                add_rewrite_endpoint(
+                    $this->settings->get('base_slug'),
+                    EP_ROOT,
+                    'cision_release_id'
+                );
+            }
+            flush_rewrite_rules();
+            delete_transient('cision_block_flush_rewrite_rules');
+        }
+    }
+
     /**
      * Add filters.
      */
     public function addFilters()
     {
         add_filter('plugin_action_links', array($this, 'addActionLinks'), 10, 2);
-        add_filter('plugin_row_meta', array($this, 'filterPluginRowMeta'), 10, 4);
+        add_filter('plugin_row_meta', array($this, 'filterPluginRowMeta'), 10, 2);
     }
 
     /**
@@ -102,6 +127,7 @@ class Backend extends Singleton
                 return true;
             }
         }
+        return false;
     }
 
     /**
@@ -122,6 +148,7 @@ class Backend extends Singleton
                 return true;
             }
         }
+        return false;
     }
 
     /**
@@ -417,8 +444,6 @@ class Backend extends Singleton
 
     /**
      * Registers styles and scripts.
-     *
-     * @return bool
      */
     public function registerStyles()
     {
@@ -442,8 +467,6 @@ class Backend extends Singleton
 
     /**
      * Handle form data for configuration pages.
-     *
-     * @return bool
      */
     public function saveSettings()
     {

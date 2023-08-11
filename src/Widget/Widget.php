@@ -13,18 +13,16 @@ class Widget extends \CisionBlock\Plugin\Widget\Widget
      */
     public function __construct()
     {
-        $this->name = 'cision_block_widget';
+        $this->id_base = 'cision_block_widget';
         $this->description = __('Display pressreleases from cision.', 'cision-block');
-        $this->title = __('Cision Block', 'cision-block');
+        $this->name = __('Cision Block', 'cision-block');
         parent::__construct();
     }
 
     /**
-     * Render the widget content.
-     *
-     * @param array $instance
+     * @inheridoc
      */
-    public function render($instance)
+    public function render(array $instance)
     {
         if (!$instance) {
             return;
@@ -224,6 +222,7 @@ class Widget extends \CisionBlock\Plugin\Widget\Widget
         $output .= '<input class="tiny-text" type="number" min="0" name="' . $this->get_field_name('cache_expire') . '" value="' . $instance['cache_expire'] . '" />';
         $output .= '</p>';
         echo $output;
+        return 'form';
     }
 
     /**

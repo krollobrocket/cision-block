@@ -30,14 +30,14 @@
  *   An array of all feed items.
  * @var string $pager
  *   Markup for pager.
- * @var array $wrapper_attributes
- *   Array of attributes for wrapper element.
+ * @var string $wrapper_attributes
+ *   Attributes for wrapper element.
  * @var string $prefix
  *   String prefix to add to start of wrapper.
  * @var string $suffix
  *   String suffix to add to end of wrapper.
- * @var array $attributes
- *   Array of attributes for article wrapper element.
+ * @var string $attributes
+ *   Attributes for article wrapper element.
  * @var array $options
  *   Array of options.
  *
@@ -82,7 +82,6 @@
             <?php if ($mark_regulatory && (($item->IsRegulatory && $regulatory_text !== '<none>') || (!$item->IsRegulatory && $non_regulatory_text !== '<none>'))) : ?>
             <span class="cision-feed-regulatory"><?php echo $item->IsRegulatory ? $regulatory_text : $non_regulatory_text; ?></span>
             <?php endif; ?>
-            <p>
             <?php if (isset($item->Images[0])) : ?>
             <span class="cision-feed-item-media">
             <img
@@ -93,10 +92,11 @@
             </span>
             <?php endif; ?>
             <?php if ($show_excerpt) : ?>
+            <p>
                 <?php echo wp_trim_words(esc_html($item->Intro ?: $item->Body)); ?>
-            <?php endif; ?>
             </p>
-            <?php if (isset($item->CisionWireUrl, $readmore)) : ?>
+            <?php endif; ?>
+            <?php if (isset($item->CisionWireUrl, $item->LinkTarget) && $readmore) : ?>
             <a
                     href="<?php echo esc_url($item->CisionWireUrl); ?>"
                     target="<?php echo $item->LinkTarget; ?>"
@@ -108,4 +108,3 @@
     <?php echo $suffix; ?>
     </section>
 <?php endif; ?>
-

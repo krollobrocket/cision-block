@@ -2,7 +2,7 @@
 
 namespace CisionBlock\Plugin\Http;
 
-abstract class AbstractResponse implements ResponseInterface
+abstract class AbstractResponse implements ResponseInterface, \JsonSerializable
 {
     /** @var array */
     private $headers;
@@ -16,7 +16,7 @@ abstract class AbstractResponse implements ResponseInterface
     public function __construct($body, $headers, $httpCode)
     {
         $this->body = $body;
-        $this->headers = $headers;
+        $this->headers = array_change_key_case($headers);
         $this->httpCode = $httpCode;
     }
 
@@ -27,6 +27,7 @@ abstract class AbstractResponse implements ResponseInterface
 
     public function getHeader($name)
     {
+        $name = strtolower($name);
         return isset($this->headers[$name]) ? $this->headers[$name] : null;
     }
 
@@ -43,5 +44,11 @@ abstract class AbstractResponse implements ResponseInterface
     public function getHttpCode()
     {
         return $this->httpCode;
+    }
+
+    #[\ReturnTypeWillChange]
+    public function jsonSerialize()
+    {
+        return $this->body;
     }
 }

@@ -21,13 +21,13 @@ class Frontend extends Singleton
 
     /**
      *
-     * @var Settings
+     * @var Settings|null
      */
     private static $settings;
 
     /**
      *
-     * @var RemoteRequest
+     * @var RemoteRequest|null
      */
     private $request;
 
@@ -198,25 +198,6 @@ class Frontend extends Singleton
     }
 
     /**
-     * Add rewrite rules.
-     */
-    public function addRewriteRules()
-    {
-        if (self::$settings->get('internal_links')) {
-            add_rewrite_endpoint(
-                self::$settings->get('base_slug'),
-                EP_ROOT,
-                'cision_release_id'
-            );
-        }
-        // Flush rewrite rules if needed.
-        if (get_transient('cision_block_flush_rewrite_rules')) {
-            flush_rewrite_rules();
-            delete_transient('cision_block_flush_rewrite_rules');
-        }
-    }
-
-    /**
      * Triggered when a post is updated.
      *
      * @param int $post_ID
@@ -236,7 +217,6 @@ class Frontend extends Singleton
     {
         add_action('wp_enqueue_scripts', array($this, 'addStyles'));
         add_action('post_updated', array($this, 'postUpdated'), 10, 3);
-        add_action('init', array($this, 'addRewriteRules'));
         add_action('template_redirect', array($this, 'addTemplate'));
         add_action('after_setup_theme', array($this, 'setTheme'));
     }
@@ -247,7 +227,7 @@ class Frontend extends Singleton
     protected function addFilters()
     {
         add_filter('query_vars', array($this, 'addQueryVars'), 10);
-        add_filter('pre_get_document_title', array($this, 'setTitle'), 10, 2);
+        add_filter('pre_get_document_title', array($this, 'setTitle'), 10);
     }
 
     /**
