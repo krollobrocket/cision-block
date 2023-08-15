@@ -318,7 +318,7 @@ class Backend extends Singleton
      */
     protected function checkForUpdate()
     {
-        if (version_compare($this->settings->get('version'), Frontend::VERSION, '<')) {
+        if (version_compare($this->settings->get('version') ?: Frontend::VERSION, Frontend::VERSION, '<')) {
             // Rename old settings field.
             $this->settings->rename('source', 'source_uid');
 

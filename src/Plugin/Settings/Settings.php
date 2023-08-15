@@ -276,7 +276,7 @@ class Settings implements \IteratorAggregate, \Countable, \ArrayAccess
      */
     public function load()
     {
-        $this->settings = get_option($this->optionName);
+        $this->settings = get_option($this->optionName, []);
         return $this;
     }
 

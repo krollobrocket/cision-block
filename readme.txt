@@ -3,9 +3,9 @@ Contributors: cyclonecode
 Donate link: https://www.buymeacoffee.com/cyclonecode
 Tags: cision, feed, investor relation, press, stock, shortcode, widget, content
 Requires at least: 3.1.0
-Tested up to: 6.2
+Tested up to: 6.3
 Requires PHP: 5.6
-Stable tag: 2.9.1
+Stable tag: 2.9.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -24,22 +24,22 @@ If you have questions or perhaps some idea on things that should be added you ca
 
 There is a **PRO** version of this plugin, which includes extended features. For instance:
 
-- Support to fetch entire feed and not only the last 100 entries.
-- Custom post types. Creates a post for each item in Wordpress. This means that all news have standard Wordpress links.
-- Manually created posts can be added to the feed.
-- Custom taxonomies for categories and tags fetched from Cision.
-- Use standard article template from your active theme.
-- Support to create, update and delete posts based on PUSH events sent from Cision.
-- Support to create, update and delete posts during CRON at configurable intervals.
-- Subscription module.
-- Ticker module.
-- Shareholder module.
-- Calendar module.
-- Media module.
-- Insider module.
-- Use normal or ajax based load more button for pagination.
-- Annual free support and quicker response times.
-- Discount for multisite licenses.
+★ Support to fetch entire feed and not only the last 100 entries.
+★ Custom post types. Creates a post for each item in Wordpress. This means that all news have standard Wordpress links.
+★ Manually created posts can be added to the feed.
+★ Custom taxonomies for categories and tags fetched from Cision.
+★ Use standard article template from your active theme.
+★ Support to create, update and delete posts based on PUSH events sent from Cision.
+★ Support to create, update and delete posts during CRON at configurable intervals.
+★ Subscription module.
+★ Ticker module.
+★ Shareholder module.
+★ Calendar module.
+★ Media module.
+★ Insider module.
+★ Use normal or ajax based load more button for pagination.
+★ Annual free support and quicker response times.
+★ Discount for multisite licenses.
 
 I usually have an initial meeting where I talk about the plugin, explain the different features and answer any questions.
 
@@ -405,5 +405,6 @@ This is something that is possible using the **Pro** version, since all news are
 
 = 2.9.2
 
+- Fix deprecation warnings.
 - Fix bug in widget were some settings never were saved.
 - Add setting for attachment labels.
