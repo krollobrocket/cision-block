@@ -17,7 +17,7 @@ class Frontend extends Singleton
     const SETTINGS_NAME = 'cision_block_settings';
     const TRANSIENT_KEY = 'cision_block_data';
     const USER_AGENT = 'cision-block/' . self::VERSION;
-    const VERSION = '2.9.2';
+    const VERSION = '2.9.3';
 
     /**
      *
@@ -637,13 +637,13 @@ class Frontend extends Singleton
             'id' => self::$current_block_id,
             'readmore' => $readMore,
             'mark_regulatory' => self::$settings->get('mark_regulatory'),
-            'regulatory_text' => htmlspecialchars_decode($regulatoryText),
-            'non_regulatory_text' => htmlspecialchars_decode($nonRegulatoryText),
+            'regulatory_text' => htmlspecialchars_decode($regulatoryText ?: ''),
+            'non_regulatory_text' => htmlspecialchars_decode($nonRegulatoryText ?: ''),
             'show_filters' => self::$settings->get('show_filters'),
             'show_excerpt' => self::$settings->get('show_excerpt'),
-            'filter_all_text' => htmlspecialchars_decode($filterAllText),
-            'filter_regulatory_text' => htmlspecialchars_decode($filterRegulatoryText),
-            'filter_non_regulatory_text' => htmlspecialchars_decode($filterNonRegulatoryText),
+            'filter_all_text' => htmlspecialchars_decode($filterAllText ?: ''),
+            'filter_regulatory_text' => htmlspecialchars_decode($filterRegulatoryText ?: ''),
+            'filter_non_regulatory_text' => htmlspecialchars_decode($filterNonRegulatoryText ?: ''),
             'prefix' => apply_filters('cision_block_prefix', '', self::$current_block_id),
             'suffix' => apply_filters('cision_block_suffix', '', self::$current_block_id),
             'attributes' => $this->parseAttributes(apply_filters('cision_block_media_attributes', array(

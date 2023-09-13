@@ -3,9 +3,9 @@ Contributors: cyclonecode
 Donate link: https://www.buymeacoffee.com/cyclonecode
 Tags: cision, feed, investor relation, press, stock, shortcode, widget, content
 Requires at least: 3.1.0
-Tested up to: 6.3
+Tested up to: 6.3.1
 Requires PHP: 5.6
-Stable tag: 2.9.2
+Stable tag: 2.9.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -403,8 +403,9 @@ This is something that is possible using the **Pro** version, since all news are
 
 == Changelog ==
 
-= 2.9.2
+= 2.9.3
 
-- Fix deprecation warnings.
-- Fix bug in widget were some settings never were saved.
-- Add setting for attachment labels.
+- Fix bug where settings was not saved during activation.
+- Fix bug that triggered warnings when calling htmlspecialchars_decode().
+- Fix bug in Settings class for removing entries.
+- Remove languages not supported by Cision.

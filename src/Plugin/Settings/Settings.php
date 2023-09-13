@@ -263,7 +263,7 @@ class Settings implements \IteratorAggregate, \Countable, \ArrayAccess
      */
     public function rename($from, $to)
     {
-        if (isset($this->settings[$from])) {
+        if (array_key_exists($from, $this->settings)) {
             $this->settings[$to] = $this->settings[$from];
             $this->remove($from);
         }
