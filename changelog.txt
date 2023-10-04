@@ -1,3 +1,10 @@
+= 2.9.3
+
+- Fix bug where settings was not saved during activation.
+- Fix bug that triggered warnings when calling htmlspecialchars_decode().
+- Fix bug in Settings class for removing entries.
+- Remove languages not supported by Cision.
+
 = 2.9.2
 
 - Fix deprecation warnings.

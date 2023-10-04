@@ -17,7 +17,7 @@ class Frontend extends Singleton
     const SETTINGS_NAME = 'cision_block_settings';
     const TRANSIENT_KEY = 'cision_block_data';
     const USER_AGENT = 'cision-block/' . self::VERSION;
-    const VERSION = '2.9.3';
+    const VERSION = '2.9.4';
 
     /**
      *
@@ -228,7 +228,11 @@ class Frontend extends Singleton
     protected function addFilters()
     {
         add_filter('query_vars', array($this, 'addQueryVars'), 10);
-        add_filter('pre_get_document_title', array($this, 'setTitle'), 10);
+        add_filter('pre_get_document_title', array($this, 'setTitle'));
+        // The SEO Framework plugin removes any pre_get_document_title filter.
+        if (class_exists('The_SEO_Framework\\Core')) {
+            add_filter('the_seo_framework_title_from_custom_field', array($this, 'setTitle'), 10, 2);
+        }
     }
 
     /**
