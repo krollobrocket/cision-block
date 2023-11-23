@@ -200,14 +200,19 @@ class Backend extends Singleton
                 <li><?php _e('Import categories and tags for each feed item.', 'cision-block'); ?></li>
                 <li><?php _e('Support to hide news based on id.', 'cision-block'); ?></li>
                 <li><?php _e('Make changes to imported posts and mark them as locally modified.', 'cision-block'); ?></li>
-                <li><?php _e('Extension support.', 'cision-block'); ?></li>
-                <li><?php _e('Subscription module.', 'cision-block'); ?></li>
-                <li><?php _e('Shareholder module.', 'cision-block'); ?></li>
-                <li><?php _e('Ticker module.', 'cision-block'); ?></li>
-                <li><?php _e('Calendar module.', 'cision-block'); ?></li>
-                <li><?php _e('Media module.', 'cision-block'); ?></li>
-                <li><?php _e('Insider module.', 'cision-block'); ?></li>
                 <li><?php _e('Free support, installation and configuration help.', 'cision-block'); ?></li>
+            </ul>
+            <p><?php _e('Available extensions:', 'cision-block'); ?></p>
+            <ul>
+                <li><?php _e('Calendar module.', 'cision-block'); ?></li>
+                <li><?php _e('Cron module.', 'cision-block-pro'); ?></li>
+                <li><?php _e('Insider module.', 'cision-block'); ?></li>
+                <li><?php _e('Media module.', 'cision-block'); ?></li>
+                <li><?php _e('Push module.', 'cision-block-pro'); ?></li>
+                <li><?php _e('Sharegraph module.', 'cision-block'); ?></li>
+                <li><?php _e('Shareholder module.', 'cision-block'); ?></li>
+                <li><?php _e('Subscription module.', 'cision-block'); ?></li>
+                <li><?php _e('Ticker module.', 'cision-block'); ?></li>
             </ul>
         </div>
         <p><?php echo sprintf(__('To get more information about the Pro version, please send me an email at <a href="mailto:cyclonecode@gmail.com?subject=%s" target="_blank" rel="noopener noreferrer">cyclonecode@gmail.com</a> or give me a <a href="%s">call</a>, you can also contact me at my <a href="%s" target="_blank" rel="noopener noreferrer">slack channel</a>.', 'cision-block'), 'Cision%20Block%20Pro', 'tel:+46767013987', 'https://join.slack.com/t/cyclonecode/shared_invite/zt-6bdtbdab-n9QaMLM~exHP19zFDPN~AQ'); ?></p>
