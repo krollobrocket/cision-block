@@ -1,3 +1,7 @@
+= 2.9.4
+
+- Fix issue with title when using The SEO Framework plugin.
+
 = 2.9.3
 
 - Fix bug where settings was not saved during activation.

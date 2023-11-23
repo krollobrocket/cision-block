@@ -5,7 +5,7 @@ Tags: cision, feed, investor relation, press, stock, shortcode, widget, content
 Requires at least: 3.1.0
 Tested up to: 6.3.1
 Requires PHP: 5.6
-Stable tag: 2.9.4
+Stable tag: 2.9.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -403,6 +403,6 @@ This is something that is possible using the **Pro** version, since all news are
 
 == Changelog ==
 
-= 2.9.4
+= 2.9.5
 
-- Fix issue with title when using The SEO Framework plugin.
+- Fix issue with empty feed when using The SEO Framework plugin.
