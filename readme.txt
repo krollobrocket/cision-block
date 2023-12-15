@@ -3,7 +3,7 @@ Contributors: cyclonecode
 Donate link: https://www.buymeacoffee.com/cyclonecode
 Tags: cision, feed, investor relation, press, stock, shortcode, widget, content
 Requires at least: 3.1.0
-Tested up to: 6.3.1
+Tested up to: 6.4.2
 Requires PHP: 5.6
 Stable tag: 2.9.5
 License: GPLv2 or later
@@ -31,12 +31,12 @@ There is a **PRO** version of this plugin, which includes extended features. For
 ★ Use standard article template from your active theme.
 ★ Support to create, update and delete posts based on PUSH events sent from Cision.
 ★ Support to create, update and delete posts during CRON at configurable intervals.
+★ Calendar module.
+★ Insider module.
+★ Media module.
+★ Shareholder module.
 ★ Subscription module.
 ★ Ticker module.
-★ Shareholder module.
-★ Calendar module.
-★ Media module.
-★ Insider module.
 ★ Use normal or ajax based load more button for pagination.
 ★ Annual free support and quicker response times.
 ★ Discount for multisite licenses.
@@ -49,8 +49,6 @@ There is also a backlog with features yet to be implemented on github, some of t
 
 - Pin feed items to top of list.
 - Import and export settings between environments.
-- Graph module.
-- REST API.
 - Slideshow.
 - Preview functionality.
 - Disclaimer support.
@@ -58,7 +56,7 @@ There is also a backlog with features yet to be implemented on github, some of t
 - Display estimated reading time for each feed item.
 - And much, much more.
 
-To get more information about the Pro version, send me an email at [cyclonecode@gmail.com](mailto:cyclonecode@gmail.com) or give me a call at +(46)-791026643.
+To get more information about the Pro version, email me at [cyclonecode@gmail.com](mailto:cyclonecode@gmail.com) or give me a call at +(46)-767013987.
 
 = Looking for help =
 
