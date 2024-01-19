@@ -215,7 +215,7 @@ class Backend extends Singleton
                 <li><?php _e('Ticker module.', 'cision-block'); ?></li>
             </ul>
         </div>
-        <p><?php echo sprintf(__('To get more information about the Pro version, please send me an email at <a href="mailto:cyclonecode@gmail.com?subject=%s" target="_blank" rel="noopener noreferrer">cyclonecode@gmail.com</a> or give me a <a href="%s">call</a>, you can also contact me at my <a href="%s" target="_blank" rel="noopener noreferrer">slack channel</a>.', 'cision-block'), 'Cision%20Block%20Pro', 'tel:+46767013987', 'https://join.slack.com/t/cyclonecode/shared_invite/zt-6bdtbdab-n9QaMLM~exHP19zFDPN~AQ'); ?></p>
+        <p><?php echo sprintf(__('To get more information about the Pro version, please send me an email at <a href="mailto:cisionblock@gmail.com?subject=%s" target="_blank" rel="noopener noreferrer">cisionblock@gmail.com</a> or give me a <a href="%s">call</a>, you can also contact me at my <a href="%s" target="_blank" rel="noopener noreferrer">slack channel</a>.', 'cision-block'), 'Cision%20Block%20Pro', 'tel:+46767013987', 'https://join.slack.com/t/cyclonecode/shared_invite/zt-6bdtbdab-n9QaMLM~exHP19zFDPN~AQ'); ?></p>
         <?php
     }
 
@@ -241,7 +241,7 @@ class Backend extends Singleton
         ?>
         <h3><?php _e('Do you have any feedback or need support?', 'cision-block'); ?></h3>
         <p><?php echo sprintf(__('If you have any request for improvement or just need some help. Do not hesitate to open a ticket in the <a href="%s" target="_blank">support section</a>.', 'cision-block'), 'https://wordpress.org/support/plugin/cision-block/#new-topic-0'); ?></p>
-        <p><?php echo sprintf(__('I can also be reached by email at <a href="%s" target="_blank" rel="noopener noreferrer">%s</a>', 'cision-block'), 'mailto:cyclonecode.help@gmail.com?subject=Cision%20Block', 'cyclonecode.help@gmail.com'); ?></p>
+        <p><?php echo sprintf(__('I can also be reached by email at <a href="%s" target="_blank" rel="noopener noreferrer">%s</a>', 'cision-block'), 'mailto:cisionblock@gmail.com?subject=Cision%20Block', 'cisionblock@gmail.com'); ?></p>
         <p><?php echo sprintf(__('There is also a slack channel that you can <a href="%s" target="_blank" rel="noopener noreferrer">join</a>.', 'cision-block'), 'https://join.slack.com/t/cyclonecode/shared_invite/zt-6bdtbdab-n9QaMLM~exHP19zFDPN~AQ'); ?></p>
         <p><?php _e('I hope you will have an awesome day!', 'cision-block'); ?></p>
         <?php

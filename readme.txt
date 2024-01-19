@@ -56,7 +56,7 @@ There is also a backlog with features yet to be implemented on github, some of t
 - Display estimated reading time for each feed item.
 - And much, much more.
 
-To get more information about the Pro version, email me at [cyclonecode@gmail.com](mailto:cyclonecode@gmail.com) or give me a call at +(46)-767013987.
+To get more information about the Pro version, email me at [cisionblock@gmail.com](mailto:cisionblock@gmail.com) or give me a call at +(46)-767013987.
 
 = Looking for help =
 
@@ -327,7 +327,7 @@ The following Feed identifier can be used for testing: **A275C0BF733048FFAE9126A
 
 == Improvements ==
 
-If you have any ideas for improvements, don't hesitate to email me at cyclonecode.help@gmail.com or send me a message on [slack](https://join.slack.com/t/cyclonecode/shared_invite/zt-6bdtbdab-n9QaMLM~exHP19zFDPN~AQ).
+If you have any ideas for improvements, don't hesitate to email me at cisionblock@gmail.com or send me a message on [slack](https://join.slack.com/t/cyclonecode/shared_invite/zt-6bdtbdab-n9QaMLM~exHP19zFDPN~AQ).
 
 == Support ==
 
