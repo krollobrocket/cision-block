@@ -3,7 +3,7 @@ Contributors: cyclonecode
 Donate link: https://www.buymeacoffee.com/cyclonecode
 Tags: cision, feed, investor relation, press, stock, shortcode, widget, content
 Requires at least: 3.1.0
-Tested up to: 6.4.2
+Tested up to: 6.4.3
 Requires PHP: 5.6
 Stable tag: 2.9.5
 License: GPLv2 or later
@@ -32,7 +32,9 @@ There is a **PRO** version of this plugin, which includes extended features. For
 ★ Support to create, update and delete posts based on PUSH events sent from Cision.
 ★ Support to create, update and delete posts during CRON at configurable intervals.
 ★ Calendar module.
+★ Cron module.
 ★ Insider module.
+★ Link Back module.
 ★ Media module.
 ★ Shareholder module.
 ★ Subscription module.

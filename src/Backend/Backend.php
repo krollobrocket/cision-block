@@ -207,6 +207,7 @@ class Backend extends Singleton
                 <li><?php _e('Calendar module.', 'cision-block'); ?></li>
                 <li><?php _e('Cron module.', 'cision-block-pro'); ?></li>
                 <li><?php _e('Insider module.', 'cision-block'); ?></li>
+                <li><?php _e('Link Back module.', 'cision-block'); ?></li>
                 <li><?php _e('Media module.', 'cision-block'); ?></li>
                 <li><?php _e('Push module.', 'cision-block-pro'); ?></li>
                 <li><?php _e('Sharegraph module.', 'cision-block'); ?></li>
