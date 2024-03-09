@@ -1,7 +1,7 @@
 === Cision Block ===
 Contributors: cyclonecode
 Donate link: https://www.buymeacoffee.com/cyclonecode
-Tags: cision, feed, investor relation, press, stock, shortcode, widget, content
+Tags: cision, feed, ir, press, stock
 Requires at least: 3.1.0
 Tested up to: 6.4.3
 Requires PHP: 5.6
@@ -347,6 +347,10 @@ You can also try contacting me on [slack](https://join.slack.com/t/cyclonecode/s
 
 == Frequently Asked Questions ==
 
+= Where can I get the Premium version? =
+
+You can contact me by sending on an email to: [cisionblock@gmail.com](mailto:cisionblock@gmail.com).
+
 = Can I fetch more than the last 100 news? =
 
 You will need to use the **Pro** version to do this.
@@ -400,6 +404,8 @@ This is something that is possible using the **Pro** version, since all news are
 5. Subscription module. Available in the *Pro* version.
 6. Shareholder module. Available in the *Pro* version.
 7. Insider module. Available in the *Pro* version.
+8. Sharegraph module. Available in the *Pro* version.
+9. A sharegraph and a pie chart.
 
 == Changelog ==
 
