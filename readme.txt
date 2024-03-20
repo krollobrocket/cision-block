@@ -36,9 +36,12 @@ There is a **PRO** version of this plugin, which includes extended features. For
 ★ Insider module.
 ★ Link Back module.
 ★ Media module.
-★ Shareholder module.
+★ Share Graph module.
+★ ShareHolder module.
+★ Share Calculator module.
 ★ Subscription module.
 ★ Ticker module.
+★ Translation module.
 ★ Use normal or ajax based load more button for pagination.
 ★ Annual free support and quicker response times.
 ★ Discount for multisite licenses.
@@ -47,18 +50,22 @@ I usually have an initial meeting where I talk about the plugin, explain the dif
 
 A demo site showing some of the modules can be found [here](https://dev-cision-block-pro.pantheonsite.io/).
 
-There is also a backlog with features yet to be implemented on github, some of the tasks in the list includes:
-
-- Pin feed items to top of list.
-- Import and export settings between environments.
-- Slideshow.
-- Preview functionality.
-- Disclaimer support.
-- Support for multiple templates.
-- Display estimated reading time for each feed item.
-- And much, much more.
-
 To get more information about the Pro version, email me at [cisionblock@gmail.com](mailto:cisionblock@gmail.com) or give me a call at +(46)-767013987.
+
+= Addons =
+
+Even if you are not using the premium version of the plugin there is still possible to install addons for extended functionality.
+
+Here is a list of the available addons:
+
+- Calendar
+- Insider
+- Media
+- Share Graph
+- ShareHolder
+- Share Calculator
+- Subscription
+- Ticker
 
 = Looking for help =
 
