@@ -14,6 +14,12 @@ class Backend extends Singleton
 
     const PARENT_MENU_SLUG = 'options-general.php';
     const MENU_SLUG = 'cision-block';
+    const SLACK_LINK = 'https://join.slack.com/t/cyclonecode/shared_invite/zt-6bdtbdab-n9QaMLM~exHP19zFDPN~AQ';
+    const PHONE_LINK = 'tel:+46767013987';
+    const EMAIL_ADDRESS = 'cisionblock@gmail.com';
+    const BUY_ME_A_COFFEE_LINK = 'https://www.buymeacoffee.com/cyclonecode';
+    const REVIEW_LINK = 'https://wordpress.org/support/plugin/cision-block/reviews/?rate=5#new-post';
+    const SUPPORT_LINK = 'https://wordpress.org/support/plugin/cision-block/#new-topic-0';
 
     /**
      *
@@ -161,7 +167,7 @@ class Backend extends Singleton
     public function renderNotices(): void
     {
         foreach ($this->settings->get('notes') as $note) {
-            if (is_callable($note['callback']) && (!$note['dismissed'] || (!$note['persistent'] && time() - $note['time'] > 30 * 24 * 60 * 60))) {
+            if (is_callable([$this, $note['callback']]) && (!$note['dismissed'] || (!$note['persistent'] && time() - $note['time'] > 30 * 24 * 60 * 60))) {
                 ?>
                 <div id="note-<?php echo $note['id']; ?>" class="cision-block-notice notice-<?php echo $note['type']; ?> notice<?php echo ($note['dismissible'] ? ' is-dismissible' : ''); ?> inline">
                 <?php echo call_user_func([$this, $note['callback']]); ?>
@@ -216,18 +222,20 @@ class Backend extends Singleton
             <p><?php _e('Available extensions:', 'cision-block'); ?></p>
             <ul>
                 <li><?php _e('Calendar module.', 'cision-block'); ?></li>
-                <li><?php _e('Cron module.', 'cision-block-pro'); ?></li>
+                <li><?php _e('Cron module.', 'cision-block'); ?></li>
                 <li><?php _e('Insider module.', 'cision-block'); ?></li>
                 <li><?php _e('Link Back module.', 'cision-block'); ?></li>
                 <li><?php _e('Media module.', 'cision-block'); ?></li>
-                <li><?php _e('Push module.', 'cision-block-pro'); ?></li>
+                <li><?php _e('Push module.', 'cision-block'); ?></li>
+                <li><?php _e('Share Calculator module.', 'cision-block'); ?></li>
                 <li><?php _e('Sharegraph module.', 'cision-block'); ?></li>
                 <li><?php _e('Shareholder module.', 'cision-block'); ?></li>
                 <li><?php _e('Subscription module.', 'cision-block'); ?></li>
                 <li><?php _e('Ticker module.', 'cision-block'); ?></li>
+                <li><?php _e('Translation module.', 'cision-block'); ?></li>
             </ul>
         </div>
-        <p><?php echo sprintf(__('To get more information about the Pro version, please send me an email at <a href="mailto:cisionblock@gmail.com?subject=%s" target="_blank" rel="noopener noreferrer">cisionblock@gmail.com</a> or give me a <a href="%s">call</a>, you can also contact me at my <a href="%s" target="_blank" rel="noopener noreferrer">slack channel</a>.', 'cision-block'), 'Cision%20Block%20Pro', 'tel:+46767013987', 'https://join.slack.com/t/cyclonecode/shared_invite/zt-6bdtbdab-n9QaMLM~exHP19zFDPN~AQ'); ?></p>
+        <p><?php echo sprintf(__('To get more information about the Pro version, please send me an email at <a href="mailto:%s?subject=%s" target="_blank" rel="noopener noreferrer">%s</a> or give me a <a href="%s">call</a>, you can also contact me at my <a href="%s" target="_blank" rel="noopener noreferrer">slack channel</a>.', 'cision-block'), self::EMAIL_ADDRESS, 'Cision%20Block%20Pro', self::EMAIL_ADDRESS, self::PHONE_LINK, self::SLACK_LINK); ?></p>
         <?php
     }
 
@@ -238,9 +246,9 @@ class Backend extends Singleton
     {
         ?>
         <h3><?php _e('Thank you for using Cision Block!', 'cision-block'); ?></h3>
-        <p><?php echo sprintf(__('If you use and enjoy Cision Block, I would be really happy if you could give it a positive review at <a href="%s" target="_blank" rel="noopener noreferrer">Wordpress.org</a>.', 'cision-block'), 'https://wordpress.org/support/plugin/cision-block/reviews/?rate=5#new-post'); ?></p>
-        <p><?php _e('Doing this would help me keeping the plugin free and up to date.', 'cision-block'); ?></p>
-        <p><?php _e('Also, if you would like to support me you can always buy me a cup of coffee at:', 'cision-block'); ?> <a href="https://www.buymeacoffee.com/cyclonecode" target="_blank" rel="noopener noreferrer">https://www.buymeacoffee.com/cyclonecode</a></p>
+        <p><?php echo sprintf(__('If you use and enjoy Cision Block, I would be really happy if you could give it a positive review at <a href="%s" target="_blank" rel="noopener noreferrer">Wordpress.org</a>.', 'cision-block'), self::REVIEW_LINK); ?><br />
+        <?php _e('Doing this would help me keeping the plugin free and up to date.', 'cision-block'); ?><br />
+        <?php _e('Also, if you would like to support me you can always buy me a cup of coffee at:', 'cision-block'); ?> <?php echo sprintf('<a href="%s" target="_blank" rel="noopener noreferrer">%s</a>', self::BUY_ME_A_COFFEE_LINK, self::BUY_ME_A_COFFEE_LINK); ?></p>
         <p><?php _e('Thank you very much!', 'cision-block'); ?></p>
         <?php
     }
@@ -252,9 +260,9 @@ class Backend extends Singleton
     {
         ?>
         <h3><?php _e('Do you have any feedback or need support?', 'cision-block'); ?></h3>
-        <p><?php echo sprintf(__('If you have any request for improvement or just need some help. Do not hesitate to open a ticket in the <a href="%s" target="_blank">support section</a>.', 'cision-block'), 'https://wordpress.org/support/plugin/cision-block/#new-topic-0'); ?></p>
-        <p><?php echo sprintf(__('I can also be reached by email at <a href="%s" target="_blank" rel="noopener noreferrer">%s</a>', 'cision-block'), 'mailto:cisionblock@gmail.com?subject=Cision%20Block', 'cisionblock@gmail.com'); ?></p>
-        <p><?php echo sprintf(__('There is also a slack channel that you can <a href="%s" target="_blank" rel="noopener noreferrer">join</a>.', 'cision-block'), 'https://join.slack.com/t/cyclonecode/shared_invite/zt-6bdtbdab-n9QaMLM~exHP19zFDPN~AQ'); ?></p>
+        <p><?php echo sprintf(__('If you have any request for improvement or just need some help. Do not hesitate to open a ticket in the <a href="%s" target="_blank">support section</a>.', 'cision-block'), self::SUPPORT_LINK); ?><br />
+        <?php echo sprintf(__('I can also be reached by email at <a href="mailto:%s?subject=%s" target="_blank" rel="noopener noreferrer">%s</a>', 'cision-block'), self::EMAIL_ADDRESS, 'Cision%20Block', self::EMAIL_ADDRESS); ?><br />
+        <?php echo sprintf(__('There is also a slack channel that you can <a href="%s" target="_blank" rel="noopener noreferrer">join</a>.', 'cision-block'), self::SLACK_LINK); ?></p>
         <p><?php _e('I hope you will have an awesome day!', 'cision-block'); ?></p>
         <?php
     }
@@ -313,17 +321,17 @@ class Backend extends Singleton
 
         $plugin_meta[] = sprintf(
             '<a target="_blank" href="%1$s"><span class="dashicons dashicons-star-filled" aria-hidden="true" style="font-size:14px;line-height:1.3"></span>%2$s</a>',
-            'https://www.buymeacoffee.com/cyclonecode',
+            self::BUY_ME_A_COFFEE_LINK,
             esc_html_x('Sponsor', 'verb', 'cision-block')
         );
         $plugin_meta[] = sprintf(
             '<a target="_blank" href="%1$s"><span class="dashicons dashicons-thumbs-up" aria-hidden="true" style="font-size:14px;line-height:1.3"></span>%2$s</a>',
-            'https://wordpress.org/support/plugin/cision-block/reviews/?rate=5#new-post',
+            self::REVIEW_LINK,
             esc_html_x('Rate', 'verb', 'cision-block')
         );
         $plugin_meta[] = sprintf(
             '<a target="_blank" href="%1$s"><span class="dashicons dashicons-editor-help" aria-hidden="true" style="font-size:14px;line-height:1.3"></span>%2$s</a>',
-            'https://wordpress.org/support/plugin/cision-block/#new-topic-0',
+            self::SUPPORT_LINK,
             esc_html_x('Support', 'verb', 'cision-block')
         );
 
