@@ -5,7 +5,7 @@ namespace CisionBlock\Locale;
 class Locale
 {
     /** @var string[] */
-    private static $localeCode = [
+    private static array $localeCode = [
         'ar' => 'ar',
         'bs_BA' => 'bs',
         'bg_BG' => 'bg',
@@ -78,7 +78,7 @@ class Locale
     ];
 
     /** @var string[] */
-    private static $languageCode = [
+    private static array $languageCode = [
         'ar' => 'ar',
         'bs' => 'bs_BA',
         'bg' => 'bg_BG',
@@ -132,7 +132,7 @@ class Locale
      * @param string $localeCode
      * @return string|null
      */
-    public static function localeCodeToLanguageCode(string $localeCode)
+    public static function localeCodeToLanguageCode(string $localeCode): ?string
     {
         $localeCode = self::parseLocaleCode($localeCode);
         return self::$localeCode[$localeCode] ?? null;
@@ -152,7 +152,7 @@ class Locale
      * @param string $languageCode
      * @return string|null
      */
-    public static function languageCodeToLocaleCode(string $languageCode)
+    public static function languageCodeToLocaleCode(string $languageCode): ?string
     {
         $languageCode = strtolower($languageCode);
         return self::$languageCode[$languageCode] ?? null;

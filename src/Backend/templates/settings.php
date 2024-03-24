@@ -157,9 +157,9 @@ $templates = get_page_templates(null, 'cision-block-post');
                 </th>
                 <td>
                     <select name="view">
-                        <option value="1"<?php selected($this->settings->get('view_mode') == 1); ?>><?php _e('All', 'cision-block'); ?></option>
-                        <option value="2"<?php selected($this->settings->get('view_mode') == 2); ?>><?php _e('Regulatory', 'cision-block'); ?></option>
-                        <option value="3"<?php selected($this->settings->get('view_mode') == 3); ?>><?php _e('Non-regulatory', 'cision-block'); ?></option>
+                        <option value="1"<?php selected($this->settings->get('view_mode') === Settings::DISPLAY_MODE_ALL); ?>><?php _e('All', 'cision-block'); ?></option>
+                        <option value="2"<?php selected($this->settings->get('view_mode') === Settings::DISPLAY_MODE_REGULATORY); ?>><?php _e('Regulatory', 'cision-block'); ?></option>
+                        <option value="3"<?php selected($this->settings->get('view_mode') === Settings::DISPLAY_MODE_NON_REGULATORY); ?>><?php _e('Non-regulatory', 'cision-block'); ?></option>
                     </select>
                     <p class="description"><?php _e('What kind of feed items to display.', 'cision-block'); ?></p>
                 </td>
@@ -182,7 +182,7 @@ $templates = get_page_templates(null, 'cision-block-post');
                     <select name="image_style">
                         <option value=""><?php _e('Select', 'cision-block'); ?></option>
                         <?php foreach (self::getImageStyles() as $key => $value) : ?>
-                        <option value="<?php echo $key; ?>"<?php selected($this->settings->get('image_style') == $key); ?>><?php echo $value['label']; ?></option>
+                        <option value="<?php echo $key; ?>"<?php selected($this->settings->get('image_style') === $key); ?>><?php echo $value['label']; ?></option>
                         <?php endforeach; ?>
                         </select>
                     <p class="description"><?php _e('The image format to use. If not set no images will be displayed.', 'cision-block'); ?></p>
@@ -214,9 +214,9 @@ $templates = get_page_templates(null, 'cision-block-post');
                 </th>
                 <td>
                     <select name="attachment_field">
-                        <option value="Description"<?php selected($this->settings->get('attachment_field') == 'Description'); ?>><?php _e('Description', 'cision-block'); ?></option>
-                        <option value="FileName"<?php selected($this->settings->get('attachment_field') == 'FileName'); ?>><?php _e('FileName', 'cision-block'); ?></option>
-                        <option value="Title"<?php selected($this->settings->get('attachment_field') == 'Title'); ?>><?php _e('Title', 'cision-block'); ?></option>
+                        <option value="Description"<?php selected($this->settings->get('attachment_field') === 'Description'); ?>><?php _e('Description', 'cision-block'); ?></option>
+                        <option value="FileName"<?php selected($this->settings->get('attachment_field') === 'FileName'); ?>><?php _e('FileName', 'cision-block'); ?></option>
+                        <option value="Title"<?php selected($this->settings->get('attachment_field') === 'Title'); ?>><?php _e('Title', 'cision-block'); ?></option>
                     </select>
                     <p class="description"><?php _e('The field to use for attachment labels.', 'cision-block'); ?></p>
                 </td>

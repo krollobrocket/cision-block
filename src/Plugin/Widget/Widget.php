@@ -7,7 +7,7 @@ abstract class Widget extends \WP_Widget
     /**
      * @var string
      */
-    protected $description;
+    protected string $description;
 
     /**
      * Constructor.
@@ -17,9 +17,9 @@ abstract class Widget extends \WP_Widget
         parent::__construct(
             $this->id_base,
             $this->name,
-            array(
+            [
                 'description' => $this->description,
-            )
+            ]
         );
 
         $this->register();
@@ -34,7 +34,7 @@ abstract class Widget extends \WP_Widget
     /**
      * Register the widget.
      */
-    private function register()
+    private function register(): void
     {
         $class = get_called_class();
         add_action('widgets_init', function () use ($class) {
@@ -47,7 +47,7 @@ abstract class Widget extends \WP_Widget
      * @param array $args
      * @param array $instance
      */
-    public function widget($args, $instance)
+    public function widget($args, $instance): void
     {
         /**
          * Add arguments to widget.

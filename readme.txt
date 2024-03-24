@@ -420,3 +420,4 @@ This is something that is possible using the **Pro** version, since all news are
 
 - Add: locale class.
 - Add: support for addons.
+- Refactor: code to use PHP 7.4.

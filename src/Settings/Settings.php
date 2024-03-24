@@ -32,7 +32,7 @@ class Settings extends \CisionBlock\Plugin\Settings\Settings
     /**
      * @var array $default_settings
      */
-    private $defaultSettings = array(
+    private array $defaultSettings = [
         'count' => self::DEFAULT_ITEM_COUNT,
         'source_uid' => '',
         'tags' => '',
@@ -64,12 +64,12 @@ class Settings extends \CisionBlock\Plugin\Settings\Settings
         'exclude_css' => false,
         'template' => null,
         'version' => Frontend::VERSION,
-    );
+    ];
 
     /**
-     * @return mixed|null
+     * @return array
      */
-    public function getDefaults()
+    public function getDefaults(): array
     {
         return $this->defaultSettings;
     }

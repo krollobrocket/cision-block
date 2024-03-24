@@ -7,12 +7,12 @@ abstract class Singleton
     /**
      * @var array $instance
      */
-    protected static $instance = array();
+    protected static array $instance = [];
 
     /**
      * @return mixed
      */
-    final public static function getInstance()
+    final public static function getInstance(): static
     {
         $class = get_called_class();
         if (!isset(self::$instance[$class]) || !self::$instance[$class] instanceof $class) {

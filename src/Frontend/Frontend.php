@@ -3,7 +3,8 @@
 namespace CisionBlock\Frontend;
 
 use CisionBlock\Plugin\Common\Singleton;
-use CisionBlock\Plugin\Http\RemoteRequest;
+use CisionBlock\GuzzleHttp\Client;
+use CisionBlock\GuzzleHttp\ClientInterface;
 use CisionBlock\Settings\Settings;
 use CisionBlock\Trait\AddonTrait;
 use CisionBlock\Widget\Widget;
@@ -24,25 +25,25 @@ class Frontend extends Singleton
 
     /**
      *
-     * @var Settings|null
+     * @var Settings
      */
-    private static $settings;
+    private static Settings $settings;
 
     /**
      *
-     * @var RemoteRequest|null
+     * @var ClientInterface
      */
-    private $request;
+    private ClientInterface $request;
 
     /**
      * @var string
      */
-    private static $current_block_id;
+    private static string $current_block_id;
 
     /**
      * Uninstalls the plugin.
      */
-    public static function delete()
+    public static function delete(): void
     {
         delete_option(self::SETTINGS_NAME);
         self::clearCache();
@@ -64,7 +65,7 @@ class Frontend extends Singleton
     /**
      * Delete any transient cache data.
      */
-    public static function clearCache()
+    public static function clearCache(): void
     {
         global $wpdb;
 
@@ -78,13 +79,15 @@ class Frontend extends Singleton
     /**
      * Initialization.
      */
-    public function init()
+    public function init(): void
     {
         self::$settings = new Settings(self::SETTINGS_NAME);
-        $this->request = new RemoteRequest();
-        $this->request->setHeaders(array(
-            'User-agent' => self::USER_AGENT,
-        ));
+        $this->request = new Client([
+            'headers' => [
+                'User-agent' => self::USER_AGENT,
+                'Content-type' => 'application/json',
+            ],
+        ]);
 
         // Add support for addons.
         do_action('cision-block/register/addon', [$this]);
@@ -92,7 +95,7 @@ class Frontend extends Singleton
         // Setup widget.
         new Widget();
 
-        add_shortcode('cision-block', array($this, 'displayFeed'));
+        add_shortcode('cision-block', [$this, 'displayFeed']);
 
         $this->addActions();
         $this->addFilters();
@@ -105,11 +108,11 @@ class Frontend extends Singleton
      * @param int $post_ID
      * @param string $content
      */
-    protected function checkTransient($post_ID, $content)
+    protected function checkTransient(int $post_ID, string $content): void
     {
         if (has_shortcode($content, 'cision-block')) {
             $regex = get_shortcode_regex();
-            $matches = array();
+            $matches = [];
             $block_id = 'cision_block';
             if (preg_match_all('/' . $regex . '/', $content, $matches) &&
                 array_key_exists(2, $matches)
@@ -137,7 +140,7 @@ class Frontend extends Singleton
      *
      * @return string
      */
-    public function setTitle($title)
+    public function setTitle(string $title): string
     {
         global $CisionItem;
         if (get_query_var('cision_release_id')) {
@@ -153,7 +156,7 @@ class Frontend extends Singleton
      * @global stdClass $CisionItem
      * @global WP_Query $wp_query
      */
-    public function addTemplate()
+    public function addTemplate(): void
     {
         global $CisionItem;
         global $displayFiles;
@@ -162,7 +165,9 @@ class Frontend extends Singleton
         if (get_query_var('cision_release_id')) {
             $release_id = get_query_var('cision_release_id');
             try {
-                $response = $this->request->get(self::FEED_RELEASE_URL . $release_id)->toJSON();
+                $response = \json_decode($this->request->get(self::FEED_RELEASE_URL . $release_id)
+                    ->getBody()
+                    ->getContents());
             } catch (\Exception $e) {
                 // Return a 404 page.
                 $wp_query->set_404();
@@ -188,10 +193,10 @@ class Frontend extends Singleton
             $displayFiles = self::$settings->get('show_files', false);
             $attachmentField = self::$settings->get('attachment_field', 'FileName');
             add_filter('template_include', function () {
-                $template = locate_template(array(
+                $template = locate_template([
                     'cision-block-post.php',
                     'templates/cision-block-post.php'
-                ));
+                ]);
                 if ($template) {
                     // Include theme overridden template.
                     return $template;
@@ -207,10 +212,10 @@ class Frontend extends Singleton
      * Triggered when a post is updated.
      *
      * @param int $post_ID
-     * @param object $post_after
-     * @param object $post_before
+     * @param \WP_Post $post_after
+     * @param \WP_Post $post_before
      */
-    public function postUpdated($post_ID, $post_after, $post_before)
+    public function postUpdated(int $post_ID, \WP_Post $post_after, \WP_Post $post_before)
     {
         $this->checkTransient($post_ID, $post_before->post_content);
         $this->checkTransient($post_ID, $post_after->post_content);
@@ -219,32 +224,32 @@ class Frontend extends Singleton
     /**
      * Register actions.
      */
-    protected function addActions()
+    protected function addActions(): void
     {
-        add_action('init', array($this, 'addRewriteRules'));
-        add_action('wp_enqueue_scripts', array($this, 'addStyles'));
-        add_action('post_updated', array($this, 'postUpdated'), 10, 3);
-        add_action('template_redirect', array($this, 'addTemplate'));
-        add_action('after_setup_theme', array($this, 'setTheme'));
+        add_action('init', [$this, 'addRewriteRules']);
+        add_action('wp_enqueue_scripts', [$this, 'addStyles']);
+        add_action('post_updated', [$this, 'postUpdated'], 10, 3);
+        add_action('template_redirect', [$this, 'addTemplate']);
+        add_action('after_setup_theme', [$this, 'setTheme']);
     }
 
     /**
      * Register filters.
      */
-    protected function addFilters()
+    protected function addFilters(): void
     {
-        add_filter('query_vars', array($this, 'addQueryVars'), 10);
-        add_filter('pre_get_document_title', array($this, 'setTitle'));
+        add_filter('query_vars', [$this, 'addQueryVars']);
+        add_filter('pre_get_document_title', [$this, 'setTitle']);
         // The SEO Framework plugin removes any pre_get_document_title filter.
         if (defined('THE_SEO_FRAMEWORK_PRESENT')) {
-            add_filter('the_seo_framework_title_from_custom_field', array($this, 'setTitle'), 10, 2);
+            add_filter('the_seo_framework_title_from_custom_field', [$this, 'setTitle'], 10, 2);
         }
     }
 
     /**
      * Localize plugin.
      */
-    protected function localize()
+    protected function localize(): void
     {
         load_plugin_textdomain('cision-block');
     }
@@ -255,19 +260,19 @@ class Frontend extends Singleton
      *
      * @return array
      */
-    public static function getFeedTypes()
+    public static function getFeedTypes(): array
     {
-        return array(
+        return [
             'KMK' => __('Annual Financial statement', 'cision-block'),
             'RDV' => __('Annual Report', 'cision-block'),
             'PRM' => __('Company Announcement', 'cision-block'),
             'RPT' => __('Interim Report', 'cision-block'),
             'INB' => __('Invitation', 'cision-block'),
             'NBR' => __('Newsletter', 'cision-block'),
-        );
+        ];
     }
 
-    public function addRewriteRules()
+    public function addRewriteRules(): void
     {
         // Flush rewrite rules if needed.
         if (get_transient('cision_block_flush_rewrite_rules')) {
@@ -292,20 +297,20 @@ class Frontend extends Singleton
      * @return array
      *   Updated array of query variables.
      */
-    public function addQueryVars(array $vars)
+    public function addQueryVars(array $vars): array
     {
-        return array_merge($vars, array('cb_id', 'cb_page', 'cb_filter'));
+        return array_merge($vars, ['cb_id', 'cb_page', 'cb_filter']);
     }
 
     /**
      * Register stylesheet and scripts.
      */
-    public function addStyles()
+    public function addStyles(): void
     {
         wp_register_style(
             'cision-block',
             $this->getPluginUrl('css/cision-block.css'),
-            array(),
+            [],
             self::VERSION
         );
     }
@@ -314,7 +319,7 @@ class Frontend extends Singleton
      * @param string $path
      * @return string
      */
-    public function getPluginUrl($path)
+    public function getPluginUrl(string $path): string
     {
         return plugin_dir_url(__FILE__) . $path;
     }
@@ -322,7 +327,7 @@ class Frontend extends Singleton
     /**
      * Triggered after we have switched theme.
      */
-    public function setTheme()
+    public function setTheme(): void
     {
         set_transient('cision_block_flush_rewrite_rules', 1);
     }
@@ -330,7 +335,7 @@ class Frontend extends Singleton
     /**
      * @return Settings
      */
-    public static function getSettings()
+    public static function getSettings(): Settings
     {
         $settings = self::$settings ?: new Settings(self::SETTINGS_NAME);
         return $settings;
@@ -341,12 +346,12 @@ class Frontend extends Singleton
      * @param Settings $options
      * @return array
      */
-    public static function verifySettings(array $settings, Settings $options)
+    public static function verifySettings(array $settings, Settings $options): array
     {
         global $post;
         global $widget_id;
 
-        $mapping = array(
+        $mapping = [
             // general
             'count' => 'count',
             'cache_expire' => 'cache_expire',
@@ -394,9 +399,9 @@ class Frontend extends Singleton
             'view_mode' => 'view_mode',
             'start_date' => 'start_date',
             'end_date' => 'end_date',
-        );
+        ];
 
-        $result = array(
+        $result = [
             'show_excerpt' => $options->get('show_excerpt'),
             'show_files' => $options->get('show_files'),
             'use_https' => $options->get('use_https'),
@@ -404,7 +409,7 @@ class Frontend extends Singleton
             'show_filters' => $options->get('show_filters'),
             'internal_links' => $options->get('internal_links'),
             'exclude_css' => $options->get('exclude_css'),
-        );
+        ];
 
         foreach ($settings as $name => $value) {
             switch ($name) {
@@ -412,13 +417,13 @@ class Frontend extends Singleton
                     $result[$mapping[$name]] = filter_var(
                         $value,
                         FILTER_VALIDATE_INT,
-                        array(
-                            'options' => array(
+                        [
+                            'options' => [
                                 'default' => Settings::DEFAULT_ITEM_COUNT,
                                 'min_range' => 1,
                                 'max_range' => Settings::MAX_ITEMS_PER_FEED,
-                            ),
-                        )
+                            ],
+                        ]
                     );
                     break;
                 case 'cache_expire':
@@ -537,24 +542,26 @@ class Frontend extends Singleton
                     $result[$mapping[$name]] = filter_var(
                         $value,
                         FILTER_VALIDATE_INT,
-                        array(
-                            'default' => 1,
-                            'min_range' => 1,
-                            'max_range' => 3,
-                        )
+                        [
+                            'options' => [
+                                'default' => 1,
+                                'min_range' => 1,
+                                'max_range' => 3,
+                            ],
+                        ]
                     );
                     break;
                 case 'items_per_page':
                     $result[$mapping[$name]] = filter_var(
                         $value,
                         FILTER_VALIDATE_INT,
-                        array(
-                            'options' => array(
+                        [
+                            'options' => [
                                 'default' => Settings::DEFAULT_ITEMS_PER_PAGE,
                                 'min_range' => 0,
                                 'max_range' => Settings::MAX_ITEMS_PER_PAGE,
-                            ),
-                        )
+                            ],
+                        ]
                     );
                     break;
                 case 'regulatory':
@@ -580,7 +587,7 @@ class Frontend extends Singleton
     /**
      * @return string
      */
-    protected function getCacheKey()
+    protected function getCacheKey(): string
     {
         global $post;
         global $widget_id;
@@ -641,7 +648,7 @@ class Frontend extends Singleton
         }
 
         // Add variables to symbol table.
-        extract(array(
+        extract([
             'cision_feed' => $feed_items,
             'pager' => $pager,
             'id' => self::$current_block_id,
@@ -656,26 +663,26 @@ class Frontend extends Singleton
             'filter_non_regulatory_text' => htmlspecialchars_decode($filterNonRegulatoryText ?: ''),
             'prefix' => apply_filters('cision_block_prefix', '', self::$current_block_id),
             'suffix' => apply_filters('cision_block_suffix', '', self::$current_block_id),
-            'attributes' => $this->parseAttributes(apply_filters('cision_block_media_attributes', array(
-                'class' => array(
+            'attributes' => $this->parseAttributes(apply_filters('cision_block_media_attributes', [
+                'class' => [
                     'cision-feed-item',
-                ),
-            ), self::$current_block_id)),
-            'wrapper_attributes' => $this->parseAttributes(apply_filters('cision_block_wrapper_attributes', array(
-                'class' => array(
+                ],
+            ], self::$current_block_id)),
+            'wrapper_attributes' => $this->parseAttributes(apply_filters('cision_block_wrapper_attributes', [
+                'class' => [
                     'cision-feed-wrapper',
-                ),
-            ), self::$current_block_id)),
-            'options' => array(
+                ],
+            ], self::$current_block_id)),
+            'options' => [
                 'date_format' => self::$settings->get('date_format'),
-            )
-        ), EXTR_SKIP);
+            ],
+        ], EXTR_SKIP);
 
         ob_start();
-        $templates = array(
+        $templates = [
             'cision-block.php',
-            'templates/cision-block.php'
-        );
+            'templates/cision-block.php',
+        ];
         if (self::$settings->get('template')) {
             array_unshift($templates, self::$settings->get('template'));
         }
@@ -695,7 +702,7 @@ class Frontend extends Singleton
      *
      * @return string
      */
-    protected function parseAttributes(array $attributes)
+    protected function parseAttributes(array $attributes): string
     {
         $attributeString = '';
         foreach ($attributes as $key => $attribute) {
@@ -717,14 +724,14 @@ class Frontend extends Singleton
      * @return string
      *   Markup for the generated pager.
      */
-    protected function getPagination(array &$items)
+    protected function getPagination(array &$items): string
     {
         $output = '';
-        $attributes = array(
-            'class' => array(
+        $attributes = [
+            'class' => [
                 'cision-feed-pager',
-            ),
-        );
+            ],
+        ];
         $attributes = $this->parseAttributes(apply_filters('cision_block_pager_attributes', $attributes, self::$current_block_id));
         $active_class = apply_filters('cision_block_pager_active_class', 'active', self::$current_block_id);
         if (self::$settings->get('items_per_page') > 0) {
@@ -735,7 +742,7 @@ class Frontend extends Singleton
             if ($max > 1) {
                 $output = '<ul' . $attributes . '>';
                 for ($i = 0; $i < $max; $i++) {
-                    $output .= '<li><a href="' . add_query_arg(array('cb_id' => 'cision_block', 'cb_page' => $i)) . '"' .
+                    $output .= '<li><a href="' . add_query_arg(['cb_id' => 'cision_block', 'cb_page' => $i]) . '"' .
                         ($active === $i ? ' class="' . $active_class . '"' : '') . '>' . ($i + 1) . '</a></li>';
                 }
                 if ($active >= 0 && $active < $max) {
@@ -757,13 +764,13 @@ class Frontend extends Singleton
      * @return array
      *   Returns an array of feed items.
      */
-    protected function getFeed()
+    protected function getFeed(): array
     {
         // Try to get data from transient.
         $cacheKey = self::TRANSIENT_KEY . '_' . $this->getCacheKey();
         $data = get_transient($cacheKey);
         if ($data === false) {
-            $params = array(
+            $params = [
                 'PageIndex' => Settings::DEFAULT_PAGE_INDEX,
                 'PageSize' => self::$settings->get('count'),
                 'DetailLevel' => self::FEED_DETAIL_LEVEL,
@@ -776,11 +783,13 @@ class Frontend extends Singleton
                     self::$settings->get('view_mode') === Settings::DISPLAY_MODE_REGULATORY ?
                         'true' :
                         (self::$settings->get('view_mode') === Settings::DISPLAY_MODE_NON_REGULATORY ? 'false' : null),
-            );
+            ];
             try {
-                $response = $this->request->get(self::FEED_URL . self::$settings->get('source_uid'), array(
-                    'body' => $params,
-                ))->toJSON();
+                $response = \json_decode($this->request->get(self::FEED_URL . self::$settings->get('source_uid'), [
+                    'query' => $params,
+                ])
+                    ->getBody()
+                    ->getContents());
             } catch (\Exception $e) {
                 error_log('Cision Block :: Failed to fetch feed :: ' . $e->getMessage());
                 $response = null;
@@ -796,19 +805,19 @@ class Frontend extends Singleton
                 );
             }
         }
-        return ($data ?: array());
+        return ($data ?: []);
     }
 
     /**
      * @param stdClass $release
-     * @param $image_style
+     * @param string $image_style
      * @param bool $use_https
      *
-     * @return object
+     * @return stdClass
      */
-    protected function mapFeedItem(stdClass $release, $image_style, $use_https = false)
+    protected function mapFeedItem(stdClass $release, string $image_style, bool $use_https = false): stdClass
     {
-        $item = array();
+        $item = [];
 
         // Clean up data.
         $item['Title'] = sanitize_text_field($release->Title);
@@ -828,11 +837,11 @@ class Frontend extends Singleton
                 if ($use_https) {
                     $image->{$image_style} = str_replace('http:', 'https:', $image->{$image_style});
                 }
-                $item['Images'][] = (object) array(
+                $item['Images'][] = (object) [
                     'DownloadUrl' => esc_url_raw($image->{$image_style}),
                     'Description' => sanitize_text_field($image->Description),
                     'Title' => sanitize_text_field($image->Title),
-                );
+                ];
             }
         }
 
@@ -848,7 +857,7 @@ class Frontend extends Singleton
      *
      * @return bool
      */
-    protected function hasCategory(stdClass $item, array $categories)
+    protected function hasCategory(stdClass $item, array $categories): bool
     {
         foreach ($item->Categories as $category) {
             if (in_array(strtolower($category->Name), $categories)) {
@@ -867,9 +876,9 @@ class Frontend extends Singleton
      * @return array
      *   An array of mapped feed items.
      */
-    protected function mapSources(stdClass $feed)
+    protected function mapSources(stdClass $feed): ?array
     {
-        $items = array();
+        $items = [];
         $image_style = self::$settings->get('image_style');
         $use_https = self::$settings->get('use_https');
         $language = self::$settings->get('language');

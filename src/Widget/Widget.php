@@ -14,7 +14,7 @@ class Widget extends \CisionBlock\Plugin\Widget\Widget
     public function __construct()
     {
         $this->id_base = 'cision_block_widget';
-        $this->description = __('Display pressreleases from cision.', 'cision-block');
+        $this->description = __('Display pressreleases from Cision.', 'cision-block');
         $this->name = __('Cision Block', 'cision-block');
         parent::__construct();
     }
@@ -22,12 +22,12 @@ class Widget extends \CisionBlock\Plugin\Widget\Widget
     /**
      * @inheridoc
      */
-    public function render(array $instance)
+    public function render(array $instance): void
     {
         if (!$instance) {
             return;
         }
-        $args = array(
+        $args = [
             'source_uid' => $instance['source'],
             'count' => $instance['count'],
             'items_per_page' => $instance['items_per_page'],
@@ -50,7 +50,7 @@ class Widget extends \CisionBlock\Plugin\Widget\Widget
             'filter_all_text' => $instance['filter_all_text'],
             'filter_regulatory_text' => $instance['filter_regulatory_text'],
             'filter_non_regulatory_text' => $instance['filter_non_regulatory_text'],
-        );
+        ];
 
         $shortcode_args = '';
         foreach ($args as $key => $value) {
@@ -68,13 +68,13 @@ class Widget extends \CisionBlock\Plugin\Widget\Widget
      *
      * @param array $instance Previously saved values from database.
      */
-    public function form($instance)
+    public function form($instance): string
     {
         // Make sure so keys are set.
-        $defaults = array(
+        $defaults = [
             'count' => Settings::DEFAULT_ITEM_COUNT,
             'source' => '',
-            'types' => array(Settings::DEFAULT_FEED_TYPE),
+            'types' => [Settings::DEFAULT_FEED_TYPE],
             'tags' => '',
             'items_per_page' => Settings::DEFAULT_ITEMS_PER_PAGE,
             'view_mode' => Settings::DEFAULT_DISPLAY_MODE,
@@ -93,7 +93,7 @@ class Widget extends \CisionBlock\Plugin\Widget\Widget
             'filter_all_text' => Settings::DEFAULT_FILTER_ALL_TEXT,
             'filter_regulatory_text' => Settings::DEFAULT_FILTER_REGULATORY_TEXT,
             'filter_non_regulatory_text' => Settings::DEFAULT_FILTER_NON_REGULATORY_TEXT,
-        );
+        ];
         foreach ($defaults as $key => $value) {
             if (!isset($instance[$key])) {
                 $instance[$key] = $value;
@@ -112,7 +112,7 @@ class Widget extends \CisionBlock\Plugin\Widget\Widget
         $image_style_options = '';
         foreach ($image_styles as $key => $image_style) {
             $image_style_options .= '<option value="' . $key . '"' .
-                selected($key == $instance['image_style'], true, false) .
+                selected($key === $instance['image_style'], true, false) .
                 '>' . $image_style['label'] . '</option>';
         }
 
@@ -235,7 +235,7 @@ class Widget extends \CisionBlock\Plugin\Widget\Widget
      *
      * @return array Updated safe values to be saved.
      */
-    public function update($new_instance, $old_instance)
+    public function update($new_instance, $old_instance): array
     {
         $config = Frontend::verifySettings($new_instance, Frontend::getSettings());
         $config['source'] = $config['source_uid'];

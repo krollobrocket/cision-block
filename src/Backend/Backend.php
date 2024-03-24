@@ -2,13 +2,16 @@
 
 namespace CisionBlock\Backend;
 
+use CisionBlock\Frontend\Frontend;
 use CisionBlock\Plugin\Common\Singleton;
 use CisionBlock\Settings\Settings;
+use CisionBlock\Trait\AddonTrait;
 use CisionBlock\Widget\Widget;
-use CisionBlock\Frontend\Frontend;
 
 class Backend extends Singleton
 {
+    use AddonTrait;
+
     const PARENT_MENU_SLUG = 'options-general.php';
     const MENU_SLUG = 'cision-block';
 
@@ -16,28 +19,28 @@ class Backend extends Singleton
      *
      * @var Settings
      */
-    private $settings;
+    private Settings $settings;
 
     /**
      *
      * @var Widget
      */
-    private $widget;
+    private Widget $widget;
 
     /**
      * @var string $capability
      */
-    private $capability = 'manage_options';
+    private string $capability = 'manage_options';
 
     /**
      * @var string $currentTab
      */
-    private $currentTab = '';
+    private string $currentTab = '';
 
     /**
      *
      */
-    public function init()
+    public function init(): void
     {
         // Allow people to change what capability is required to use this plugin.
         $this->capability = apply_filters('cision_block_cap', $this->capability);
@@ -46,7 +49,13 @@ class Backend extends Singleton
         $this->addFilters();
         $this->settings = new Settings(Frontend::SETTINGS_NAME);
         $this->checkForUpdate();
-        $this->setTabs();
+
+        // Add support for addons.
+        do_action('cision-block/register/addon', [$this]);
+
+        add_action('admin_menu', function () {
+            $this->setTabs();
+        });
 
         // WPML
         if (has_action('wpml_register_single_string')) {
@@ -73,23 +82,23 @@ class Backend extends Singleton
     /**
      * Add actions.
      */
-    public function addActions()
+    public function addActions(): void
     {
-        add_action('admin_menu', array($this, 'addMenu'));
-        add_action('in_admin_header', array($this, 'addHeader'));
-        add_action('admin_post_cision_block_save_settings', array($this, 'saveSettings'));
-        add_action('admin_enqueue_scripts', array($this, 'registerStyles'));
-        add_action('cision_block_admin_notices', array($this, 'renderNotices'));
-        add_action('wp_ajax_cision_block_dismiss_notice', array($this, 'doDismissNotice'));
+        add_action('admin_menu', [$this, 'addMenu']);
+        add_action('in_admin_header', [$this, 'addHeader']);
+        add_action('admin_post_cision_block_save_settings', [$this, 'saveSettings']);
+        add_action('admin_enqueue_scripts', [$this, 'registerStyles']);
+        add_action('cision_block_admin_notices', [$this, 'renderNotices']);
+        add_action('wp_ajax_cision_block_dismiss_notice', [$this, 'doDismissNotice']);
     }
 
     /**
      * Add filters.
      */
-    public function addFilters()
+    public function addFilters(): void
     {
-        add_filter('plugin_action_links', array($this, 'addActionLinks'), 10, 2);
-        add_filter('plugin_row_meta', array($this, 'filterPluginRowMeta'), 10, 2);
+        add_filter('plugin_action_links', [$this, 'addActionLinks'], 10, 2);
+        add_filter('plugin_row_meta', [$this, 'filterPluginRowMeta'], 10, 2);
     }
 
     /**
@@ -98,7 +107,7 @@ class Backend extends Singleton
      * @param string $id
      * @return bool
      */
-    private function dismissNotice($id)
+    private function dismissNotice(string $id): bool
     {
         $notes = $this->settings->get('notes');
         foreach ($notes as $key => $note) {
@@ -119,7 +128,7 @@ class Backend extends Singleton
      * @param string $id
      * @return bool
      */
-    public function resetNotice($id)
+    public function resetNotice(string $id): bool
     {
         $notes = $this->settings->get('notes');
         foreach ($notes as $key => $note) {
@@ -140,7 +149,7 @@ class Backend extends Singleton
      * @param string $name
      * @return mixed|null
      */
-    public function getNoticeByName($name)
+    public function getNoticeByName(string $name)
     {
         $notes = $this->settings->get('notes');
         return isset($notes[$name]) ? $notes[$name] : null;
@@ -149,14 +158,13 @@ class Backend extends Singleton
     /**
      * Render any notifications.
      */
-    public function renderNotices()
+    public function renderNotices(): void
     {
         foreach ($this->settings->get('notes') as $note) {
-            // TODO: Check so it is callable.
-            if (!$note['dismissed'] || ($note['dismissed'] && !$note['persistent'] && time() - $note['time'] > 30 * 24 * 60 * 60)) {
+            if (is_callable($note['callback']) && (!$note['dismissed'] || (!$note['persistent'] && time() - $note['time'] > 30 * 24 * 60 * 60))) {
                 ?>
                 <div id="note-<?php echo $note['id']; ?>" class="cision-block-notice notice-<?php echo $note['type']; ?> notice<?php echo ($note['dismissible'] ? ' is-dismissible' : ''); ?> inline">
-                <?php echo call_user_func(array($this, $note['callback'])); ?>
+                <?php echo call_user_func([$this, $note['callback']]); ?>
                 </div>
                 <?php
             }
@@ -166,17 +174,20 @@ class Backend extends Singleton
     /**
      * Ajax handler for dismissing notifications.
      */
-    public function doDismissNotice()
+    public function doDismissNotice(): void
     {
         check_ajax_referer('cision_block_dismiss_notice');
         if (!current_user_can('administrator')) {
-            return wp_send_json_error(__('You are not allowed to perform this action.', 'cision-block'));
+            wp_send_json_error(__('You are not allowed to perform this action.', 'cision-block'));
+            return;
         }
         if (!filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT)) {
-            return wp_send_json_error(__('No valid notification id supplied.', 'cision-block'));
+            wp_send_json_error(__('No valid notification id supplied.', 'cision-block'));
+            return;
         }
         if (!$this->dismissNotice($_POST['id'])) {
-            return wp_send_json_error(__('Notification could not be found.', 'cision-block'));
+            wp_send_json_error(__('Notification could not be found.', 'cision-block'));
+            return;
         }
         wp_send_json_success();
     }
@@ -184,7 +195,7 @@ class Backend extends Singleton
     /**
      * Adds premium admin notification.
      */
-    public function addPremiumNotice()
+    public function addPremiumNotice(): void
     {
         ?>
         <h3><?php _e('Pro Version', 'cision-block'); ?></h3>
@@ -223,7 +234,7 @@ class Backend extends Singleton
     /**
      * Adds review admin notification.
      */
-    public function addReviewNotice()
+    public function addReviewNotice(): void
     {
         ?>
         <h3><?php _e('Thank you for using Cision Block!', 'cision-block'); ?></h3>
@@ -237,7 +248,7 @@ class Backend extends Singleton
     /**
      * Adds support admin notification.
      */
-    public function addSupportNotice()
+    public function addSupportNotice(): void
     {
         ?>
         <h3><?php _e('Do you have any feedback or need support?', 'cision-block'); ?></h3>
@@ -251,7 +262,7 @@ class Backend extends Singleton
     /**
      * Render admin header.
      */
-    public function addHeader()
+    public function addHeader(): void
     {
         if (get_current_screen()->id !== 'settings_page_cision-block') {
             return;
@@ -272,15 +283,15 @@ class Backend extends Singleton
     }
 
     /**
-     * @param $links
-     * @param $file
+     * @param array $links
+     * @param string $file
      *
-     * @return mixed
+     * @return string[]
      */
-    public function addActionLinks($links, $file)
+    public function addActionLinks(array $links, string $file): array
     {
         $settings_link = '<a href="' . admin_url('options-general.php?page=cision-block') . '">' . __('General Settings', 'cision-block') . '</a>';
-        if ($file == 'cision-block/bootstrap.php') {
+        if ($file === 'cision-block/bootstrap.php') {
             array_unshift($links, $settings_link);
         }
 
@@ -294,7 +305,7 @@ class Backend extends Singleton
      * @param string   $plugin_file Path to the plugin file relative to the plugins directory.
      * @return string[] An array of the plugin's metadata.
      */
-    public function filterPluginRowMeta(array $plugin_meta, $plugin_file)
+    public function filterPluginRowMeta(array $plugin_meta, string $plugin_file): array
     {
         if ($plugin_file !== 'cision-block/bootstrap.php') {
             return $plugin_meta;
@@ -322,9 +333,9 @@ class Backend extends Singleton
     /**
      * Check if we need to update.
      */
-    protected function checkForUpdate()
+    protected function checkForUpdate(): void
     {
-        if (version_compare($this->settings->get('version') ?: '0.0.1', Frontend::VERSION, '<')) {
+        if (version_compare($this->settings->get('version', '1.0.0'), Frontend::VERSION, '<')) {
             // Rename old settings field.
             $this->settings->rename('source', 'source_uid');
 
@@ -339,8 +350,8 @@ class Backend extends Singleton
             }
 
             // Setup notifications
-            $defaults['notes'] = array(
-                'pro' => array(
+            $defaults['notes'] = [
+                'pro' => [
                     'id' => 3,
                     'weight' => 1,
                     'persistent' => false,
@@ -350,8 +361,8 @@ class Backend extends Singleton
                     'callback' => 'addPremiumNotice',
                     'dismissed' => false,
                     'dismissible' => true,
-                ),
-                'review' => array(
+                ],
+                'review' => [
                     'id' => 1,
                     'weight' => 1,
                     'persistent' => false,
@@ -361,8 +372,8 @@ class Backend extends Singleton
                     'callback' => 'addReviewNotice',
                     'dismissed' => false,
                     'dismissible' => true,
-                ),
-                'support' => array(
+                ],
+                'support' => [
                     'id' => 2,
                     'weight' => 2,
                     'persistent' => true,
@@ -372,8 +383,8 @@ class Backend extends Singleton
                     'callback' => 'addSupportNotice',
                     'dismissed' => true,
                     'dismissible' => true,
-                )
-            );
+                ],
+            ];
             $notes = $this->settings->get('notes');
 
             // Special handling for persistent notes.
@@ -403,7 +414,7 @@ class Backend extends Singleton
     /**
      * Check if any updates needs to be performed.
      */
-    public static function activate()
+    public static function activate(): void
     {
         global $wp_version;
         if (version_compare(PHP_VERSION, Settings::MIN_PHP_VERSION, '<')) {
@@ -419,7 +430,7 @@ class Backend extends Singleton
     /**
      * Add menu item for plugin.
      */
-    public function addMenu()
+    public function addMenu(): void
     {
         add_submenu_page(
             self::PARENT_MENU_SLUG,
@@ -427,37 +438,37 @@ class Backend extends Singleton
             __('Cision Block', 'cision-block'),
             $this->capability,
             self::MENU_SLUG,
-            array($this, 'displaySettingsPage')
+            [$this, 'renderSettings']
         );
     }
 
     /**
      * Registers styles and scripts.
      */
-    public function registerStyles()
+    public function registerStyles(): void
     {
         wp_enqueue_style(
             'cision-block-admin',
             plugin_dir_url(__FILE__) . 'css/admin.css',
-            array(),
+            [],
             Frontend::VERSION
         );
         wp_enqueue_script(
             'cision-block-admin',
             plugin_dir_url(__FILE__) . 'js/cision-block-admin.js',
-            array('jquery'),
+            ['jquery'],
             Frontend::VERSION,
             true
         );
-        wp_localize_script('cision-block-admin', 'data', array(
+        wp_localize_script('cision-block-admin', 'data', [
             '_nonce' => wp_create_nonce('cision_block_dismiss_notice'),
-        ));
+        ]);
     }
 
     /**
      * Handle form data for configuration pages.
      */
-    public function saveSettings()
+    public function saveSettings(): void
     {
         $tab = '';
 
@@ -493,10 +504,10 @@ class Backend extends Singleton
         if (($notice = $this->getNoticeByName('support')) && $notice['time'] === 0) {
             $this->resetNotice($notice['id']);
         }
-        wp_safe_redirect(add_query_arg(array(
+        wp_safe_redirect(add_query_arg([
             'page' => self::MENU_SLUG,
             'tab' => $tab,
-        ), self::PARENT_MENU_SLUG));
+        ], self::PARENT_MENU_SLUG));
     }
 
     /**
@@ -504,46 +515,46 @@ class Backend extends Singleton
      *
      * @return array
      */
-    public static function getImageStyles()
+    public static function getImageStyles(): array
     {
-        return array(
-            'DownloadUrl' => array(
+        return [
+            'DownloadUrl' => [
                 'label' => __('Original Image', 'cision-block'),
                 'class' => 'image-original',
-            ),
-            'UrlTo100x100ArResized' => array(
+            ],
+            'UrlTo100x100ArResized' => [
                 'label' => __('100x100 Resized', 'cision-block'),
                 'class' => 'image-100x100-resized',
-            ),
-            'UrlTo200x200ArResized' => array(
+            ],
+            'UrlTo200x200ArResized' => [
                 'label' => __('200x200 Resized', 'cision-block'),
                 'class' => 'image-200x200-resized',
-            ),
-            'UrlTo400x400ArResized' => array(
+            ],
+            'UrlTo400x400ArResized' => [
                 'label' => __('400x400 Resized', 'cision-block'),
                 'class' => 'image-400x400-resized',
-            ),
-            'UrlTo800x800ArResized' => array(
+            ],
+            'UrlTo800x800ArResized' => [
                 'label' => __('800x800 Resized', 'cision-block'),
                 'class' => 'image-800x800-resized',
-            ),
-            'UrlTo100x100Thumbnail' => array(
+            ],
+            'UrlTo100x100Thumbnail' => [
                 'label' => __('100x100 Thumbnail', 'cision-block'),
                 'class' => 'image-100x100-thumbnail',
-            ),
-            'UrlTo200x200Thumbnail' => array(
+            ],
+            'UrlTo200x200Thumbnail' => [
                 'label' => __('200x200 Thumbnail', 'cision-block'),
                 'class' => 'image-200x200-thumbnail',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
      * Return a list of languages.
      *
-     * @return array
+     * @return string[]
      */
-    public function getLanguages()
+    public function getLanguages(): array
     {
         $languages = [
             'ar' => __('Arabic', 'cision-block'),
@@ -586,7 +597,7 @@ class Backend extends Singleton
     /**
      * Sets the current tab.
      */
-    public function setTabs()
+    public function setTabs(): void
     {
         $this->currentTab = isset($_GET['tab']) && in_array($_GET['tab'], array_keys($this->getTabs())) ? $_GET['tab'] : 'settings';
     }
@@ -594,20 +605,24 @@ class Backend extends Singleton
     /**
      * @return array
      */
-    public function getTabs()
+    public function getTabs(): array
     {
-        return array(
+        $tabs = [
             'settings' => __('General Settings', 'cision-block'),
             'permalinks' => __('Permalinks', 'cision-block'),
             'filters' => __('Filters', 'cision-block'),
-            'status' => __('Status', 'cision-block'),
-        );
+        ];
+        foreach ($this->addons as $key => $addon) {
+            $tabs[$key] = ucfirst($addon->getModuleName());
+        }
+        $tabs['status'] = __('Status', 'cision-block');
+        return $tabs;
     }
 
     /**
      * @return string
      */
-    public function getCurrentTab()
+    public function getCurrentTab(): string
     {
         return $this->currentTab;
     }
@@ -615,7 +630,7 @@ class Backend extends Singleton
     /**
      * Renders tabs.
      */
-    public function displayTabs()
+    public function displayTabs(): void
     {
         include_once 'templates/tabs.php';
     }
@@ -623,8 +638,14 @@ class Backend extends Singleton
     /**
      * Display the settings page.
      */
-    public function displaySettingsPage()
+    public function renderSettings(): void
     {
+        if (in_array($this->getCurrentTab(), array_map(function($addon) {
+            return $addon->getModuleName();
+        }, $this->addons))) {
+            $this->addons[$this->getCurrentTab()]->renderSettings();
+            return;
+        }
         $template = $this->getCurrentTab() . '.php';
         include_once 'templates/' . $template;
     }
