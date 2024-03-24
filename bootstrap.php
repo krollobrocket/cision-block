@@ -25,9 +25,9 @@ use CisionBlock\Frontend\Frontend;
 
 add_action('plugins_loaded', function () {
     if (is_admin()) {
-        Backend::getInstance();
+        $GLOBALS['cb_backend'] = Backend::getInstance();
     } else {
-        Frontend::getInstance();
+        $GLOBALS['cb_frontend'] = Frontend::getInstance();
     }
 });
 

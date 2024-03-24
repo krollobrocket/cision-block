@@ -4,7 +4,7 @@ Donate link: https://www.buymeacoffee.com/cyclonecode
 Tags: cision, feed, ir, press, stock
 Requires at least: 3.1.0
 Tested up to: 6.4.3
-Requires PHP: 5.6
+Requires PHP: 7.4
 Stable tag: 2.9.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -416,6 +416,7 @@ This is something that is possible using the **Pro** version, since all news are
 
 == Changelog ==
 
-= 2.9.5
+= 3.0.0
 
-- Fix issue with empty feed when using The SEO Framework plugin.
+- Add: locale class.
+- Add: support for addons.

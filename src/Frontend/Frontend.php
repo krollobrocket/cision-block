@@ -5,11 +5,14 @@ namespace CisionBlock\Frontend;
 use CisionBlock\Plugin\Common\Singleton;
 use CisionBlock\Plugin\Http\RemoteRequest;
 use CisionBlock\Settings\Settings;
+use CisionBlock\Trait\AddonTrait;
 use CisionBlock\Widget\Widget;
 use stdClass;
 
 class Frontend extends Singleton
 {
+    use AddonTrait;
+
     const FEED_DETAIL_LEVEL = 'detail';
     const FEED_FORMAT = 'json';
     const FEED_RELEASE_URL = 'http://publish.ne.cision.com/papi/Release/';
@@ -82,6 +85,9 @@ class Frontend extends Singleton
         $this->request->setHeaders(array(
             'User-agent' => self::USER_AGENT,
         ));
+
+        // Add support for addons.
+        do_action('cision-block/register/addon', [$this]);
 
         // Setup widget.
         new Widget();
