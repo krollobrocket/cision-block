@@ -163,7 +163,8 @@ class Frontend extends Singleton
         global $attachmentField;
         global $wp_query;
         if (get_query_var('cision_release_id')) {
-            $release_id = get_query_var('cision_release_id');
+            $release_id = apply_filters('cision-block/filter/release/id', get_query_var('cision_release_id'));
+
             try {
                 $response = \json_decode($this->request->get(self::FEED_RELEASE_URL . $release_id)
                     ->getBody()
@@ -790,6 +791,8 @@ class Frontend extends Singleton
                 ])
                     ->getBody()
                     ->getContents());
+                $response = apply_filters('cision-block/filter/feed/response', $response, $params, self::$settings);
+                do_action('cision-block/action/feed/response', $response);
             } catch (\Exception $e) {
                 error_log('Cision Block :: Failed to fetch feed :: ' . $e->getMessage());
                 $response = null;
@@ -825,7 +828,7 @@ class Frontend extends Singleton
         $item['Intro'] = sanitize_text_field($release->Intro);
         $item['Body'] = sanitize_text_field($release->Body);
         if (self::$settings->get('internal_links')) {
-            $item['CisionWireUrl'] = get_bloginfo('url') . '/' . self::$settings->get('base_slug') . '/' . $release->EncryptedId;
+            $item['CisionWireUrl'] = apply_filters('cision-block/filter/internal/link', get_bloginfo('url') . '/' . self::$settings->get('base_slug') . '/' . $release->EncryptedId, $release);
             $item['LinkTarget'] = '_self';
         } else {
             $item['CisionWireUrl'] = esc_url_raw($release->CisionWireUrl);
