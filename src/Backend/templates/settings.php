@@ -14,17 +14,8 @@ $templates = get_page_templates(null, 'cision-block-post');
         <table class="form-table">
             <tr>
                 <th scope="row">
-                    <label for="count"><?php _e('Number of feed items', 'cision-block'); ?></label>
-                </th>
-                <td>
-                    <input type="number" min="1" max="<?php echo Settings::MAX_ITEMS_PER_FEED; ?>" name="count" value="<?php echo intval($this->settings->get('count')); ?>" />
-                    <p class="description"><?php _e('The maximum number of items in the feed.', 'cision-block'); ?></p>
-                </td>
-            </tr>
-            <tr>
-                <th scope="row">
                     <label for="source_uid"><?php _e('Cision Feed source id', 'cision-block'); ?></label>
-                    </th>
+                </th>
                 <td>
                     <input type="text" class="regular-text" name="source_uid" value="<?php echo sanitize_text_field($this->settings->get('source_uid')); ?>"/>
                     <p class="description"><?php _e('A valid unique JSON identifier for your cision feed.', 'cision-block'); ?></p>
@@ -37,10 +28,62 @@ $templates = get_page_templates(null, 'cision-block-post');
                 <td>
                     <select class="regular-text" name="types[]" multiple>
                         <?php foreach (\CisionBlock\Frontend\Frontend::getFeedTypes() as $key => $value) : ?>
-                        <option value="<?php echo $key; ?>"<?php selected(in_array($key, $this->settings->get('types'))); ?>><?php echo $value; ?></option>
+                            <option value="<?php echo $key; ?>"<?php selected(in_array($key, $this->settings->get('types'))); ?>><?php echo $value; ?></option>
                         <?php endforeach; ?>
                     </select>
                     <p class="description"><?php _e('Type of feed items to include.', 'cision-block'); ?></p>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    <label for="count"><?php _e('Number of feed items', 'cision-block'); ?></label>
+                </th>
+                <td>
+                    <input type="number" min="1" max="<?php echo Settings::MAX_ITEMS_PER_FEED; ?>" name="count" value="<?php echo intval($this->settings->get('count')); ?>" />
+                    <p class="description"><?php _e('The maximum number of items in the feed.', 'cision-block'); ?></p>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    <label for="items_per_page"><?php _e('Items per page', 'cision-block'); ?></label>
+                </th>
+                <td>
+                    <input type="number" min="0" max="<?php echo Settings::MAX_ITEMS_PER_PAGE; ?>" name="items_per_page" value="<?php echo $this->settings->get('items_per_page'); ?>" />
+                    <p class="description"><?php _e('Number of items on each page (set to 0 to disable).', 'cision-block'); ?></p>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    <label for="language"><?php _e('Language', 'cision-block'); ?></label>
+                </th>
+                <td>
+                    <select name="language">
+                        <option value=""><?php _e('Select'); ?></option>
+                        <?php foreach ($this->getLanguages() as $code => $name) : ?>
+                            <option value="<?php echo $code; ?>"<?php selected($code === $this->settings->get('language')) ?>><?php echo $name; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                    <p class="description"><?php _e('The language for each feed item.'); ?></p>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    <label for="categories"><?php _e('Categories', 'cision-block'); ?></label>
+                </th>
+                <td>
+                    <input type="text" class="regular-text" name="categories" value="<?php echo $this->settings->get('categories'); ?>">
+                    <p class="description"><?php _e('Defines a filter on categories, this will return releases with connected to these categories. One or several
+                            categories can be provided separated with a comma.', 'cision-block'); ?></p>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    <label for="tags"><?php _e('Tags', 'cision-block'); ?></label>
+                </th>
+                <td>
+                    <input type="text" class="regular-text" name="tags" value="<?php echo $this->settings->get('tags'); ?>">
+                    <p class="description"><?php _e('Defines a filter on tags, this will return releases with these tags. One or several
+                            tags can be provided separated with a comma.', 'cision-block'); ?></p>
                 </td>
             </tr>
             <tr>
@@ -92,54 +135,11 @@ $templates = get_page_templates(null, 'cision-block-post');
             </tr>
             <tr>
                 <th scope="row">
-                    <label for="tags"><?php _e('Tags', 'cision-block'); ?></label>
-                </th>
-                <td>
-                    <input type="text" class="regular-text" name="tags" value="<?php echo $this->settings->get('tags'); ?>">
-                    <p class="description"><?php _e('Defines a filter on tags, this will return releases with these tags. One or several
-                            tags can be provided separated with a comma.', 'cision-block'); ?></p>
-                </td>
-            </tr>
-            <tr>
-                <th scope="row">
                     <label for="search_term"><?php _e('Search term', 'cision-block'); ?></label>
                 </th>
                 <td>
                     <input type="text" class="regular-text" name="search_term" value="<?php echo $this->settings->get('search_term'); ?>">
                     <p class="description"><?php _e('Free text search in release titles.', 'cision-block'); ?></p>
-                </td>
-            </tr>
-            <tr>
-                <th scope="row">
-                    <label for="categories"><?php _e('Categories', 'cision-block'); ?></label>
-                    </th>
-                <td>
-                    <input type="text" class="regular-text" name="categories" value="<?php echo $this->settings->get('categories'); ?>">
-                    <p class="description"><?php _e('Defines a filter on categories, this will return releases with connected to these categories. One or several
-                            categories can be provided separated with a comma.', 'cision-block'); ?></p>
-                </td>
-            </tr>
-            <tr>
-                <th scope="row">
-                    <label for="items_per_page"><?php _e('Items per page', 'cision-block'); ?></label>
-                </th>
-                <td>
-                    <input type="number" min="0" max="<?php echo Settings::MAX_ITEMS_PER_PAGE; ?>" name="items_per_page" value="<?php echo $this->settings->get('items_per_page'); ?>" />
-                    <p class="description"><?php _e('Number of items on each page (set to 0 to disable).', 'cision-block'); ?></p>
-                </td>
-            </tr>
-            <tr>
-                <th scope="row">
-                    <label for="language"><?php _e('Language', 'cision-block'); ?></label>
-                </th>
-                <td>
-                    <select name="language">
-                        <option value=""><?php _e('Select'); ?></option>
-                        <?php foreach ($this->getLanguages() as $code => $name) : ?>
-                            <option value="<?php echo $code; ?>"<?php selected($code === $this->settings->get('language')) ?>><?php echo $name; ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                    <p class="description"><?php _e('The language for each feed item.'); ?></p>
                 </td>
             </tr>
             <tr>
