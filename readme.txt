@@ -422,3 +422,4 @@ This is something that is possible using the **Pro** version, since all news are
 - Add: support for addons.
 - Refactor: code to use PHP 7.4.
 - Fix: ordering fields on settings page.
+- Add: missing ids on setting pages.

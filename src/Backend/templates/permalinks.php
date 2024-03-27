@@ -10,7 +10,7 @@
                 </th>
                 <td>
                     <input type="hidden" id="hidden_internal_links" name="internal_links" value="0" />
-                    <input type="checkbox" name="internal_links"<?php checked($this->settings->get('internal_links')); ?>/>
+                    <input type="checkbox" id="internal_links" name="internal_links"<?php checked($this->settings->get('internal_links')); ?>/>
                     <p class="description"><?php _e('Display feed items directly in Wordpress.', 'cision-block'); ?></p>
                 </td>
             </tr>
@@ -19,7 +19,7 @@
                     <label for="base_slug"><?php _e('Slug', 'cision-block'); ?></label>
                 </th>
                 <td>
-                    <input type="text" name="base_slug" value="<?php echo $this->settings->get('base_slug'); ?>" />
+                    <input type="text" id="base_slug" name="base_slug" value="<?php echo $this->settings->get('base_slug'); ?>" />
                     <p class="description"><?php _e('The base slug to use when displaying feed items in Wordpress.', 'cision-block'); ?></p>
                     <p class="description"><?php _e(sprintf('Current format is: %s/%s/AAA093541230X/', get_bloginfo('url'), $this->settings->get('base_slug')), 'cision-block'); ?></p>
                 </td>
